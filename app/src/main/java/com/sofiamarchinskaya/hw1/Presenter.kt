@@ -6,9 +6,14 @@ class Presenter(private val view: View) {
 
     interface View {
         fun onSaveComplete()
+        fun onFailed()
     }
 
     fun onSave(title: String, text: String) {
+        if (title.isBlank() || text.isBlank()) {
+            view.onFailed()
+            return
+        }
         model.onSave(title, text)
         view.onSaveComplete()
     }

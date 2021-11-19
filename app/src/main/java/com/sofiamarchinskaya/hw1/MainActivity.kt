@@ -20,7 +20,10 @@ class MainActivity : AppCompatActivity(), Presenter.View {
     }
 
     override fun onSaveComplete() {
-        Toast.makeText(this, "Successfully saved", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, getString(R.string.success), Toast.LENGTH_LONG).show()
     }
 
+    override fun onFailed() {
+        Toast.makeText(this, getString(R.string.no_content), Toast.LENGTH_LONG).show()
+    }
 }
