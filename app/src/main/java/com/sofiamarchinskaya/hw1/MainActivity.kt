@@ -6,15 +6,18 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 
-class MainActivity : AppCompatActivity(), Presenter.View {
-    private val presenter = Presenter(this)
-
+class MainActivity : AppCompatActivity(), MainActivityView{
+    private val presenter: MainActivityPresenter = MainActivityPresenterImp(this, SaveModelImp())
+    private lateinit var text:EditText
+    private lateinit var title:EditText
+    private lateinit var save:Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val text = findViewById<EditText>(R.id.text)
-        val title = findViewById<EditText>(R.id.title)
-        val save = findViewById<Button>(R.id.save)
+
+        text = findViewById<EditText>(R.id.text)
+        title = findViewById<EditText>(R.id.title)
+        save = findViewById<Button>(R.id.save)
         save.setOnClickListener { presenter.onSave(text.text.toString(), title.text.toString()) }
 
     }
