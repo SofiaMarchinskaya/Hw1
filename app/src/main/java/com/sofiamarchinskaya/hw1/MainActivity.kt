@@ -6,11 +6,11 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 
-class MainActivity : AppCompatActivity(), MainActivityView{
-    private val presenter: MainActivityPresenter = MainActivityPresenterImp(this, SaveModelImp())
-    private lateinit var text:EditText
-    private lateinit var title:EditText
-    private lateinit var save:Button
+class MainActivity : AppCompatActivity(), MainActivityView {
+    private var presenter: MainActivityPresenter = MainActivityPresenterImpl(this, SaveModelImpl())
+    private lateinit var text: EditText
+    private lateinit var title: EditText
+    private lateinit var save: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -28,5 +28,10 @@ class MainActivity : AppCompatActivity(), MainActivityView{
 
     override fun onFailed() {
         Toast.makeText(this, getString(R.string.no_content), Toast.LENGTH_LONG).show()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.onDestroy()
     }
 }
