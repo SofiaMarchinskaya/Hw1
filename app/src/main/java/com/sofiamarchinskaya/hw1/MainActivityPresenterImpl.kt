@@ -5,6 +5,7 @@ class MainActivityPresenterImpl(
     private var view : MainActivityView?,
     private val model : SaveModel
 ) : MainActivityPresenter {
+
     override fun onSave(title : String, text : String) {
         if (title.isBlank() || text.isBlank()) {
             view?.onFailed()
