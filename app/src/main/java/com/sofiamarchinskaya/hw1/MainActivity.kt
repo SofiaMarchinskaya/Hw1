@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity(), MainActivityView {
         save = findViewById(R.id.save)
         share = findViewById(R.id.share)
         save.setOnClickListener { presenter.onSave(text.text.toString(), title.text.toString()) }
-        share.setOnClickListener { shareNote(title.text.toString(), text.text.toString()) }
+        share.setOnClickListener { presenter.shareOnClick(title.text.toString(), text.text.toString()) }
 
     }
 
@@ -42,14 +42,10 @@ class MainActivity : AppCompatActivity(), MainActivityView {
     }
 
     override fun shareNote(title : String, text : String) {
-        if (title.isBlank() || text.isBlank()) {
-            onFailed()
-        } else {
-            startActivity(Intent(Intent.ACTION_SEND).apply {
-                type = "text/plain"
-                putExtra(Intent.EXTRA_TEXT, "$title\n$text")
-            })
-        }
+        startActivity(Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, "$title\n$text")
+        })
     }
 
     override fun onDestroy() {
@@ -66,8 +62,7 @@ class MainActivity : AppCompatActivity(), MainActivityView {
     override fun onOptionsItemSelected(item : MenuItem) : Boolean {
         when (item.itemId) {
             R.id.about -> {
-                val intent = Intent(this, AboutActivity::class.java)
-                startActivity(intent)
+                presenter.aboutOnClick()
                 return true
             }
         }

@@ -18,4 +18,17 @@ class MainActivityPresenterImpl(
     override fun onDestroy() {
         view = null
     }
+
+    override fun shareOnClick(title : String, text : String) {
+        if (title.isBlank() || text.isBlank()) {
+            view?.onFailed()
+        } else {
+            view?.shareNote(title, text)
+
+        }
+    }
+
+    override fun aboutOnClick() {
+        view?.openAboutScreen()
+    }
 }
