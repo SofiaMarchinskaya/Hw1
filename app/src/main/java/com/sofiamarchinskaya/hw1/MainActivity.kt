@@ -10,6 +10,7 @@ import android.widget.EditText
 import android.widget.Toast
 
 class MainActivity : AppCompatActivity(), MainActivityView {
+
     private var presenter : MainActivityPresenter = MainActivityPresenterImpl(this, SaveModelImpl())
     private lateinit var text : EditText
     private lateinit var title : EditText
@@ -25,8 +26,12 @@ class MainActivity : AppCompatActivity(), MainActivityView {
         save = findViewById(R.id.save)
         share = findViewById(R.id.share)
         save.setOnClickListener { presenter.onSave(text.text.toString(), title.text.toString()) }
-        share.setOnClickListener { presenter.shareOnClick(title.text.toString(), text.text.toString()) }
-
+        share.setOnClickListener {
+            presenter.shareOnClick(
+                title.text.toString(),
+                text.text.toString()
+            )
+        }
     }
 
     override fun onSaveComplete() {
@@ -43,7 +48,7 @@ class MainActivity : AppCompatActivity(), MainActivityView {
 
     override fun shareNote(title : String, text : String) {
         startActivity(Intent(Intent.ACTION_SEND).apply {
-            type = "text/plain"
+            type = TYPE
             putExtra(Intent.EXTRA_TEXT, "$title\n$text")
         })
     }
@@ -54,8 +59,7 @@ class MainActivity : AppCompatActivity(), MainActivityView {
     }
 
     override fun onCreateOptionsMenu(menu : Menu?) : Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.menu_main, menu)
+        menuInflater.inflate(R.menu.menu_main, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -67,5 +71,10 @@ class MainActivity : AppCompatActivity(), MainActivityView {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    companion object {
+
+        private const val TYPE = "text/plain"
     }
 }

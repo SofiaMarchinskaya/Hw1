@@ -24,7 +24,6 @@ class MainActivityPresenterImpl(
             view?.onFailed()
         } else {
             view?.shareNote(title, text)
-
         }
     }
 

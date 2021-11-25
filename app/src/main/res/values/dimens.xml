@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="text_margin">10dp</dimen>
+    <dimen name="app_description_text_size">28sp</dimen>
+    <dimen name="about_author_text_size">25sp</dimen>
+</resources>
