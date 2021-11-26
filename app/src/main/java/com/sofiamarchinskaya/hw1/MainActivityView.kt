@@ -8,5 +8,5 @@ interface MainActivityView {
 
     fun openAboutScreen()
 
-    fun shareNote(title : String, text : String)
+    fun shareNote(title: String, text: String)
 }

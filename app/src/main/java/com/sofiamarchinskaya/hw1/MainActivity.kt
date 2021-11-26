@@ -11,13 +11,13 @@ import android.widget.Toast
 
 class MainActivity : AppCompatActivity(), MainActivityView {
 
-    private var presenter : MainActivityPresenter = MainActivityPresenterImpl(this, SaveModelImpl())
-    private lateinit var text : EditText
-    private lateinit var title : EditText
-    private lateinit var save : Button
-    private lateinit var share : Button
+    private var presenter: MainActivityPresenter = MainActivityPresenterImpl(this, SaveModelImpl())
+    private lateinit var text: EditText
+    private lateinit var title: EditText
+    private lateinit var save: Button
+    private lateinit var share: Button
 
-    override fun onCreate(savedInstanceState : Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity(), MainActivityView {
         startActivity(Intent(this, AboutActivity::class.java))
     }
 
-    override fun shareNote(title : String, text : String) {
+    override fun shareNote(title: String, text: String) {
         startActivity(Intent(Intent.ACTION_SEND).apply {
             type = TYPE
             putExtra(Intent.EXTRA_TEXT, "$title\n$text")
@@ -58,12 +58,12 @@ class MainActivity : AppCompatActivity(), MainActivityView {
         presenter.onDestroy()
     }
 
-    override fun onCreateOptionsMenu(menu : Menu?) : Boolean {
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item : MenuItem) : Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.about -> {
                 presenter.aboutOnClick()
