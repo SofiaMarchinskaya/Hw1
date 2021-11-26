@@ -25,5 +25,14 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="@string/save" />
+    <Button
+        android:id="@+id/share"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/share">
+
+    </Button>
+
     
 </LinearLayout>

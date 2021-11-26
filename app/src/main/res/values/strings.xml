@@ -3,4 +3,9 @@
     <string name="save">Save</string>
     <string name="success">Successfully saved</string>
     <string name="no_content">No content</string>
+    <string name="share">share</string>
+    <string name="settings">settings</string>
+    <string name="about">about</string>
+    <string name="app_description">App for working with notes</string>
+    <string name="author">Author: Marchinskaya Sofia</string>
 </resources>

@@ -2,11 +2,11 @@ package com.sofiamarchinskaya.hw1
 
 
 class MainActivityPresenterImpl(
-    private var view : MainActivityView?,
-    private val model : SaveModel
+    private var view: MainActivityView?,
+    private val model: SaveModel
 ) : MainActivityPresenter {
 
-    override fun onSave(title : String, text : String) {
+    override fun onSave(title: String, text: String) {
         if (title.isBlank() || text.isBlank()) {
             view?.onFailed()
             return
@@ -17,5 +17,17 @@ class MainActivityPresenterImpl(
 
     override fun onDestroy() {
         view = null
+    }
+
+    override fun shareOnClick(title: String, text: String) {
+        if (title.isBlank() || text.isBlank()) {
+            view?.onFailed()
+        } else {
+            view?.shareNote(title, text)
+        }
+    }
+
+    override fun aboutOnClick() {
+        view?.openAboutScreen()
     }
 }
