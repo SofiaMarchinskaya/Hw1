@@ -1,31 +1,10 @@
 package com.sofiamarchinskaya.hw1
 
+import com.sofiamarchinskaya.hw1.presenters.MainActivityPresenter
 
 class MainActivityPresenterImpl(
-    private var view: MainActivityView?,
-    private val model: SaveModel
+    private var view: MainActivityView?
 ) : MainActivityPresenter {
-
-    override fun onSave(title: String, text: String) {
-        if (title.isBlank() || text.isBlank()) {
-            view?.onFailed()
-            return
-        }
-        model.onSave(title, text)
-        view?.onSaveComplete()
-    }
-
-    override fun onDestroy() {
-        view = null
-    }
-
-    override fun shareOnClick(title: String, text: String) {
-        if (title.isBlank() || text.isBlank()) {
-            view?.onFailed()
-        } else {
-            view?.shareNote(title, text)
-        }
-    }
 
     override fun aboutOnClick() {
         view?.openAboutScreen()
