@@ -7,5 +7,8 @@ interface NotesList {
     fun openAboutItemFragment(note: Note)
 
     fun onMenuCreated(menu: ContextMenu?)
+
+    fun initAdapter(list: List<Note>)
+
 }
 

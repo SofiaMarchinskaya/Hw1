@@ -3,17 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <fragment
-        android:id="@+id/navHostFragment"
-        android:name="androidx.navigation.fragment.NavHostFragment"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/host"
+        android:name="com.sofiamarchinskaya.hw1.fragments.NotesListFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:navGraph="@navigation/navigation"
-        app:defaultNavHost="true" />
-
-
+        android:layout_height="match_parent" />
 </LinearLayout>

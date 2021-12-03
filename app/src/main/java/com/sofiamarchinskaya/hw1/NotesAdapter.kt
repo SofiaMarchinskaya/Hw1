@@ -10,25 +10,15 @@ class NotesAdapter(
     private val onMenuCreated: (ContextMenu?) -> Unit
 ) : RecyclerView.Adapter<NotesAdapter.NoteViewHolder>() {
 
-    var position = 0
+    var pos = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder =
         NoteViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.note_item, parent, false)
         )
 
-    override fun onViewRecycled(holder: NoteViewHolder) {
-        holder.itemView.setOnLongClickListener(null)
-        super.onViewRecycled(holder)
-    }
-
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
         holder.bind(list[position])
-        holder.itemView.setOnLongClickListener {
-            this.position = holder.adapterPosition
-            false
-        }
-
     }
 
     override fun getItemCount(): Int = list.size
@@ -42,6 +32,10 @@ class NotesAdapter(
             text.text = data.text
             itemView.setOnClickListener { onClick.invoke(data) }
             itemView.setOnCreateContextMenuListener { menu, _, _ -> onMenuCreated.invoke(menu) }
+            itemView.setOnLongClickListener {
+                pos = this.adapterPosition
+                false
+            }
         }
     }
 }

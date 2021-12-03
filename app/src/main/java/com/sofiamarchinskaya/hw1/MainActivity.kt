@@ -34,4 +34,9 @@ class MainActivity : AppCompatActivity(), MainActivityView {
     override fun openAboutScreen() {
         startActivity(Intent(this, AboutActivity::class.java))
     }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        supportFragmentManager.popBackStack()
+    }
 }

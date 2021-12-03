@@ -1,6 +1,6 @@
 package com.sofiamarchinskaya.hw1
 
-class NotesModel(
+object NotesModel {
 
     val list: List<Note> = listOf(
         Note(
@@ -20,4 +20,4 @@ class NotesModel(
             "1) Встал поздно.\n 2) Разгорячился, прибил Алешку.\n 3) Ленился.\n 4) Был беспорядочен.\n 5) Был грустен."
         )
     )
-)
+}
