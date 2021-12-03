@@ -1,6 +1,5 @@
 package com.sofiamarchinskaya.hw1
 
-import android.graphics.Color
 import android.view.*
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -34,7 +33,7 @@ class NotesAdapter(
 
     override fun getItemCount(): Int = list.size
 
-    inner class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+    inner class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val title = itemView.findViewById<TextView>(R.id.title)
         private val text = itemView.findViewById<TextView>(R.id.text)
 

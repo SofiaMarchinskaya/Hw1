@@ -6,6 +6,7 @@ class NoteInfoPresenterImpl(
     private var view: NoteInfo?,
     private val model: SaveModel
 ) : NoteInfoPresenter {
+
     override fun onSave(title: String, text: String) {
         if (title.isBlank() || text.isBlank()) {
             view?.onFailed()

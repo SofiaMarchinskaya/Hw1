@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sofiamarchinskaya.hw1.Note
 
 interface NotesListPresenter {
+
     fun onItemClick(note: Note)
 
     fun initAdapter(recyclerView: RecyclerView)

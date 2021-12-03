@@ -12,6 +12,7 @@ import com.sofiamarchinskaya.hw1.*
 import com.sofiamarchinskaya.hw1.presenters.NoteInfoPresenter
 
 class NoteInfoFragment : Fragment(), NoteInfo {
+
     private val presenter: NoteInfoPresenter = NoteInfoPresenterImpl(this, SaveModelImpl())
     private lateinit var title: TextView
     private lateinit var text: TextView
