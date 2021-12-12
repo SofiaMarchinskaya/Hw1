@@ -4,11 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".view.MainActivity">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/host"
-        android:name="com.sofiamarchinskaya.hw1.fragments.NotesListFragment"
+        android:name="com.sofiamarchinskaya.hw1.view.NotesListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>

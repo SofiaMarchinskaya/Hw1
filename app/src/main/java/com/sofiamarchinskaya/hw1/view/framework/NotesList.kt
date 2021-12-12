@@ -1,6 +1,7 @@
-package com.sofiamarchinskaya.hw1
+package com.sofiamarchinskaya.hw1.view.framework
 
 import android.view.ContextMenu
+import com.sofiamarchinskaya.hw1.Note
 
 interface NotesList {
 
@@ -9,6 +10,8 @@ interface NotesList {
     fun onMenuCreated(menu: ContextMenu?)
 
     fun initAdapter(list: List<Note>)
+
+    fun onShare(dataForExtra: String)
 
 }
 

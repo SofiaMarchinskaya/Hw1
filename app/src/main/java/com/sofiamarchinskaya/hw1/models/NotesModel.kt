@@ -1,4 +1,6 @@
-package com.sofiamarchinskaya.hw1
+package com.sofiamarchinskaya.hw1.models
+
+import com.sofiamarchinskaya.hw1.Note
 
 object NotesModel {
 

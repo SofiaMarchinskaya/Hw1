@@ -1,11 +1,14 @@
-package com.sofiamarchinskaya.hw1
+package com.sofiamarchinskaya.hw1.view
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import com.sofiamarchinskaya.hw1.presenters.MainActivityPresenter
+import com.sofiamarchinskaya.hw1.presenters.MainActivityPresenterImpl
+import com.sofiamarchinskaya.hw1.view.framework.MainActivityView
+import com.sofiamarchinskaya.hw1.R
+import com.sofiamarchinskaya.hw1.presenters.framework.MainActivityPresenter
 
 class MainActivity : AppCompatActivity(), MainActivityView {
 

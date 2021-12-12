@@ -1,4 +1,4 @@
-package com.sofiamarchinskaya.hw1
+package com.sofiamarchinskaya.hw1.view.framework
 
 interface MainActivityView {
 

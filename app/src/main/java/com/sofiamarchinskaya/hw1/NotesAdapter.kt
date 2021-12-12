@@ -1,16 +1,19 @@
 package com.sofiamarchinskaya.hw1
 
-import android.view.*
+import android.view.ContextMenu
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class NotesAdapter(
-    private val list: List<Note>,
-    private val onClick: (Note) -> Unit,
-    private val onMenuCreated: (ContextMenu?) -> Unit
+    private var onClick: (Note) -> Unit,
+    private var onMenuCreated: (ContextMenu?) -> Unit,
+    private var onItemLongClick: (Note) -> Unit
 ) : RecyclerView.Adapter<NotesAdapter.NoteViewHolder>() {
 
-    var pos = 0
+    private var list: List<Note> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder =
         NoteViewHolder(
@@ -19,6 +22,11 @@ class NotesAdapter(
 
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
         holder.bind(list[position])
+    }
+
+    fun update(list: List<Note>) {
+        this.list = list
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int = list.size
@@ -30,11 +38,13 @@ class NotesAdapter(
         fun bind(data: Note) {
             title.text = data.title
             text.text = data.text
-            itemView.setOnClickListener { onClick.invoke(data) }
-            itemView.setOnCreateContextMenuListener { menu, _, _ -> onMenuCreated.invoke(menu) }
-            itemView.setOnLongClickListener {
-                pos = this.adapterPosition
-                false
+            itemView.apply {
+                setOnClickListener { onClick.invoke(data) }
+                setOnCreateContextMenuListener { menu, _, _ -> onMenuCreated.invoke(menu) }
+                setOnLongClickListener {
+                    onItemLongClick.invoke(data)
+                    false
+                }
             }
         }
     }

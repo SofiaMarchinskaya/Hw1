@@ -1,7 +1,8 @@
-package com.sofiamarchinskaya.hw1
+package com.sofiamarchinskaya.hw1.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.sofiamarchinskaya.hw1.R
 
 class AboutActivity : AppCompatActivity() {
 
