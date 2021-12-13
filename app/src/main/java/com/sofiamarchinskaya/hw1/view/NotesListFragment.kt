@@ -19,7 +19,7 @@ import com.sofiamarchinskaya.hw1.view.framework.NotesListView
  */
 class NotesListFragment : Fragment(), NotesListView {
 
-    private val presenter: NotesListPresenter = NotesListPresenterImpl(this, NotesModel)
+    private lateinit var presenter: NotesListPresenter
     private lateinit var notesList: RecyclerView
     private lateinit var notesListAdapter: NotesAdapter
 
@@ -28,6 +28,7 @@ class NotesListFragment : Fragment(), NotesListView {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? = inflater.inflate(R.layout.fragment_notes_list, container, false).apply {
+        presenter = NotesListPresenterImpl(this@NotesListFragment, NotesModel)
         notesList = findViewById(R.id.notes_list)
         notesListAdapter =
             NotesAdapter(
