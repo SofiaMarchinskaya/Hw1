@@ -1,23 +1,28 @@
-package com.sofiamarchinskaya.hw1
+package com.sofiamarchinskaya.hw1.view
 
+import android.content.Context
 import android.view.ContextMenu
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.sofiamarchinskaya.hw1.models.Note
+import com.sofiamarchinskaya.hw1.R
 
 class NotesAdapter(
+    context: Context,
     private var onClick: (Note) -> Unit,
     private var onMenuCreated: (ContextMenu?) -> Unit,
     private var onItemLongClick: (Note) -> Unit
 ) : RecyclerView.Adapter<NotesAdapter.NoteViewHolder>() {
 
     private var list: List<Note> = ArrayList()
+    private val inflater = LayoutInflater.from(context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder =
         NoteViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.note_item, parent, false)
+            inflater.inflate(R.layout.note_item, parent, false)
         )
 
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {

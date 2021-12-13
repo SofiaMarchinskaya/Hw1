@@ -10,7 +10,7 @@ import com.sofiamarchinskaya.hw1.*
 
 /**
  * Фрагмент для отображения деталей о заметке
- * */
+ */
 class NoteInfoFragment : Fragment() {
 
     private lateinit var title: TextView
@@ -24,6 +24,5 @@ class NoteInfoFragment : Fragment() {
         text = findViewById(R.id.text)
         title.text = arguments?.getString(Constants.TITLE)
         text.text = arguments?.getString(Constants.TEXT)
-
     }
 }

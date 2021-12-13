@@ -8,21 +8,20 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.sofiamarchinskaya.hw1.*
-import com.sofiamarchinskaya.hw1.Note
+import com.sofiamarchinskaya.hw1.models.Note
 import com.sofiamarchinskaya.hw1.models.NotesModel
 import com.sofiamarchinskaya.hw1.presenters.NotesListPresenterImpl
 import com.sofiamarchinskaya.hw1.presenters.framework.NotesListPresenter
-import com.sofiamarchinskaya.hw1.view.framework.NotesList
+import com.sofiamarchinskaya.hw1.view.framework.NotesListView
 
 /**
  * Фрагмент для отображения списка заметок
- * */
-class NotesListFragment : Fragment(), NotesList {
+ */
+class NotesListFragment : Fragment(), NotesListView {
 
     private val presenter: NotesListPresenter = NotesListPresenterImpl(this, NotesModel)
     private lateinit var notesList: RecyclerView
-    private var notesListAdapter: NotesAdapter =
-        NotesAdapter(presenter::onItemClick, this::onMenuCreated, presenter::longClick)
+    private lateinit var notesListAdapter: NotesAdapter
 
 
     override fun onCreateView(
@@ -30,6 +29,13 @@ class NotesListFragment : Fragment(), NotesList {
         savedInstanceState: Bundle?
     ): View? = inflater.inflate(R.layout.fragment_notes_list, container, false).apply {
         notesList = findViewById(R.id.notes_list)
+        notesListAdapter =
+            NotesAdapter(
+                requireContext(),
+                presenter::onItemClick,
+                this@NotesListFragment::onMenuCreated,
+                presenter::longClick
+            )
         val dividerItemDecoration = DividerItemDecoration(requireContext(), RecyclerView.VERTICAL)
         dividerItemDecoration.setDrawable(resources.getDrawable(R.drawable.divider, null))
         notesList.addItemDecoration(dividerItemDecoration)
@@ -38,9 +44,10 @@ class NotesListFragment : Fragment(), NotesList {
     }
 
     override fun openAboutItemFragment(note: Note) {
-        val infoFragment = NoteInfoFragment()
-        infoFragment.arguments =
-            bundleOf(Pair(Constants.TITLE, note.title), Pair(Constants.TEXT, note.text))
+        val infoFragment = NoteInfoFragment().apply {
+            arguments =
+                bundleOf(Constants.TITLE to note.title, Constants.TEXT to note.text)
+        }
         activity?.supportFragmentManager?.beginTransaction()
             ?.replace(R.id.host, infoFragment)?.addToBackStack(TAG)?.commit()
     }
@@ -70,6 +77,11 @@ class NotesListFragment : Fragment(), NotesList {
             }
         }
         return super.onContextItemSelected(item)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        presenter.onDestroyView()
     }
 
     companion object {

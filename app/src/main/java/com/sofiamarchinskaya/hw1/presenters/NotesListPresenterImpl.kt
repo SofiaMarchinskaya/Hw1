@@ -1,13 +1,13 @@
 package com.sofiamarchinskaya.hw1.presenters
 
 import android.view.ContextMenu
-import com.sofiamarchinskaya.hw1.Note
-import com.sofiamarchinskaya.hw1.view.framework.NotesList
+import com.sofiamarchinskaya.hw1.models.Note
+import com.sofiamarchinskaya.hw1.view.framework.NotesListView
 import com.sofiamarchinskaya.hw1.models.NotesModel
 import com.sofiamarchinskaya.hw1.presenters.framework.NotesListPresenter
 
 class NotesListPresenterImpl(
-    private var view: NotesList?,
+    private var view: NotesListView?,
     private val model: NotesModel,
 ) : NotesListPresenter {
     private var clickedNote: Note? = null
@@ -15,9 +15,6 @@ class NotesListPresenterImpl(
     override fun init() {
         view?.initAdapter(model.list)
     }
-
-    private fun getDataToExtra(): String =
-        clickedNote?.title + "\n" + clickedNote?.text
 
     override fun onItemClick(note: Note) {
         view?.openAboutItemFragment(note)
@@ -34,5 +31,12 @@ class NotesListPresenterImpl(
     override fun onShare() {
         view?.onShare(getDataToExtra())
     }
+
+    override fun onDestroyView() {
+        view = null
+    }
+
+    private fun getDataToExtra(): String =
+        clickedNote?.title + "\n" + clickedNote?.text
 
 }

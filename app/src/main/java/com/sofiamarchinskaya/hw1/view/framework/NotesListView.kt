@@ -1,9 +1,9 @@
 package com.sofiamarchinskaya.hw1.view.framework
 
 import android.view.ContextMenu
-import com.sofiamarchinskaya.hw1.Note
+import com.sofiamarchinskaya.hw1.models.Note
 
-interface NotesList {
+interface NotesListView {
 
     fun openAboutItemFragment(note: Note)
 

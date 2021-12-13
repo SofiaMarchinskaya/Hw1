@@ -1,7 +1,5 @@
 package com.sofiamarchinskaya.hw1.models
 
-import com.sofiamarchinskaya.hw1.Note
-
 object NotesModel {
 
     val list: List<Note> = listOf(

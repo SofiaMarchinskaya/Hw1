@@ -9,7 +9,9 @@ import com.sofiamarchinskaya.hw1.presenters.MainActivityPresenterImpl
 import com.sofiamarchinskaya.hw1.view.framework.MainActivityView
 import com.sofiamarchinskaya.hw1.R
 import com.sofiamarchinskaya.hw1.presenters.framework.MainActivityPresenter
-
+/**
+ * Активити, содержащая меню и фрагменты
+ */
 class MainActivity : AppCompatActivity(), MainActivityView {
 
     private var presenter: MainActivityPresenter = MainActivityPresenterImpl(this)

@@ -1,7 +1,7 @@
 package com.sofiamarchinskaya.hw1.presenters.framework
 
 import android.view.ContextMenu
-import com.sofiamarchinskaya.hw1.Note
+import com.sofiamarchinskaya.hw1.models.Note
 
 interface NotesListPresenter {
 
@@ -14,5 +14,7 @@ interface NotesListPresenter {
     fun longClick(note: Note)
 
     fun onShare()
+
+    fun onDestroyView()
 
 }
