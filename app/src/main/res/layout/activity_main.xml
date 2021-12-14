@@ -4,35 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".view.MainActivity">
 
-    <EditText
-        android:id="@+id/title"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/host"
+        android:name="com.sofiamarchinskaya.hw1.view.NotesListFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="16"
-        android:gravity="top" />
-
-    <Button
-        android:id="@+id/save"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/save" />
-    <Button
-        android:id="@+id/share"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/share">
-
-    </Button>
-
-    
+        android:layout_height="match_parent" />
 </LinearLayout>
