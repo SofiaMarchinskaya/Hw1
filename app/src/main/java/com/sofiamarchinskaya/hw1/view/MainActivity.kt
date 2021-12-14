@@ -9,8 +9,10 @@ import com.sofiamarchinskaya.hw1.presenters.MainActivityPresenterImpl
 import com.sofiamarchinskaya.hw1.view.framework.MainActivityView
 import com.sofiamarchinskaya.hw1.R
 import com.sofiamarchinskaya.hw1.presenters.framework.MainActivityPresenter
+
 /**
- * Активити, содержащая меню и фрагменты
+ * Активити, в которой находится основной интерфейс пирложения: фрагмент со списком,
+ * фрагмент с основной информацией о заметке, меню
  */
 class MainActivity : AppCompatActivity(), MainActivityView {
 

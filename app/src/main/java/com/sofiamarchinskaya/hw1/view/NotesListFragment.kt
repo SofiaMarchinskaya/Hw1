@@ -46,8 +46,7 @@ class NotesListFragment : Fragment(), NotesListView {
 
     override fun openAboutItemFragment(note: Note) {
         val infoFragment = NoteInfoFragment().apply {
-            arguments =
-                bundleOf(Constants.TITLE to note.title, Constants.TEXT to note.text)
+            arguments = bundleOf(Constants.TITLE to note.title, Constants.TEXT to note.text)
         }
         activity?.supportFragmentManager?.beginTransaction()
             ?.replace(R.id.host, infoFragment)?.addToBackStack(TAG)?.commit()

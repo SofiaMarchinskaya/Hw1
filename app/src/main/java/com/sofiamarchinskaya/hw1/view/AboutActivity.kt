@@ -3,6 +3,7 @@ package com.sofiamarchinskaya.hw1.view
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.sofiamarchinskaya.hw1.R
+
 /**
  * Активити с информацией о создателе
  */
