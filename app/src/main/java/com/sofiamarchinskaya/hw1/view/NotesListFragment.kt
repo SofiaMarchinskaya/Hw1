@@ -44,12 +44,12 @@ class NotesListFragment : Fragment(), NotesListView {
         registerForContextMenu(notesList)
     }
 
-    override fun openAboutItemFragment(note: Note) {
-        val infoFragment = NoteInfoFragment().apply {
-            arguments = bundleOf(Constants.TITLE to note.title, Constants.TEXT to note.text)
+    override fun openAboutItemActivity(note: Note) {
+        val intent = Intent(context,NotesPagerActivity::class.java).apply {
+            putExtra(Constants.TITLE,note.title)
+            putExtra(Constants.TEXT,note.text)
         }
-        activity?.supportFragmentManager?.beginTransaction()
-            ?.replace(R.id.host, infoFragment)?.addToBackStack(TAG)?.commit()
+        startActivity(intent)
     }
 
     override fun onMenuCreated(menu: ContextMenu?) {

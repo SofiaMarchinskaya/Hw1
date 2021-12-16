@@ -5,7 +5,7 @@ import com.sofiamarchinskaya.hw1.models.Note
 
 interface NotesListView {
 
-    fun openAboutItemFragment(note: Note)
+    fun openAboutItemActivity(note: Note)
 
     fun onMenuCreated(menu: ContextMenu?)
 

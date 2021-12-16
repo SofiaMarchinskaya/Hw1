@@ -17,7 +17,7 @@ class NotesListPresenterImpl(
     }
 
     override fun onItemClick(note: Note) {
-        view?.openAboutItemFragment(note)
+        view?.openAboutItemActivity(note)
     }
 
     override fun createMenu(menu: ContextMenu?) {

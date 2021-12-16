@@ -42,8 +42,4 @@ class MainActivity : AppCompatActivity(), MainActivityView {
         startActivity(Intent(this, AboutActivity::class.java))
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        supportFragmentManager.popBackStack()
-    }
 }

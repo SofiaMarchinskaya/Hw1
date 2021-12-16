@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import com.sofiamarchinskaya.hw1.*
+import com.sofiamarchinskaya.hw1.models.Note
 
 /**
  * Фрагмент для отображения деталей о заметке
@@ -24,5 +26,13 @@ class NoteInfoFragment : Fragment() {
         text = findViewById(R.id.text)
         title.text = arguments?.getString(Constants.TITLE)
         text.text = arguments?.getString(Constants.TEXT)
+    }
+    companion object{
+        fun newInstance(note: Note): NoteInfoFragment {
+            val args = bundleOf(Constants.TITLE to note.title, Constants.TEXT to note.text)
+            val fragment = NoteInfoFragment()
+            fragment.arguments = args
+            return fragment
+        }
     }
 }
