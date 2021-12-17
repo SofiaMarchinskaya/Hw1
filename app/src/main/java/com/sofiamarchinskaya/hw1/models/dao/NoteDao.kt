@@ -2,16 +2,14 @@ package com.sofiamarchinskaya.hw1.models.dao
 
 import androidx.room.*
 import com.sofiamarchinskaya.hw1.models.entity.Note
-import kotlinx.coroutines.flow.Flow
-
 
 @Dao
 interface NoteDao {
     @Query("SELECT * FROM notes")
-    fun getAll(): Flow<List<Note>>
+    suspend fun getAll(): List<Note>
 
-    @Query("SELECT * FROM notes WHERE note_title LIKE :title LIMIT 1")
-    suspend fun findByTitleName(title: String): Note
+    @Query("SELECT * FROM notes WHERE id=:id")
+    suspend fun findById(id: Long): Note
 
     @Insert
     suspend fun insert(note: Note): Long

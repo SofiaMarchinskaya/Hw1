@@ -3,7 +3,7 @@ package com.sofiamarchinskaya.hw1.view
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.sofiamarchinskaya.hw1.models.Note
+import com.sofiamarchinskaya.hw1.models.entity.Note
 
 class NotesPagerAdapter(
     fragmentActivity: FragmentActivity,

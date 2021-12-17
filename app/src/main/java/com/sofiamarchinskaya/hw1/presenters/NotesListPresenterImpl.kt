@@ -1,19 +1,20 @@
 package com.sofiamarchinskaya.hw1.presenters
 
 import android.view.ContextMenu
-import com.sofiamarchinskaya.hw1.models.Note
 import com.sofiamarchinskaya.hw1.view.framework.NotesListView
-import com.sofiamarchinskaya.hw1.models.NotesModel
+import com.sofiamarchinskaya.hw1.models.database.AppDatabase
+import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.presenters.framework.NotesListPresenter
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class NotesListPresenterImpl(
-    private var view: NotesListView?,
-    private val model: NotesModel,
+    private var view: NotesListView?
 ) : NotesListPresenter {
     private var clickedNote: Note? = null
 
-    override fun init() {
-        view?.initAdapter(model.list)
+    override fun init(): Unit = runBlocking {
+        view?.initAdapter(AppDatabase.getDataBase().noteDao().getAll())
     }
 
     override fun onItemClick(note: Note) {
@@ -36,7 +37,13 @@ class NotesListPresenterImpl(
         view = null
     }
 
+    override fun addNote() {
+        view?.openAddNoteFragment()
+    }
+
     private fun getDataToExtra(): String =
-        clickedNote?.title + "\n" + clickedNote?.text
+        clickedNote?.title + "\n" + clickedNote?.body
+
+
 
 }
