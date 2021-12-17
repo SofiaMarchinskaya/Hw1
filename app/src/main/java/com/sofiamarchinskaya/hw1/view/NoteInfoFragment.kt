@@ -1,5 +1,6 @@
 package com.sofiamarchinskaya.hw1.view
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -41,6 +42,7 @@ class NoteInfoFragment : Fragment(),NoteInfoView {
             activity?.invalidateOptionsMenu()
             isNewNote = true
         }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -65,7 +67,14 @@ class NoteInfoFragment : Fragment(),NoteInfoView {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.save -> {
-                presenter.onSaveNote(title.text.toString(),text.text.toString(),noteId)
+                val dialogFragment = AlertDialog.Builder(requireActivity()).apply {
+                    setTitle("Сохранение?")
+                    setMessage("Сохранить изменения?")
+                    setNegativeButton("Нет", null )
+                    setPositiveButton("Да") { _, _ -> presenter.onSaveNote(title.text.toString(),text.text.toString(),noteId) }
+                    create()
+                }
+                activity?.supportFragmentManager?.let { dialogFragment.show() }
                 return true
             }
         }
