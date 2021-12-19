@@ -11,8 +11,8 @@ import com.sofiamarchinskaya.hw1.presenters.NotesPagerPresenterImpl
 import com.sofiamarchinskaya.hw1.presenters.framework.NotesPagerPresenter
 import com.sofiamarchinskaya.hw1.view.framework.NotesPagerActivityView
 
-class NotesPagerActivity : AppCompatActivity(),NotesPagerActivityView {
-    private lateinit var viewPager:ViewPager2
+class NotesPagerActivity : AppCompatActivity(), NotesPagerActivityView {
+    private lateinit var viewPager: ViewPager2
     private lateinit var presenter: NotesPagerPresenter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

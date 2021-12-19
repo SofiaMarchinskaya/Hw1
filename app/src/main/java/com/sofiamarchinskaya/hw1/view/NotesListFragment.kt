@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -13,7 +12,6 @@ import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.presenters.NotesListPresenterImpl
 import com.sofiamarchinskaya.hw1.presenters.framework.NotesListPresenter
 import com.sofiamarchinskaya.hw1.view.framework.NotesListView
-import kotlinx.coroutines.launch
 
 /**
  * Фрагмент для отображения списка заметок
@@ -23,7 +21,7 @@ class NotesListFragment : Fragment(), NotesListView {
     private lateinit var presenter: NotesListPresenter
     private lateinit var notesList: RecyclerView
     private lateinit var notesListAdapter: NotesAdapter
-    private lateinit var addButton:FloatingActionButton
+    private lateinit var addButton: FloatingActionButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
@@ -56,10 +54,10 @@ class NotesListFragment : Fragment(), NotesListView {
     }
 
     override fun openAboutItemActivity(note: Note) {
-        val intent = Intent(context,NotesPagerActivity::class.java).apply {
-            putExtra(Constants.TITLE,note.title)
-            putExtra(Constants.TEXT,note.body)
-            putExtra(Constants.ID,note.id)
+        val intent = Intent(context, NotesPagerActivity::class.java).apply {
+            putExtra(Constants.TITLE, note.title)
+            putExtra(Constants.TEXT, note.body)
+            putExtra(Constants.ID, note.id)
         }
         startActivity(intent)
     }
