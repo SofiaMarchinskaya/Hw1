@@ -18,6 +18,4 @@ interface NotesListPresenter {
     fun onDestroyView()
 
     fun addNote()
-
-
 }

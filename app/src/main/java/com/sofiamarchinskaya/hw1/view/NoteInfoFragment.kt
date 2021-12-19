@@ -16,13 +16,13 @@ import com.sofiamarchinskaya.hw1.view.framework.NoteInfoView
 /**
  * Фрагмент для отображения деталей о заметке
  */
-class NoteInfoFragment : Fragment(),NoteInfoView {
+class NoteInfoFragment : Fragment(), NoteInfoView {
 
     private lateinit var title: TextView
     private lateinit var text: TextView
-    private var noteId =Constants.INVALID_ID
+    private var noteId = Constants.INVALID_ID
     private var isNewNote = false
-    private lateinit var presenter:NoteInfoPresenter
+    private lateinit var presenter: NoteInfoPresenter
     private var isSaveDialogOpen = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,12 +39,12 @@ class NoteInfoFragment : Fragment(),NoteInfoView {
         title.text = arguments?.getString(Constants.TITLE)
         text.text = arguments?.getString(Constants.TEXT)
         noteId = arguments?.getLong(Constants.ID) ?: Constants.INVALID_ID
-        presenter =NoteInfoPresenterImpl(this@NoteInfoFragment)
-        if (arguments == null){
+        presenter = NoteInfoPresenterImpl(this@NoteInfoFragment)
+        if (arguments == null) {
             activity?.invalidateOptionsMenu()
             isNewNote = true
         }
-        if(savedInstanceState?.getBoolean("dialogState") == true){
+        if (savedInstanceState?.getBoolean(Constants.DIALOG_STATE) == true) {
             createSaveDialog()
         }
     }
@@ -52,12 +52,16 @@ class NoteInfoFragment : Fragment(),NoteInfoView {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         if (isNewNote)
-        inflater.inflate(R.menu.menu_add, menu)
+            inflater.inflate(R.menu.menu_add, menu)
     }
 
-    companion object{
+    companion object {
         fun newInstance(note: Note): NoteInfoFragment {
-            val args = bundleOf(Constants.TITLE to note.title, Constants.TEXT to note.body,Constants.ID to note.id)
+            val args = bundleOf(
+                Constants.TITLE to note.title,
+                Constants.TEXT to note.body,
+                Constants.ID to note.id
+            )
             val fragment = NoteInfoFragment()
             fragment.arguments = args
             return fragment
@@ -76,7 +80,7 @@ class NoteInfoFragment : Fragment(),NoteInfoView {
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.apply {
-            putBoolean("dialogState", isSaveDialogOpen)
+            putBoolean(Constants.DIALOG_STATE, isSaveDialogOpen)
         }
     }
 
@@ -86,20 +90,22 @@ class NoteInfoFragment : Fragment(),NoteInfoView {
     }
 
     override fun onSaveAllowed() {
-    createSaveDialog()
+        createSaveDialog()
     }
 
     override fun onSaveDisabled() {
-       Toast.makeText(requireContext(),"Заметка пуста!",Toast.LENGTH_LONG).show()
+        Toast.makeText(requireContext(), getString(R.string.empty_note), Toast.LENGTH_LONG).show()
     }
 
-    private fun createSaveDialog(){
-        isSaveDialogOpen=true
+    private fun createSaveDialog() {
+        isSaveDialogOpen = true
         val dialogFragment = AlertDialog.Builder(requireActivity()).apply {
-            setTitle("Сохранение?")
-            setMessage("Сохранить изменения?")
-            setNegativeButton("Нет", { _,_->isSaveDialogOpen=false})
-            setPositiveButton("Да") { _, _ ->
+            setTitle(getString(R.string.dialog_title))
+            setMessage(getString(R.string.dialog_message))
+            setNegativeButton(
+                getString(R.string.dialog_negative),
+                { _, _ -> isSaveDialogOpen = false })
+            setPositiveButton(getString(R.string.dialog_positive)) { _, _ ->
                 presenter.onSaveNote(
                     title.text.toString(),
                     text.text.toString(),

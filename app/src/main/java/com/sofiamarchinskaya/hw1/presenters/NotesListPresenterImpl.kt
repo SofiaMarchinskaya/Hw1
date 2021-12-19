@@ -43,7 +43,4 @@ class NotesListPresenterImpl(
 
     private fun getDataToExtra(): String =
         clickedNote?.title + "\n" + clickedNote?.body
-
-
-
 }

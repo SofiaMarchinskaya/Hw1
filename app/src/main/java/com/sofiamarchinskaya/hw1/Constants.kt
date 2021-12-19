@@ -8,4 +8,5 @@ object Constants {
     const val DATABASE_NAME = "database"
     const val ID = "id"
     const val INVALID_ID = -1L
+    const val DIALOG_STATE = "dialogState"
 }

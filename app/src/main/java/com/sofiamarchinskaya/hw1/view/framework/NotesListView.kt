@@ -14,6 +14,5 @@ interface NotesListView {
     fun onShare(dataForExtra: String)
 
     fun openAddNoteFragment()
-
 }
 
