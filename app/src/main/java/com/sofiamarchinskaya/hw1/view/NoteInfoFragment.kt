@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import com.sofiamarchinskaya.hw1.*
 import com.sofiamarchinskaya.hw1.models.entity.Note
@@ -22,6 +23,7 @@ class NoteInfoFragment : Fragment(),NoteInfoView {
     private var noteId =Constants.INVALID_ID
     private var isNewNote = false
     private lateinit var presenter:NoteInfoPresenter
+    private var isSaveDialogOpen = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
@@ -42,7 +44,9 @@ class NoteInfoFragment : Fragment(),NoteInfoView {
             activity?.invalidateOptionsMenu()
             isNewNote = true
         }
-
+        if(savedInstanceState?.getBoolean("dialogState") == true){
+            createSaveDialog()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -60,25 +64,51 @@ class NoteInfoFragment : Fragment(),NoteInfoView {
         }
     }
 
-    override fun onSaveComplete() {
-
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.save -> {
-                val dialogFragment = AlertDialog.Builder(requireActivity()).apply {
-                    setTitle("Сохранение?")
-                    setMessage("Сохранить изменения?")
-                    setNegativeButton("Нет", null )
-                    setPositiveButton("Да") { _, _ -> presenter.onSaveNote(title.text.toString(),text.text.toString(),noteId) }
-                    create()
-                }
-                activity?.supportFragmentManager?.let { dialogFragment.show() }
+                presenter.checkNote(title.text.toString(), text.text.toString())
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.apply {
+            putBoolean("dialogState", isSaveDialogOpen)
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        presenter.onDestroy()
+    }
+
+    override fun onSaveAllowed() {
+    createSaveDialog()
+    }
+
+    override fun onSaveDisabled() {
+       Toast.makeText(requireContext(),"Заметка пуста!",Toast.LENGTH_LONG).show()
+    }
+
+    private fun createSaveDialog(){
+        isSaveDialogOpen=true
+        val dialogFragment = AlertDialog.Builder(requireActivity()).apply {
+            setTitle("Сохранение?")
+            setMessage("Сохранить изменения?")
+            setNegativeButton("Нет", { _,_->isSaveDialogOpen=false})
+            setPositiveButton("Да") { _, _ ->
+                presenter.onSaveNote(
+                    title.text.toString(),
+                    text.text.toString(),
+                    noteId
+                )
+                isSaveDialogOpen = false
+            }
+            create()
+        }
+        activity?.supportFragmentManager?.let { dialogFragment.show() }
+    }
 }

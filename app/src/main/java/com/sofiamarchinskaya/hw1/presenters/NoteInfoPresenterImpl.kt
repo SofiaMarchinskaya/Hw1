@@ -18,4 +18,16 @@ class NoteInfoPresenterImpl(
         }
     }
 
+    override fun checkNote(title: String, text: String) {
+        if(title.isBlank() || text.isBlank()){
+            view?.onSaveDisabled()
+        }
+        else
+            view?.onSaveAllowed()
+    }
+
+    override fun onDestroy() {
+        view = null
+    }
+
 }
