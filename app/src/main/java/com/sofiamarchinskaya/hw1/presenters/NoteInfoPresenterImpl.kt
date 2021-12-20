@@ -8,14 +8,15 @@ import com.sofiamarchinskaya.hw1.view.framework.NoteInfoView
 import kotlinx.coroutines.runBlocking
 
 class NoteInfoPresenterImpl(
-    private var view: NoteInfoView?
+    private var view: NoteInfoView?,
+    private val database: AppDatabase
 ) : NoteInfoPresenter {
 
     override fun onSaveNote(title: String, text: String, id: Long): Unit = runBlocking {
         if (id == Constants.INVALID_ID) {
-            AppDatabase.getDataBase().noteDao().insert(Note(title = title, body = text))
+            database.noteDao().insert(Note(title = title, body = text))
         } else {
-            AppDatabase.getDataBase().noteDao().update(Note(id, title, text))
+            database.noteDao().update(Note(id, title, text))
         }
     }
 

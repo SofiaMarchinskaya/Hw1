@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.Menu
 import androidx.viewpager2.widget.ViewPager2
 import com.sofiamarchinskaya.hw1.R
+import com.sofiamarchinskaya.hw1.models.database.AppDatabase
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.presenters.NotesPagerPresenterImpl
 import com.sofiamarchinskaya.hw1.presenters.framework.NotesPagerPresenter
@@ -14,11 +15,13 @@ import com.sofiamarchinskaya.hw1.view.framework.NotesPagerActivityView
 class NotesPagerActivity : AppCompatActivity(), NotesPagerActivityView {
     private lateinit var viewPager: ViewPager2
     private lateinit var presenter: NotesPagerPresenter
+    private lateinit var database: AppDatabase
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notes_pager)
         setSupportActionBar(findViewById(R.id.toolBar))
-        presenter = NotesPagerPresenterImpl(this)
+        database = AppDatabase.getDataBase(applicationContext)
+        presenter = NotesPagerPresenterImpl(this, database)
         presenter.init(intent.extras)
     }
 

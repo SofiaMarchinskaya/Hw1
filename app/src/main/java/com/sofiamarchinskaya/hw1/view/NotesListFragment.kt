@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.sofiamarchinskaya.hw1.*
+import com.sofiamarchinskaya.hw1.models.database.AppDatabase
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.presenters.NotesListPresenterImpl
 import com.sofiamarchinskaya.hw1.presenters.framework.NotesListPresenter
@@ -22,6 +23,7 @@ class NotesListFragment : Fragment(), NotesListView {
     private lateinit var notesList: RecyclerView
     private lateinit var notesListAdapter: NotesAdapter
     private lateinit var addButton: FloatingActionButton
+    private lateinit var database: AppDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
@@ -32,7 +34,8 @@ class NotesListFragment : Fragment(), NotesListView {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? = inflater.inflate(R.layout.fragment_notes_list, container, false).apply {
-        presenter = NotesListPresenterImpl(this@NotesListFragment)
+        database = AppDatabase.getDataBase(requireContext().applicationContext)
+        presenter = NotesListPresenterImpl(this@NotesListFragment, database)
         notesList = findViewById(R.id.notes_list)
         addButton = findViewById(R.id.fab)
         addButton.setOnClickListener {

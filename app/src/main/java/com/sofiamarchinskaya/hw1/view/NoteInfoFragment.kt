@@ -8,6 +8,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import com.sofiamarchinskaya.hw1.*
+import com.sofiamarchinskaya.hw1.models.database.AppDatabase
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.presenters.NoteInfoPresenterImpl
 import com.sofiamarchinskaya.hw1.presenters.framework.NoteInfoPresenter
@@ -24,6 +25,7 @@ class NoteInfoFragment : Fragment(), NoteInfoView {
     private var isNewNote = false
     private lateinit var presenter: NoteInfoPresenter
     private var isSaveDialogOpen = false
+    private lateinit var database: AppDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
@@ -31,15 +33,16 @@ class NoteInfoFragment : Fragment(), NoteInfoView {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? = inflater.inflate(R.layout.fragment_note_info, container, false).apply {
         title = findViewById(R.id.title)
         text = findViewById(R.id.text)
         title.text = arguments?.getString(Constants.TITLE)
         text.text = arguments?.getString(Constants.TEXT)
         noteId = arguments?.getLong(Constants.ID) ?: Constants.INVALID_ID
-        presenter = NoteInfoPresenterImpl(this@NoteInfoFragment)
+        database = AppDatabase.getDataBase(requireContext().applicationContext)
+        presenter = NoteInfoPresenterImpl(this@NoteInfoFragment,database)
         if (arguments == null) {
             activity?.invalidateOptionsMenu()
             isNewNote = true
@@ -58,9 +61,9 @@ class NoteInfoFragment : Fragment(), NoteInfoView {
     companion object {
         fun newInstance(note: Note): NoteInfoFragment {
             val args = bundleOf(
-                Constants.TITLE to note.title,
-                Constants.TEXT to note.body,
-                Constants.ID to note.id
+                    Constants.TITLE to note.title,
+                    Constants.TEXT to note.body,
+                    Constants.ID to note.id
             )
             val fragment = NoteInfoFragment()
             fragment.arguments = args
@@ -103,13 +106,13 @@ class NoteInfoFragment : Fragment(), NoteInfoView {
             setTitle(getString(R.string.dialog_title))
             setMessage(getString(R.string.dialog_message))
             setNegativeButton(
-                getString(R.string.dialog_negative),
-                { _, _ -> isSaveDialogOpen = false })
+                    getString(R.string.dialog_negative),
+                    { _, _ -> isSaveDialogOpen = false })
             setPositiveButton(getString(R.string.dialog_positive)) { _, _ ->
                 presenter.onSaveNote(
-                    title.text.toString(),
-                    text.text.toString(),
-                    noteId
+                        title.text.toString(),
+                        text.text.toString(),
+                        noteId
                 )
                 isSaveDialogOpen = false
             }

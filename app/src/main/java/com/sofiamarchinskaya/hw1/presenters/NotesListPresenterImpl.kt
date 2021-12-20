@@ -9,12 +9,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 class NotesListPresenterImpl(
-    private var view: NotesListView?
+    private var view: NotesListView?,
+    private val database: AppDatabase
 ) : NotesListPresenter {
     private var clickedNote: Note? = null
 
     override fun init(): Unit = runBlocking {
-        view?.initAdapter(AppDatabase.getDataBase().noteDao().getAll())
+        view?.initAdapter(database.noteDao().getAll())
     }
 
     override fun onItemClick(note: Note) {

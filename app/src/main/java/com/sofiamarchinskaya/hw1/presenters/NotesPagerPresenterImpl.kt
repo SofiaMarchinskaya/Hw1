@@ -8,11 +8,12 @@ import com.sofiamarchinskaya.hw1.view.framework.NotesPagerActivityView
 import kotlinx.coroutines.runBlocking
 
 class NotesPagerPresenterImpl(
-    private var view: NotesPagerActivityView?
+    private var view: NotesPagerActivityView?,
+    private val database: AppDatabase
 ) : NotesPagerPresenter {
 
     override fun init(extras: Bundle?): Unit = runBlocking {
-        val list = AppDatabase.getDataBase().noteDao().getAll()
+        val list = database.noteDao().getAll()
         var index = 0L
         val id = extras?.getLong(Constants.ID)
         while (index != id) {
