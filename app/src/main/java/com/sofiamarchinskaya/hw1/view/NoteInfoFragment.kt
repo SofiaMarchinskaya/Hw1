@@ -55,19 +55,6 @@ class NoteInfoFragment : Fragment(), NoteInfoView {
             inflater.inflate(R.menu.menu_add, menu)
     }
 
-    companion object {
-        fun newInstance(note: Note): NoteInfoFragment {
-            val args = bundleOf(
-                Constants.TITLE to note.title,
-                Constants.TEXT to note.body,
-                Constants.ID to note.id
-            )
-            val fragment = NoteInfoFragment()
-            fragment.arguments = args
-            return fragment
-        }
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.save -> {
@@ -97,6 +84,10 @@ class NoteInfoFragment : Fragment(), NoteInfoView {
         Toast.makeText(requireContext(), getString(R.string.empty_note), Toast.LENGTH_LONG).show()
     }
 
+    override fun onSuccessfullySaved() {
+        Toast.makeText(requireContext(), getString(R.string.success), Toast.LENGTH_LONG).show()
+    }
+
     private fun createSaveDialog() {
         isSaveDialogOpen = true
         val dialogFragment = AlertDialog.Builder(requireActivity()).apply {
@@ -116,5 +107,18 @@ class NoteInfoFragment : Fragment(), NoteInfoView {
             create()
         }
         activity?.supportFragmentManager?.let { dialogFragment.show() }
+    }
+
+    companion object {
+        fun newInstance(note: Note): NoteInfoFragment {
+            val args = bundleOf(
+                Constants.TITLE to note.title,
+                Constants.TEXT to note.body,
+                Constants.ID to note.id
+            )
+            val fragment = NoteInfoFragment()
+            fragment.arguments = args
+            return fragment
+        }
     }
 }

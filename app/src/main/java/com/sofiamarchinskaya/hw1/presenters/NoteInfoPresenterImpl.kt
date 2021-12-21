@@ -17,6 +17,7 @@ class NoteInfoPresenterImpl(
         } else {
             AppDatabase.getDataBase().noteDao().update(Note(id, title, text))
         }
+        view?.onSuccessfullySaved()
     }
 
     override fun checkNote(title: String, text: String) {

@@ -5,4 +5,6 @@ interface NoteInfoView {
     fun onSaveAllowed()
 
     fun onSaveDisabled()
+
+    fun onSuccessfullySaved()
 }

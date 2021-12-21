@@ -25,6 +25,10 @@ class NotesListPresenterImpl(
         view?.onMenuCreated(menu)
     }
 
+    override fun onResume(): Unit = runBlocking {
+        view?.update(AppDatabase.getDataBase().noteDao().getAll())
+    }
+
     override fun longClick(note: Note) {
         clickedNote = note
     }

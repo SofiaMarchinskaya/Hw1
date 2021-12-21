@@ -1,10 +1,12 @@
 package com.sofiamarchinskaya.hw1.view
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import androidx.viewpager2.widget.ViewPager2
+import com.sofiamarchinskaya.hw1.Constants
 import com.sofiamarchinskaya.hw1.R
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.presenters.NotesPagerPresenterImpl
@@ -19,7 +21,7 @@ class NotesPagerActivity : AppCompatActivity(), NotesPagerActivityView {
         setContentView(R.layout.activity_notes_pager)
         setSupportActionBar(findViewById(R.id.toolBar))
         presenter = NotesPagerPresenterImpl(this)
-        presenter.init(intent.extras)
+        presenter.init(intent.extras?.getLong(Constants.ID))
     }
 
     override fun init(list: List<Note>, index: Long) {
@@ -27,14 +29,6 @@ class NotesPagerActivity : AppCompatActivity(), NotesPagerActivityView {
             adapter = NotesPagerAdapter(this@NotesPagerActivity, list)
             setCurrentItem(index.toInt(), false)
         }
-
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-        finish()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

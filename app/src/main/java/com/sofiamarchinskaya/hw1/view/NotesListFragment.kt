@@ -71,6 +71,10 @@ class NotesListFragment : Fragment(), NotesListView {
         notesList.adapter = notesListAdapter
     }
 
+    override fun update(list: List<Note>) {
+        notesListAdapter.update(list)
+    }
+
     override fun onShare(dataForExtra: String) {
         startActivity(Intent(Intent.ACTION_SEND).apply {
             type = Constants.TYPE
@@ -102,6 +106,11 @@ class NotesListFragment : Fragment(), NotesListView {
     override fun onDestroyView() {
         super.onDestroyView()
         presenter.onDestroyView()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        presenter.onResume()
     }
 
     companion object {

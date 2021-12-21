@@ -14,10 +14,10 @@ abstract class AppDatabase : RoomDatabase() {
 
     companion object {
         @Volatile
-        private var INSTANCE: AppDatabase? = null
+        private lateinit var INSTANCE: AppDatabase
 
         fun getDataBase(): AppDatabase {
-            return INSTANCE!!
+            return INSTANCE
         }
 
         fun createDataBase(context: Context) {
