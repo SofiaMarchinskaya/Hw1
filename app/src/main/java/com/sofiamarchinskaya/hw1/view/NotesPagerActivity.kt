@@ -7,25 +7,27 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.sofiamarchinskaya.hw1.Constants
 import com.sofiamarchinskaya.hw1.R
+import com.sofiamarchinskaya.hw1.databinding.ActivityNotesPagerBinding
 import com.sofiamarchinskaya.hw1.presenters.NotesPagerViewModel
 
 
 class NotesPagerActivity : AppCompatActivity() {
-    private lateinit var viewPager: ViewPager2
+
+    private lateinit var binding: ActivityNotesPagerBinding
     private val viewModel by lazy { ViewModelProvider(this)[NotesPagerViewModel::class.java] }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_notes_pager)
-        setSupportActionBar(findViewById(R.id.toolBar))
+        binding = ActivityNotesPagerBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolBar)
         viewModel.update()
         viewModel.init(intent.extras?.getLong(Constants.ID))
         viewModel.list.observe(this) {
-            viewPager = findViewById<ViewPager2>(R.id.note_view_pager).apply {
-                adapter = NotesPagerAdapter(this@NotesPagerActivity, it)
-            }
+            binding.noteViewPager.adapter = NotesPagerAdapter(this, it)
         }
         viewModel.index.observe(this) {
-            viewPager.setCurrentItem(it.toInt(), false)
+            binding.noteViewPager.setCurrentItem(it.toInt(), false)
         }
     }
 

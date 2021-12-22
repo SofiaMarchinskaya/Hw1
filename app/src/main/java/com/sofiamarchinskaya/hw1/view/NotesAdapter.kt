@@ -1,6 +1,7 @@
 package com.sofiamarchinskaya.hw1.view
 
 import android.content.Context
+import android.util.Log
 import android.view.ContextMenu
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.sofiamarchinskaya.hw1.R
+import com.sofiamarchinskaya.hw1.databinding.NoteItemBinding
 import com.sofiamarchinskaya.hw1.models.entity.Note
 
 class NotesAdapter(
@@ -22,10 +24,11 @@ class NotesAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder =
         NoteViewHolder(
-            inflater.inflate(R.layout.note_item, parent, false)
+            NoteItemBinding.inflate(inflater)
         )
 
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
+        Log.d("click", list[position].body)
         holder.bind(list[position])
     }
 
@@ -36,15 +39,13 @@ class NotesAdapter(
 
     override fun getItemCount(): Int = list.size
 
-    inner class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val title = itemView.findViewById<TextView>(R.id.title)
-        private val text = itemView.findViewById<TextView>(R.id.text)
-
+    inner class NoteViewHolder(private val binding :NoteItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: Note) {
-            title.text = data.title
-            text.text = data.body
-            itemView.apply {
-                setOnClickListener { onClick.invoke(data) }
+            binding.title.text = data.title
+            binding.text.text = data.body
+            Log.d("click", data.id.toString())
+            binding.root.apply {
+                setOnClickListener {onClick.invoke(data) }
                 setOnCreateContextMenuListener { menu, _, _ -> onMenuCreated.invoke(menu) }
                 setOnLongClickListener {
                     onItemLongClick.invoke(data)

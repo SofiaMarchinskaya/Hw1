@@ -2,6 +2,7 @@ package com.sofiamarchinskaya.hw1.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -9,6 +10,8 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.sofiamarchinskaya.hw1.*
+import com.sofiamarchinskaya.hw1.databinding.FragmentNoteInfoBinding
+import com.sofiamarchinskaya.hw1.databinding.FragmentNotesListBinding
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.presenters.NotesListViewModel
 
@@ -19,9 +22,8 @@ import com.sofiamarchinskaya.hw1.presenters.NotesListViewModel
 class NotesListFragment : Fragment() {
 
     private val viewModel by lazy { ViewModelProvider(this)[NotesListViewModel::class.java] }
-    private lateinit var notesList: RecyclerView
     private lateinit var notesListAdapter: NotesAdapter
-    private lateinit var addButton: FloatingActionButton
+    private lateinit var binding: FragmentNotesListBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
@@ -31,29 +33,30 @@ class NotesListFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_notes_list, container, false).apply {
-        notesList = findViewById(R.id.notes_list)
-        addButton = findViewById(R.id.fab)
-        addButton.setOnClickListener {
+    ): View {
+        binding = FragmentNotesListBinding.inflate(inflater)
+        binding.fab.setOnClickListener {
             openAddNoteFragment()
         }
         notesListAdapter =
             NotesAdapter(
                 requireContext(),
-                this@NotesListFragment::openAboutItemActivity,
-                this@NotesListFragment::onMenuCreated,
+                this::openAboutItemActivity,
+                this::onMenuCreated,
                 viewModel::longClick
             )
         val dividerItemDecoration = DividerItemDecoration(requireContext(), RecyclerView.VERTICAL)
         dividerItemDecoration.setDrawable(resources.getDrawable(R.drawable.divider, null))
-        notesList.addItemDecoration(dividerItemDecoration)
-        notesList.adapter = notesListAdapter
-        viewModel.list.observe(this@NotesListFragment) {
+        binding.notesList.addItemDecoration(dividerItemDecoration)
+        binding.notesList.adapter = notesListAdapter
+        viewModel.list.observe(this) {
             notesListAdapter.update(it)
         }
-        registerForContextMenu(notesList)
+        registerForContextMenu(binding.notesList)
         activity?.invalidateOptionsMenu()
+        return binding.root
     }
+
 
     private fun openAboutItemActivity(note: Note) {
         val intent = Intent(context, NotesPagerActivity::class.java).apply {

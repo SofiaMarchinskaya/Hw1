@@ -2,6 +2,7 @@ package com.sofiamarchinskaya.hw1.view
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.text.Editable
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.TextView
@@ -9,6 +10,7 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import com.sofiamarchinskaya.hw1.*
+import com.sofiamarchinskaya.hw1.databinding.FragmentNoteInfoBinding
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.presenters.NoteInfoViewModel
 import com.sofiamarchinskaya.hw1.states.SavingState
@@ -19,8 +21,7 @@ import com.sofiamarchinskaya.hw1.states.States
  */
 class NoteInfoFragment : Fragment() {
 
-    private lateinit var title: TextView
-    private lateinit var text: TextView
+    private lateinit var binding: FragmentNoteInfoBinding
     private val viewModel by lazy { ViewModelProvider(this)[NoteInfoViewModel::class.java] }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,17 +32,16 @@ class NoteInfoFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_note_info, container, false).apply {
-        title = findViewById(R.id.title)
-        text = findViewById(R.id.text)
-        title.text = arguments?.getString(Constants.TITLE)
-        text.text = arguments?.getString(Constants.TEXT)
+    ): View? {
+        binding = FragmentNoteInfoBinding.inflate(inflater)
+        binding.title.setText(arguments?.getString(Constants.TITLE))
+        binding.text.setText(arguments?.getString(Constants.TEXT))
         viewModel.noteId = arguments?.getLong(Constants.ID) ?: Constants.INVALID_ID
         if (arguments == null) {
             activity?.invalidateOptionsMenu()
             viewModel.isNewNote = true
         }
-        viewModel.savingState.observe(this@NoteInfoFragment) {
+        viewModel.savingState.observe(this) {
             when (it.state) {
                 States.SAVING -> {}
                 States.SAVED -> onSuccessfullySaved()
@@ -50,6 +50,7 @@ class NoteInfoFragment : Fragment() {
                 States.NOTHING -> {}//Nothing
             }
         }
+        return binding.root
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -61,7 +62,7 @@ class NoteInfoFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.save -> {
-                viewModel.checkNote(title.text.toString(), text.text.toString())
+                viewModel.checkNote(binding.title.text.toString(), binding.text.text.toString())
                 return true
             }
         }
@@ -90,8 +91,8 @@ class NoteInfoFragment : Fragment() {
             )
             setPositiveButton(getString(R.string.dialog_positive)) { _, _ ->
                 viewModel.onSaveNote(
-                    title.text.toString(),
-                    text.text.toString()
+                    binding.title.text.toString(),
+                    binding.text.text.toString()
                 )
             }
             create()
