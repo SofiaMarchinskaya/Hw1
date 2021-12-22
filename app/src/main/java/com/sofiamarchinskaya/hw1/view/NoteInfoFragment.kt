@@ -33,7 +33,7 @@ class NoteInfoFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentNoteInfoBinding.inflate(inflater)
+        binding = FragmentNoteInfoBinding.inflate(inflater, container, false)
         binding.title.setText(arguments?.getString(Constants.TITLE))
         binding.text.setText(arguments?.getString(Constants.TEXT))
         viewModel.noteId = arguments?.getLong(Constants.ID) ?: Constants.INVALID_ID

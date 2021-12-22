@@ -24,11 +24,10 @@ class NotesAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder =
         NoteViewHolder(
-            NoteItemBinding.inflate(inflater)
+            NoteItemBinding.inflate(inflater, parent, false)
         )
 
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
-        Log.d("click", list[position].body)
         holder.bind(list[position])
     }
 
@@ -39,13 +38,13 @@ class NotesAdapter(
 
     override fun getItemCount(): Int = list.size
 
-    inner class NoteViewHolder(private val binding :NoteItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class NoteViewHolder(private val binding: NoteItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(data: Note) {
             binding.title.text = data.title
             binding.text.text = data.body
-            Log.d("click", data.id.toString())
             binding.root.apply {
-                setOnClickListener {onClick.invoke(data) }
+                setOnClickListener { onClick.invoke(data) }
                 setOnCreateContextMenuListener { menu, _, _ -> onMenuCreated.invoke(menu) }
                 setOnLongClickListener {
                     onItemLongClick.invoke(data)

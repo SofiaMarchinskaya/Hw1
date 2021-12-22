@@ -34,7 +34,7 @@ class NotesListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentNotesListBinding.inflate(inflater)
+        binding = FragmentNotesListBinding.inflate(inflater, container, false)
         binding.fab.setOnClickListener {
             openAddNoteFragment()
         }
