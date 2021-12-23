@@ -1,5 +1,7 @@
 package com.sofiamarchinskaya.hw1.view
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +13,9 @@ import com.sofiamarchinskaya.hw1.presenters.NotesPagerPresenterImpl
 import com.sofiamarchinskaya.hw1.presenters.framework.NotesPagerPresenter
 import com.sofiamarchinskaya.hw1.view.framework.NotesPagerActivityView
 
+/**
+ * Активити, в которой реализована возможность листать детальные отображения заметок
+ */
 class NotesPagerActivity : AppCompatActivity(), NotesPagerActivityView {
     private lateinit var viewPager: ViewPager2
     private lateinit var presenter: NotesPagerPresenter
@@ -32,5 +37,15 @@ class NotesPagerActivity : AppCompatActivity(), NotesPagerActivityView {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_add, menu)
         return super.onCreateOptionsMenu(menu)
+    }
+
+    companion object {
+        fun getStartIntent(context: Context, note: Note): Intent =
+            Intent(context, NotesPagerActivity::class.java).apply {
+                putExtra(Constants.TITLE, note.title)
+                putExtra(Constants.TEXT, note.body)
+                putExtra(Constants.ID, note.id)
+            }
+
     }
 }

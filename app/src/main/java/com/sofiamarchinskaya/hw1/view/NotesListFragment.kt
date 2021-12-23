@@ -54,12 +54,7 @@ class NotesListFragment : Fragment(), NotesListView {
     }
 
     override fun openAboutItemActivity(note: Note) {
-        val intent = Intent(context, NotesPagerActivity::class.java).apply {
-            putExtra(Constants.TITLE, note.title)
-            putExtra(Constants.TEXT, note.body)
-            putExtra(Constants.ID, note.id)
-        }
-        startActivity(intent)
+        startActivity(NotesPagerActivity.getStartIntent(requireContext(), note))
     }
 
     override fun onMenuCreated(menu: ContextMenu?) {

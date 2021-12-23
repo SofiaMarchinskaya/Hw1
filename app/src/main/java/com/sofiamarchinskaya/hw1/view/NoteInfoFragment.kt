@@ -111,13 +111,12 @@ class NoteInfoFragment : Fragment(), NoteInfoView {
 
     companion object {
         fun newInstance(note: Note): NoteInfoFragment {
-            val args = bundleOf(
+            val fragment = NoteInfoFragment()
+            fragment.arguments = bundleOf(
                 Constants.TITLE to note.title,
                 Constants.TEXT to note.body,
                 Constants.ID to note.id
             )
-            val fragment = NoteInfoFragment()
-            fragment.arguments = args
             return fragment
         }
     }

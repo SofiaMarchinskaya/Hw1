@@ -14,7 +14,9 @@ class NotesListPresenterImpl(
     private var clickedNote: Note? = null
 
     override fun init(): Unit = runBlocking {
-        view?.initAdapter(AppDatabase.getDataBase().noteDao().getAll())
+        launch {
+            view?.initAdapter(AppDatabase.getDataBase().noteDao().getAll())
+        }
     }
 
     override fun onItemClick(note: Note) {
@@ -26,7 +28,9 @@ class NotesListPresenterImpl(
     }
 
     override fun onResume(): Unit = runBlocking {
-        view?.update(AppDatabase.getDataBase().noteDao().getAll())
+        launch {
+            view?.update(AppDatabase.getDataBase().noteDao().getAll())
+        }
     }
 
     override fun longClick(note: Note) {
