@@ -2,6 +2,7 @@ package com.sofiamarchinskaya.hw1.models.dao
 
 import androidx.room.*
 import com.sofiamarchinskaya.hw1.models.entity.Note
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NoteDao {
@@ -17,6 +18,4 @@ interface NoteDao {
     @Update
     suspend fun update(note: Note)
 
-    @Delete
-    suspend fun delete(note: Note)
 }
