@@ -33,9 +33,14 @@ class NotesListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentNotesListBinding.inflate(inflater, container, false)
-        binding.fab.setOnClickListener {
-            openAddNoteFragment()
+        val dividerItemDecoration = DividerItemDecoration(requireContext(), RecyclerView.VERTICAL)
+        dividerItemDecoration.setDrawable(resources.getDrawable(R.drawable.divider, null))
+        binding = FragmentNotesListBinding.inflate(inflater, container, false).apply {
+            fab.setOnClickListener {
+                openAddNoteFragment()
+            }
+            notesList.addItemDecoration(dividerItemDecoration)
+            notesList.adapter = notesListAdapter
         }
         notesListAdapter =
             NotesAdapter(
@@ -45,10 +50,6 @@ class NotesListFragment : Fragment() {
                 viewModel::longClick
             )
         viewModel.setCoroutineScope(lifecycleScope)
-        val dividerItemDecoration = DividerItemDecoration(requireContext(), RecyclerView.VERTICAL)
-        dividerItemDecoration.setDrawable(resources.getDrawable(R.drawable.divider, null))
-        binding.notesList.addItemDecoration(dividerItemDecoration)
-        binding.notesList.adapter = notesListAdapter
         viewModel.list.observe(this) {
             notesListAdapter.update(it)
         }

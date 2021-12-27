@@ -6,6 +6,7 @@ import com.sofiamarchinskaya.hw1.models.framework.NoteRepository
 
 class NoteRepositoryImpl : NoteRepository {
     private val noteDao = AppDatabase.getDataBase().noteDao()
+
     override suspend fun insert(note: Note): Long {
         return noteDao.insert(note)
     }

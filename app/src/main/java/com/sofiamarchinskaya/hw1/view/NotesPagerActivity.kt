@@ -21,14 +21,16 @@ class NotesPagerActivity : AppCompatActivity() {
         binding = ActivityNotesPagerBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolBar)
-        viewModel.setCoroutineScope(lifecycleScope)
-        viewModel.update()
-        viewModel.init(intent.extras?.getLong(Constants.ID))
-        viewModel.list.observe(this) {
-            binding.noteViewPager.adapter = NotesPagerAdapter(this, it)
-        }
-        viewModel.index.observe(this) {
-            binding.noteViewPager.setCurrentItem(it.toInt(), false)
+        viewModel.apply {
+            setCoroutineScope(lifecycleScope)
+            update()
+            init(intent.extras?.getLong(Constants.ID))
+            list.observe(this@NotesPagerActivity) {
+                binding.noteViewPager.adapter = NotesPagerAdapter(this@NotesPagerActivity, it)
+            }
+            index.observe(this@NotesPagerActivity) {
+                binding.noteViewPager.setCurrentItem(it.toInt(), false)
+            }
         }
     }
 
