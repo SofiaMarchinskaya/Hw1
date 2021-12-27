@@ -33,5 +33,4 @@ class MainActivity : AppCompatActivity() {
     private fun openAboutScreen() {
         startActivity(Intent(this, AboutActivity::class.java))
     }
-
 }

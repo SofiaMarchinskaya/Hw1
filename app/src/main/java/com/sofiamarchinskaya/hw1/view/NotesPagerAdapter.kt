@@ -9,9 +9,9 @@ class NotesPagerAdapter(
     fragmentActivity: FragmentActivity,
     var list: List<Note>
 ) : FragmentStateAdapter(fragmentActivity) {
+
     override fun getItemCount(): Int = list.size
 
     override fun createFragment(position: Int): Fragment =
         NoteInfoFragment.newInstance(list[position])
-
 }
