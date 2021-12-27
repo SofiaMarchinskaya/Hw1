@@ -1,14 +1,12 @@
 package com.sofiamarchinskaya.hw1.presenters
 
 import android.view.ContextMenu
-import com.sofiamarchinskaya.hw1.view.framework.NotesListView
-import com.sofiamarchinskaya.hw1.models.database.AppDatabase
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.models.framework.NoteModel
 import com.sofiamarchinskaya.hw1.presenters.framework.NotesListPresenter
+import com.sofiamarchinskaya.hw1.view.framework.NotesListView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class NotesListPresenterImpl(
     private val model: NoteModel,
