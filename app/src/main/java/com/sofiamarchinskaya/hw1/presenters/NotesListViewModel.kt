@@ -2,14 +2,14 @@ package com.sofiamarchinskaya.hw1.presenters
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.sofiamarchinskaya.hw1.models.NoteRepository
+import com.sofiamarchinskaya.hw1.models.NoteRepositoryImpl
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 class NotesListViewModel : ViewModel() {
     private lateinit var coroutineScope: CoroutineScope
-    private val repository = NoteRepository()
+    private val repository = NoteRepositoryImpl()
     private var clickedNote: Note? = null
 
     val list = MutableLiveData<List<Note>>()

@@ -2,18 +2,19 @@ package com.sofiamarchinskaya.hw1.models
 
 import com.sofiamarchinskaya.hw1.models.database.AppDatabase
 import com.sofiamarchinskaya.hw1.models.entity.Note
+import com.sofiamarchinskaya.hw1.models.framework.NoteRepository
 
-class NoteRepository {
+class NoteRepositoryImpl : NoteRepository {
     private val noteDao = AppDatabase.getDataBase().noteDao()
-    suspend fun insert(note: Note): Long {
+    override suspend fun insert(note: Note): Long {
         return noteDao.insert(note)
     }
 
-    suspend fun update(note: Note) {
+    override suspend fun update(note: Note) {
         return noteDao.update(note)
     }
 
-    suspend fun getAll(): List<Note> {
+    override suspend fun getAll(): List<Note> {
         return noteDao.getAll()
     }
 }
