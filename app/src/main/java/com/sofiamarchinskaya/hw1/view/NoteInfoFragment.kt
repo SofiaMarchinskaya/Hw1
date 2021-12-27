@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.lifecycle.lifecycleScope
 import com.sofiamarchinskaya.hw1.*
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.presenters.NoteInfoPresenterImpl
@@ -39,7 +40,7 @@ class NoteInfoFragment : Fragment(), NoteInfoView {
         title.text = arguments?.getString(Constants.TITLE)
         text.text = arguments?.getString(Constants.TEXT)
         noteId = arguments?.getLong(Constants.ID) ?: Constants.INVALID_ID
-        presenter = NoteInfoPresenterImpl(this@NoteInfoFragment)
+        presenter = NoteInfoPresenterImpl(this@NoteInfoFragment, lifecycleScope)
         if (arguments == null) {
             activity?.invalidateOptionsMenu()
             isNewNote = true

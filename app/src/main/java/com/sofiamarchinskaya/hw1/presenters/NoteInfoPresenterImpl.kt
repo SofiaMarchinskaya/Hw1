@@ -5,14 +5,16 @@ import com.sofiamarchinskaya.hw1.models.database.AppDatabase
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.presenters.framework.NoteInfoPresenter
 import com.sofiamarchinskaya.hw1.view.framework.NoteInfoView
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 class NoteInfoPresenterImpl(
-    private var view: NoteInfoView?
-) : NoteInfoPresenter {
+    private var view: NoteInfoView?,
+    coroutineScope: CoroutineScope
+) : NoteInfoPresenter, CoroutineScope by coroutineScope {
 
-    override fun onSaveNote(title: String, text: String, id: Long): Unit = runBlocking {
+    override fun onSaveNote(title: String, text: String, id: Long) {
         launch {
             if (id == Constants.INVALID_ID) {
                 AppDatabase.getDataBase().noteDao().insert(Note(title = title, body = text))

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -32,7 +33,7 @@ class NotesListFragment : Fragment(), NotesListView {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? = inflater.inflate(R.layout.fragment_notes_list, container, false).apply {
-        presenter = NotesListPresenterImpl(this@NotesListFragment)
+        presenter = NotesListPresenterImpl(this@NotesListFragment, lifecycleScope)
         notesList = findViewById(R.id.notes_list)
         addButton = findViewById(R.id.fab)
         addButton.setOnClickListener {

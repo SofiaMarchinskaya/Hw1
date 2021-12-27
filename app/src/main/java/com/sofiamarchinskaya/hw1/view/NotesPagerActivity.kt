@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.sofiamarchinskaya.hw1.Constants
 import com.sofiamarchinskaya.hw1.R
@@ -23,7 +24,7 @@ class NotesPagerActivity : AppCompatActivity(), NotesPagerActivityView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notes_pager)
         setSupportActionBar(findViewById(R.id.toolBar))
-        presenter = NotesPagerPresenterImpl(this)
+        presenter = NotesPagerPresenterImpl(this, lifecycleScope)
         presenter.init(intent.extras?.getLong(Constants.ID))
     }
 
