@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.sofiamarchinskaya.hw1.Constants
 import com.sofiamarchinskaya.hw1.R
@@ -21,6 +22,7 @@ class NotesPagerActivity : AppCompatActivity() {
         binding = ActivityNotesPagerBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolBar)
+        viewModel.setCoroutineScope(lifecycleScope)
         viewModel.update()
         viewModel.init(intent.extras?.getLong(Constants.ID))
         viewModel.list.observe(this) {

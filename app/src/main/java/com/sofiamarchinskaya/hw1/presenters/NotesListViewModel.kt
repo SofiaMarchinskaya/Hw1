@@ -7,15 +7,15 @@ import com.sofiamarchinskaya.hw1.models.entity.Note
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-class NotesListViewModel(coroutineScope: CoroutineScope) : ViewModel(),
-    CoroutineScope by coroutineScope {
+class NotesListViewModel : ViewModel() {
+    private lateinit var coroutineScope: CoroutineScope
     private val repository = NoteRepository()
     private var clickedNote: Note? = null
 
     val list = MutableLiveData<List<Note>>()
 
     fun updateNotesList() {
-        launch {
+        coroutineScope.launch {
             list.value = repository.getAll()
         }
     }
@@ -26,4 +26,8 @@ class NotesListViewModel(coroutineScope: CoroutineScope) : ViewModel(),
 
     fun getDataToExtra(): String =
         clickedNote?.title + "\n" + clickedNote?.body
+
+    fun setCoroutineScope(coroutineScope: CoroutineScope) {
+        this.coroutineScope = coroutineScope
+    }
 }

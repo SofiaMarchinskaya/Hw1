@@ -13,15 +13,15 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class NoteInfoViewModel(coroutineScope: CoroutineScope) : ViewModel(),
-    CoroutineScope by coroutineScope {
+class NoteInfoViewModel : ViewModel() {
+    private lateinit var coroutineScope: CoroutineScope
     private val repository = NoteRepository()
     val savingState = MutableLiveData<SavingState>()
     var noteId = Constants.INVALID_ID
     var isNewNote = false
 
     fun onSaveNote(title: String, text: String) {
-        launch {
+        coroutineScope.launch {
             savingState.value = SavingState(States.SAVING)
             if (noteId == Constants.INVALID_ID) {
                 repository.insert(Note(title = title, body = text))
@@ -40,6 +40,10 @@ class NoteInfoViewModel(coroutineScope: CoroutineScope) : ViewModel(),
         } else {
             savingState.value = SavingState(States.ALLOWED)
         }
+    }
+
+    fun setCoroutineScope(coroutineScope: CoroutineScope) {
+        this.coroutineScope = coroutineScope
     }
 
 }

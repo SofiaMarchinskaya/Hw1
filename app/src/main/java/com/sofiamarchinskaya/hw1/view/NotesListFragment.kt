@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.sofiamarchinskaya.hw1.Constants
@@ -43,6 +44,7 @@ class NotesListFragment : Fragment() {
                 this::onMenuCreated,
                 viewModel::longClick
             )
+        viewModel.setCoroutineScope(lifecycleScope)
         val dividerItemDecoration = DividerItemDecoration(requireContext(), RecyclerView.VERTICAL)
         dividerItemDecoration.setDrawable(resources.getDrawable(R.drawable.divider, null))
         binding.notesList.addItemDecoration(dividerItemDecoration)

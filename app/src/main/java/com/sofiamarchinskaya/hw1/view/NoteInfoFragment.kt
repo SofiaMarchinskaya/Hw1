@@ -9,6 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.sofiamarchinskaya.hw1.*
 import com.sofiamarchinskaya.hw1.databinding.FragmentNoteInfoBinding
 import com.sofiamarchinskaya.hw1.models.entity.Note
@@ -36,6 +37,7 @@ class NoteInfoFragment : Fragment() {
         binding = FragmentNoteInfoBinding.inflate(inflater, container, false)
         binding.title.setText(arguments?.getString(Constants.TITLE))
         binding.text.setText(arguments?.getString(Constants.TEXT))
+        viewModel.setCoroutineScope(lifecycleScope)
         viewModel.noteId = arguments?.getLong(Constants.ID) ?: Constants.INVALID_ID
         if (arguments == null) {
             activity?.invalidateOptionsMenu()
@@ -101,15 +103,13 @@ class NoteInfoFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(note: Note): NoteInfoFragment {
-            val args = bundleOf(
-                Constants.TITLE to note.title,
-                Constants.TEXT to note.body,
-                Constants.ID to note.id
-            )
-            val fragment = NoteInfoFragment()
-            fragment.arguments = args
-            return fragment
-        }
+        fun newInstance(note: Note): NoteInfoFragment =
+            NoteInfoFragment().apply {
+                arguments = bundleOf(
+                    Constants.TITLE to note.title,
+                    Constants.TEXT to note.body,
+                    Constants.ID to note.id
+                )
+            }
     }
 }
