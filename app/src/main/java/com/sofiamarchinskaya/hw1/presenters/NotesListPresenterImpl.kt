@@ -4,12 +4,14 @@ import android.view.ContextMenu
 import com.sofiamarchinskaya.hw1.view.framework.NotesListView
 import com.sofiamarchinskaya.hw1.models.database.AppDatabase
 import com.sofiamarchinskaya.hw1.models.entity.Note
+import com.sofiamarchinskaya.hw1.models.framework.NoteModel
 import com.sofiamarchinskaya.hw1.presenters.framework.NotesListPresenter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 class NotesListPresenterImpl(
+    private val model: NoteModel,
     private var view: NotesListView?,
     coroutineScope: CoroutineScope
 ) : NotesListPresenter, CoroutineScope by coroutineScope {
@@ -17,7 +19,7 @@ class NotesListPresenterImpl(
 
     override fun init() {
         launch {
-            view?.initAdapter(AppDatabase.getDataBase().noteDao().getAll())
+            view?.initAdapter(model.getAll())
         }
     }
 
@@ -31,7 +33,7 @@ class NotesListPresenterImpl(
 
     override fun onResume() {
         launch {
-            view?.update(AppDatabase.getDataBase().noteDao().getAll())
+            view?.update(model.getAll())
         }
     }
 
