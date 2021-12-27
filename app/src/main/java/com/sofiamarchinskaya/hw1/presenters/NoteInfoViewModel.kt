@@ -45,5 +45,4 @@ class NoteInfoViewModel : ViewModel() {
     fun setCoroutineScope(coroutineScope: CoroutineScope) {
         this.coroutineScope = coroutineScope
     }
-
 }
