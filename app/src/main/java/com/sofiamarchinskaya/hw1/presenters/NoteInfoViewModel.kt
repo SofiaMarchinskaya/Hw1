@@ -9,23 +9,28 @@ import com.sofiamarchinskaya.hw1.models.database.AppDatabase
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.states.SavingState
 import com.sofiamarchinskaya.hw1.states.States
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class NoteInfoViewModel : ViewModel() {
+class NoteInfoViewModel(coroutineScope: CoroutineScope) : ViewModel(),
+    CoroutineScope by coroutineScope {
     private val repository = NoteRepository()
     val savingState = MutableLiveData<SavingState>()
     var noteId = Constants.INVALID_ID
     var isNewNote = false
 
-    fun onSaveNote(title: String, text: String): Unit = runBlocking {
-        savingState.value = SavingState(States.SAVING)
-        if (noteId == Constants.INVALID_ID) {
-            repository.insert(Note(title = title, body = text))
-        } else {
-            repository.update(Note(noteId, title, text))
+    fun onSaveNote(title: String, text: String) {
+        launch {
+            savingState.value = SavingState(States.SAVING)
+            if (noteId == Constants.INVALID_ID) {
+                repository.insert(Note(title = title, body = text))
+            } else {
+                repository.update(Note(noteId, title, text))
+            }
+            savingState.value = SavingState(States.SAVED)
+            savingState.value = SavingState(States.NOTHING)
         }
-        savingState.value = SavingState(States.SAVED)
-        savingState.value = SavingState(States.NOTHING)
     }
 
     fun checkNote(title: String, text: String) {

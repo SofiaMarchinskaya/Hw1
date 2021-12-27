@@ -2,15 +2,13 @@ package com.sofiamarchinskaya.hw1.view
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.sofiamarchinskaya.hw1.*
-import com.sofiamarchinskaya.hw1.databinding.FragmentNoteInfoBinding
+import com.sofiamarchinskaya.hw1.Constants
+import com.sofiamarchinskaya.hw1.R
 import com.sofiamarchinskaya.hw1.databinding.FragmentNotesListBinding
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.presenters.NotesListViewModel
