@@ -4,6 +4,7 @@ import com.sofiamarchinskaya.hw1.models.framework.NoteModel
 import com.sofiamarchinskaya.hw1.presenters.framework.NotesPagerPresenter
 import com.sofiamarchinskaya.hw1.view.framework.NotesPagerActivityView
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class NotesPagerPresenterImpl(
@@ -14,12 +15,13 @@ class NotesPagerPresenterImpl(
 
     override fun init(id: Long?) {
         launch {
-            val list = model.getAll()
-            var index = 0L
-            while (index != id) {
-                index++
+            model.getAll().collect {
+                var index = 0L
+                while (index != id) {
+                    index++
+                }
+                view?.init(it, index - 1)
             }
-            view?.init(list, index - 1)
         }
     }
 }

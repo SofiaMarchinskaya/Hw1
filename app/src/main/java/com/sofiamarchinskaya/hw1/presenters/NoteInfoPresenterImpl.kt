@@ -1,6 +1,5 @@
 package com.sofiamarchinskaya.hw1.presenters
 
-import com.sofiamarchinskaya.hw1.Constants
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.models.framework.NoteModel
 import com.sofiamarchinskaya.hw1.presenters.framework.NoteInfoPresenter
@@ -16,11 +15,7 @@ class NoteInfoPresenterImpl(
 
     override fun onSaveNote(title: String, text: String, id: Long) {
         launch {
-            if (id == Constants.INVALID_ID) {
-                model.insert(Note(title = title, body = text))
-            } else {
-                model.update(Note(id, title, text))
-            }
+            model.insert(Note(title = title, body = text))
             view?.onSuccessfullySaved()
         }
     }

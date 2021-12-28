@@ -3,6 +3,7 @@ package com.sofiamarchinskaya.hw1.models
 import com.sofiamarchinskaya.hw1.models.database.AppDatabase
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.models.framework.NoteModel
+import kotlinx.coroutines.flow.Flow
 
 class NoteModelImpl : NoteModel {
     private val noteDao = AppDatabase.getDataBase().noteDao()
@@ -11,11 +12,7 @@ class NoteModelImpl : NoteModel {
         return noteDao.insert(note)
     }
 
-    override suspend fun update(note: Note) {
-        return noteDao.update(note)
-    }
-
-    override suspend fun getAll(): List<Note> {
+    override fun getAll(): Flow<List<Note>> {
         return noteDao.getAll()
     }
 }

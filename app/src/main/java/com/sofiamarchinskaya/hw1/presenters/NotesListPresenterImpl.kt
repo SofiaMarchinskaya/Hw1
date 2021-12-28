@@ -6,6 +6,7 @@ import com.sofiamarchinskaya.hw1.models.framework.NoteModel
 import com.sofiamarchinskaya.hw1.presenters.framework.NotesListPresenter
 import com.sofiamarchinskaya.hw1.view.framework.NotesListView
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class NotesListPresenterImpl(
@@ -17,7 +18,7 @@ class NotesListPresenterImpl(
 
     override fun init() {
         launch {
-            view?.initAdapter(model.getAll())
+            model.getAll().collect { view?.initAdapter(it) }
         }
     }
 
@@ -31,7 +32,7 @@ class NotesListPresenterImpl(
 
     override fun onResume() {
         launch {
-            view?.update(model.getAll())
+            model.getAll().collect { view?.update(it) }
         }
     }
 
