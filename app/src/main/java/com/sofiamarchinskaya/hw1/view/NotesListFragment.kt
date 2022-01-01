@@ -39,8 +39,6 @@ class NotesListFragment : Fragment() {
             fab.setOnClickListener {
                 openAddNoteFragment()
             }
-            notesList.addItemDecoration(dividerItemDecoration)
-            notesList.adapter = notesListAdapter
         }
         notesListAdapter =
             NotesAdapter(
@@ -49,6 +47,8 @@ class NotesListFragment : Fragment() {
                 this::onMenuCreated,
                 viewModel::longClick
             )
+        binding.notesList.adapter = notesListAdapter
+        binding.notesList.addItemDecoration(dividerItemDecoration)
         viewModel.setCoroutineScope(lifecycleScope)
         viewModel.list.observe(this) {
             notesListAdapter.update(it)

@@ -22,8 +22,7 @@ class NotesPagerActivity : AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.toolBar)
         viewModel.apply {
-            setCoroutineScope(lifecycleScope)
-            update()
+            coroutineScope = lifecycleScope
             init(intent.extras?.getLong(Constants.ID))
             list.observe(this@NotesPagerActivity) {
                 binding.noteViewPager.adapter = NotesPagerAdapter(this@NotesPagerActivity, it)

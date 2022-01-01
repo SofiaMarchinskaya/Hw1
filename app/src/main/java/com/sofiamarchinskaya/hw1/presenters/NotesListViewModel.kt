@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.sofiamarchinskaya.hw1.models.NoteRepositoryImpl
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class NotesListViewModel : ViewModel() {
@@ -16,7 +17,7 @@ class NotesListViewModel : ViewModel() {
 
     fun updateNotesList() {
         coroutineScope.launch {
-            list.value = repository.getAll()
+            repository.getAll().collect { list.value = it }
         }
     }
 

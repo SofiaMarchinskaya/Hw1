@@ -1,6 +1,7 @@
 package com.sofiamarchinskaya.hw1.models.framework
 
 import com.sofiamarchinskaya.hw1.models.entity.Note
+import kotlinx.coroutines.flow.Flow
 
 interface NoteRepository {
 
@@ -8,5 +9,5 @@ interface NoteRepository {
 
     suspend fun update(note: Note)
 
-    suspend fun getAll(): List<Note>
+    fun getAll(): Flow<List<Note>>
 }
