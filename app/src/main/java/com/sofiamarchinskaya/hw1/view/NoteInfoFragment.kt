@@ -73,15 +73,15 @@ class NoteInfoFragment : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun onSaveAllowed() {
+    private fun onSaveAllowed() {
         createSaveDialog()
     }
 
-    fun onSaveDisabled() {
+    private fun onSaveDisabled() {
         Toast.makeText(requireContext(), getString(R.string.empty_note), Toast.LENGTH_LONG).show()
     }
 
-    fun onSuccessfullySaved() {
+    private fun onSuccessfullySaved() {
         Toast.makeText(requireContext(), getString(R.string.success), Toast.LENGTH_LONG).show()
     }
 
