@@ -11,5 +11,5 @@ interface NoteRepository {
 
     fun getAllFromCloud(callback: (List<Note>)->Unit)
 
-    fun insertCloud()
+    fun insertCloud(note: Note)
 }

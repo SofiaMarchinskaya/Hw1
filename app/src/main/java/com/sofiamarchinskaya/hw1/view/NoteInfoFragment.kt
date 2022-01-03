@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.os.Bundle
 import android.text.Editable
 import android.view.*
+import android.widget.CheckBox
 import androidx.fragment.app.Fragment
 import android.widget.TextView
 import android.widget.Toast
@@ -11,6 +12,7 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.sofiamarchinskaya.hw1.*
+import com.sofiamarchinskaya.hw1.databinding.CheckBoxBinding
 import com.sofiamarchinskaya.hw1.databinding.FragmentNoteInfoBinding
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.presenters.NoteInfoViewModel
@@ -84,14 +86,20 @@ class NoteInfoFragment : Fragment() {
     }
 
     private fun createSaveDialog() {
+        val layoutInflater = LayoutInflater.from(requireContext())
+        val checkBoxView = layoutInflater.inflate(R.layout.check_box,null)
+        val checkBox = checkBoxView.findViewById<CheckBox>(R.id.checkbox)
         val dialogFragment = AlertDialog.Builder(requireActivity()).apply {
             setTitle(getString(R.string.dialog_title))
-            setMessage(getString(R.string.dialog_message))
+            setView(checkBoxView)
             setNegativeButton(
                 getString(R.string.dialog_negative),
                 null
             )
             setPositiveButton(getString(R.string.dialog_positive)) { _, _ ->
+                if(checkBox.isChecked){
+                    viewModel.onSaveToCloud(Note(title = binding.title.text.toString(), body = binding.text.text.toString() ))
+                }
                 viewModel.onSaveNote(
                     binding.title.text.toString(),
                     binding.text.text.toString()

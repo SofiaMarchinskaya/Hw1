@@ -86,6 +86,10 @@ class NotesListFragment : Fragment() {
                 onShare(viewModel.getDataToExtra())
                 return true
             }
+            R.id.launch_from_cloud->{
+                viewModel.getNotesFromCloud()
+                return true
+            }
         }
         return super.onContextItemSelected(item)
     }

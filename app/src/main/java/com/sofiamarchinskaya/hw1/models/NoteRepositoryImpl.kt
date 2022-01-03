@@ -25,8 +25,8 @@ class NoteRepositoryImpl : NoteRepository {
        }
     }
 
-    override fun insertCloud() {
-
+    override fun insertCloud(note: Note) {
+    fireBase.child(Constants.FIREBASE_NAME).child(note.id.toString()).setValue(note)
     }
 }
 

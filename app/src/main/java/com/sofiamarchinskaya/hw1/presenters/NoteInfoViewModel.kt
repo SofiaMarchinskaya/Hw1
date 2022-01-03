@@ -35,6 +35,10 @@ class NoteInfoViewModel : ViewModel() {
         }
     }
 
+    fun onSaveToCloud(note: Note){
+        repository.insertCloud(note)
+    }
+
     fun setCoroutineScope(coroutineScope: CoroutineScope) {
         this.coroutineScope = coroutineScope
     }
