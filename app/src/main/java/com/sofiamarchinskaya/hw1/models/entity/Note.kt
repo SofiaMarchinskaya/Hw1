@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
 import com.sofiamarchinskaya.hw1.Constants
 import kotlinx.parcelize.Parcelize
 
@@ -11,6 +12,6 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class Note(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    @ColumnInfo(name = "note_title") val title: String,
-    @ColumnInfo(name = "note_text") val body: String
+    @SerializedName("title") @ColumnInfo(name = "note_title") val title: String,
+    @SerializedName("text") @ColumnInfo(name = "note_text") val body: String
 ) : Parcelable

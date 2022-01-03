@@ -20,11 +20,7 @@ class NoteInfoViewModel : ViewModel() {
     fun onSaveNote(title: String, text: String) {
         coroutineScope.launch {
             savingState.value = SavingState(States.SAVING)
-            if (noteId == Constants.INVALID_ID) {
-                repository.insert(Note(title = title, body = text))
-            } else {
-                repository.update(Note(noteId, title, text))
-            }
+            repository.insert(Note(title = title, body = text))
             savingState.value = SavingState(States.SAVED)
             savingState.value = SavingState(States.NOTHING)
         }

@@ -9,4 +9,5 @@ object Constants {
     const val ID = "id"
     const val INVALID_ID = -1L
     const val DIALOG_STATE = "dialogState"
+    const val FIREBASE_NAME = "notes"
 }
