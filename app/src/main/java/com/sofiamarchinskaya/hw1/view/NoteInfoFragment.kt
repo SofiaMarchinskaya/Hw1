@@ -98,7 +98,7 @@ class NoteInfoFragment : Fragment() {
             )
             setPositiveButton(getString(R.string.dialog_positive)) { _, _ ->
                 if(checkBox.isChecked){
-                    viewModel.onSaveToCloud(Note(title = binding.title.text.toString(), body = binding.text.text.toString() ))
+                    viewModel.onSaveToCloud(Note(viewModel.noteId,title = binding.title.text.toString(), body = binding.text.text.toString() ))
                 }
                 viewModel.onSaveNote(
                     binding.title.text.toString(),
