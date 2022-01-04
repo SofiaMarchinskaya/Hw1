@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Notes</string>
+    <string name="save">save</string>
+    <string name="success">Successfully saved</string>
+    <string name="share">share</string>
+    <string name="about">about app</string>
+    <string name="app_description">Application for working with notes</string>
+    <string name="author">Author: Marchinskaya Sofia</string>
+    <string name="empty_note">note is empty</string>
+    <string name="dialog_title">Saving</string>
+    <string name="dialog_message">Save changes</string>
+    <string name="dialog_negative">no</string>
+    <string name="dialog_positive">yes</string>
+</resources>
