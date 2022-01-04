@@ -32,9 +32,13 @@ class NotesListViewModel : ViewModel() {
         this.coroutineScope = coroutineScope
     }
 
-    fun getNotesFromCloud(){
-        repository.getAllFromCloud {
-            list.value = it
+    fun getNotesFromCloud() {
+        repository.getAllFromCloud { list1 ->
+            list1.forEach {
+                coroutineScope.launch {
+                    repository.insert(it)
+                }
+            }
         }
     }
 

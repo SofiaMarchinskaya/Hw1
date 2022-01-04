@@ -14,4 +14,7 @@ interface NoteDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(note: Note): Long
+
+    @Query("SELECT id FROM notes ORDER BY id DESC LIMIT 1 ")
+    suspend fun getLast():Long
 }

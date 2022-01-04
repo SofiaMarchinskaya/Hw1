@@ -5,11 +5,13 @@ import kotlinx.coroutines.flow.Flow
 
 interface NoteRepository {
 
-    suspend fun insert(note: Note): Long
+    suspend fun insert(note: Note)
 
     fun getAll(): Flow<List<Note>>
 
     fun getAllFromCloud(callback: (List<Note>)->Unit)
 
     fun insertCloud(note: Note)
+
+    suspend fun getLast():Long
 }

@@ -50,6 +50,7 @@ class NotesListFragment : Fragment() {
         binding.notesList.adapter = notesListAdapter
         binding.notesList.addItemDecoration(dividerItemDecoration)
         viewModel.setCoroutineScope(lifecycleScope)
+        viewModel.updateNotesList()
         viewModel.list.observe(this) {
             notesListAdapter.update(it)
         }
@@ -86,12 +87,18 @@ class NotesListFragment : Fragment() {
                 onShare(viewModel.getDataToExtra())
                 return true
             }
+        }
+        return super.onContextItemSelected(item)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             R.id.launch_from_cloud->{
                 viewModel.getNotesFromCloud()
                 return true
             }
         }
-        return super.onContextItemSelected(item)
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -102,11 +109,6 @@ class NotesListFragment : Fragment() {
     private fun openAddNoteFragment() {
         activity?.supportFragmentManager?.beginTransaction()
             ?.replace(R.id.host, NoteInfoFragment())?.addToBackStack(TAG)?.commit()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.updateNotesList()
     }
 
     companion object {

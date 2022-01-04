@@ -17,13 +17,19 @@ class NoteInfoViewModel : ViewModel() {
     var noteId = Constants.INVALID_ID
     var isNewNote = false
 
-    fun onSaveNote(title: String, text: String) {
+    fun onSaveNote(title: String, text: String, isSavingToCloud: Boolean) {
         coroutineScope.launch {
             savingState.value = SavingState(States.SAVING)
-            if (noteId != Constants.INVALID_ID)
+            if (noteId != Constants.INVALID_ID) {
                 repository.insert(Note(noteId, title, text))
-            else
+                if (isSavingToCloud)
+                    repository.insertCloud(Note(noteId, title, text))
+            } else {
                 repository.insert(Note(title = title, body = text))
+                if (isSavingToCloud)
+                    repository.insertCloud(Note(repository.getLast(), title, text))
+            }
+
             savingState.value = SavingState(States.SAVED)
             savingState.value = SavingState(States.NOTHING)
         }
@@ -36,10 +42,6 @@ class NoteInfoViewModel : ViewModel() {
         } else {
             savingState.value = SavingState(States.ALLOWED)
         }
-    }
-
-    fun onSaveToCloud(note: Note) {
-        repository.insertCloud(note)
     }
 
     fun setCoroutineScope(coroutineScope: CoroutineScope) {
