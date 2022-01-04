@@ -12,10 +12,6 @@ class NoteRepositoryImpl : NoteRepository {
         return noteDao.insert(note)
     }
 
-    override suspend fun update(note: Note) {
-        return noteDao.update(note)
-    }
-
     override fun getAll(): Flow<List<Note>> {
         return noteDao.getAll()
     }

@@ -23,7 +23,7 @@ class NoteInfoViewModel : ViewModel() {
             if (noteId == Constants.INVALID_ID) {
                 repository.insert(Note(title = title, body = text))
             } else {
-                repository.update(Note(noteId, title, text))
+                repository.insert(Note(noteId, title, text))
             }
             savingState.value = SavingState(States.SAVED)
             savingState.value = SavingState(States.NOTHING)
