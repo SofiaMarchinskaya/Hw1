@@ -96,8 +96,8 @@ class NoteInfoFragment : Fragment(), NoteInfoView {
             setTitle(getString(R.string.dialog_title))
             setMessage(getString(R.string.dialog_message))
             setNegativeButton(
-                getString(R.string.dialog_negative),
-                { _, _ -> isSaveDialogOpen = false })
+                getString(R.string.dialog_negative)
+            ) { _, _ -> isSaveDialogOpen = false }
             setPositiveButton(getString(R.string.dialog_positive)) { _, _ ->
                 presenter.onSaveNote(
                     title.text.toString(),
