@@ -12,14 +12,11 @@ import kotlinx.coroutines.launch
 class NotesListPresenterImpl(
     private val model: NoteModel,
     private var view: NotesListView?,
-    coroutineScope: CoroutineScope
-) : NotesListPresenter, CoroutineScope by coroutineScope {
+) : NotesListPresenter{
     private var clickedNote: Note? = null
 
     override fun init() {
-        launch {
-            model.getAll().collect { view?.initAdapter(it) }
-        }
+        view?.initAdapter(model.getAll())
     }
 
     override fun onItemClick(note: Note) {
@@ -31,9 +28,7 @@ class NotesListPresenterImpl(
     }
 
     override fun onResume() {
-        launch {
-            model.getAll().collect { view?.update(it) }
-        }
+        view?.update(model.getAll())
     }
 
     override fun longClick(note: Note) {

@@ -14,6 +14,9 @@ import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.presenters.NotesPagerPresenterImpl
 import com.sofiamarchinskaya.hw1.presenters.framework.NotesPagerPresenter
 import com.sofiamarchinskaya.hw1.view.framework.NotesPagerActivityView
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.collect
 
 /**
  * Активити, в которой реализована возможность листать детальные отображения заметок
@@ -29,9 +32,13 @@ class NotesPagerActivity : AppCompatActivity(), NotesPagerActivityView {
         presenter.init(intent.extras?.getLong(Constants.ID))
     }
 
-    override fun init(list: List<Note>, index: Long) {
+    override fun init(listFlow: Flow<List<Note>>, index: Long) {
         viewPager = findViewById<ViewPager2>(R.id.note_view_pager).apply {
-            adapter = NotesPagerAdapter(this@NotesPagerActivity, list)
+            lifecycleScope.launch {
+                listFlow.collect {
+                    adapter = NotesPagerAdapter(this@NotesPagerActivity, it)
+                }
+            }
             setCurrentItem(index.toInt(), false)
         }
     }

@@ -1,5 +1,6 @@
 package com.sofiamarchinskaya.hw1.presenters
 
+import com.sofiamarchinskaya.hw1.Constants
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.models.framework.NoteModel
 import com.sofiamarchinskaya.hw1.presenters.framework.NoteInfoPresenter
@@ -10,14 +11,14 @@ import kotlinx.coroutines.launch
 class NoteInfoPresenterImpl(
     private val model: NoteModel,
     private var view: NoteInfoView?,
-    coroutineScope: CoroutineScope
-) : NoteInfoPresenter, CoroutineScope by coroutineScope {
+) : NoteInfoPresenter {
 
-    override fun onSaveNote(title: String, text: String, id: Long) {
-        launch {
+    override suspend fun onSaveNote(title: String, text: String, id: Long) {
+        if (id == Constants.INVALID_ID)
             model.insert(Note(title = title, body = text))
-            view?.onSuccessfullySaved()
-        }
+        else
+            model.insert(Note(title = title, body = text, id = id))
+        view?.onSuccessfullySaved()
     }
 
     override fun checkNote(title: String, text: String) {

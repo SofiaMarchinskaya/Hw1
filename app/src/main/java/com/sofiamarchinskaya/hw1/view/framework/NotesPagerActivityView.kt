@@ -1,8 +1,9 @@
 package com.sofiamarchinskaya.hw1.view.framework
 
 import com.sofiamarchinskaya.hw1.models.entity.Note
+import kotlinx.coroutines.flow.Flow
 
 interface NotesPagerActivityView {
 
-    fun init(list: List<Note>, index: Long)
+    fun init(listFlow: Flow<List<Note>>, index: Long)
 }

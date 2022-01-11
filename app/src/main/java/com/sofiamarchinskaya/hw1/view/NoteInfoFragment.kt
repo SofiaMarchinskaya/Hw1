@@ -14,6 +14,7 @@ import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.presenters.NoteInfoPresenterImpl
 import com.sofiamarchinskaya.hw1.presenters.framework.NoteInfoPresenter
 import com.sofiamarchinskaya.hw1.view.framework.NoteInfoView
+import kotlinx.coroutines.launch
 
 /**
  * Фрагмент для отображения деталей о заметке
@@ -41,7 +42,7 @@ class NoteInfoFragment : Fragment(), NoteInfoView {
         title.text = arguments?.getString(Constants.TITLE)
         text.text = arguments?.getString(Constants.TEXT)
         noteId = arguments?.getLong(Constants.ID) ?: Constants.INVALID_ID
-        presenter = NoteInfoPresenterImpl(NoteModelImpl(), this@NoteInfoFragment, lifecycleScope)
+        presenter = NoteInfoPresenterImpl(NoteModelImpl(), this@NoteInfoFragment)
         if (arguments == null) {
             activity?.invalidateOptionsMenu()
             isNewNote = true
@@ -99,11 +100,13 @@ class NoteInfoFragment : Fragment(), NoteInfoView {
                 getString(R.string.dialog_negative)
             ) { _, _ -> isSaveDialogOpen = false }
             setPositiveButton(getString(R.string.dialog_positive)) { _, _ ->
-                presenter.onSaveNote(
-                    title.text.toString(),
-                    text.text.toString(),
-                    noteId
-                )
+                lifecycleScope.launch {
+                    presenter.onSaveNote(
+                        title.text.toString(),
+                        text.text.toString(),
+                        noteId
+                    )
+                }
                 isSaveDialogOpen = false
             }
             create()

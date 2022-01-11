@@ -14,6 +14,9 @@ import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.presenters.NotesListPresenterImpl
 import com.sofiamarchinskaya.hw1.presenters.framework.NotesListPresenter
 import com.sofiamarchinskaya.hw1.view.framework.NotesListView
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.collect
 
 /**
  * Фрагмент для отображения списка заметок
@@ -34,7 +37,7 @@ class NotesListFragment : Fragment(), NotesListView {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? = inflater.inflate(R.layout.fragment_notes_list, container, false).apply {
-        presenter = NotesListPresenterImpl(NoteModelImpl(), this@NotesListFragment, lifecycleScope)
+        presenter = NotesListPresenterImpl(NoteModelImpl(), this@NotesListFragment)
         notesList = findViewById(R.id.notes_list)
         addButton = findViewById(R.id.fab)
         addButton.setOnClickListener {
@@ -63,13 +66,17 @@ class NotesListFragment : Fragment(), NotesListView {
         requireActivity().menuInflater.inflate(R.menu.context_menu, menu)
     }
 
-    override fun initAdapter(list: List<Note>) {
-        notesListAdapter.update(list)
+    override fun initAdapter(listFlow: Flow<List<Note>>) {
+        lifecycleScope.launch {
+            listFlow.collect{notesListAdapter.update(it)}
+        }
         notesList.adapter = notesListAdapter
     }
 
-    override fun update(list: List<Note>) {
-        notesListAdapter.update(list)
+    override fun update(notesFlow: Flow<List<Note>>) {
+        lifecycleScope.launch {
+            notesFlow.collect{notesListAdapter.update(it)}
+        }
     }
 
     override fun onShare(dataForExtra: String) {
