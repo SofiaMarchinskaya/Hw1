@@ -10,6 +10,7 @@ class NotesPagerPresenterImpl(
     private var view: NotesPagerActivityView?,
     coroutineScope: CoroutineScope
 ) : NotesPagerPresenter, CoroutineScope by coroutineScope {
+
     override fun init(id: Long?) {
         var index = 0L
         while (index != id) {

@@ -37,9 +37,9 @@ class NotesPagerActivity : AppCompatActivity(), NotesPagerActivityView {
             lifecycleScope.launch {
                 listFlow.collect {
                     adapter = NotesPagerAdapter(this@NotesPagerActivity, it)
+                    setCurrentItem(index.toInt(), false)
                 }
             }
-            setCurrentItem(index.toInt(), false)
         }
     }
 
