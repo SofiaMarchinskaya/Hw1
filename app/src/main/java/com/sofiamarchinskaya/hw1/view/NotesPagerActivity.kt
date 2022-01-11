@@ -9,6 +9,7 @@ import com.sofiamarchinskaya.hw1.Constants
 import com.sofiamarchinskaya.hw1.R
 import com.sofiamarchinskaya.hw1.databinding.ActivityNotesPagerBinding
 import com.sofiamarchinskaya.hw1.presenters.NotesPagerViewModel
+import kotlinx.coroutines.launch
 
 
 class NotesPagerActivity : AppCompatActivity() {
@@ -22,8 +23,9 @@ class NotesPagerActivity : AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.toolBar)
         viewModel.apply {
-            coroutineScope = lifecycleScope
-            init(intent.extras?.getLong(Constants.ID))
+            lifecycleScope.launch {
+                init(intent.extras?.getLong(Constants.ID))
+            }
             list.observe(this@NotesPagerActivity) {
                 binding.noteViewPager.adapter = NotesPagerAdapter(this@NotesPagerActivity, it)
             }

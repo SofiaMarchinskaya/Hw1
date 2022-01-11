@@ -13,6 +13,7 @@ import com.sofiamarchinskaya.hw1.R
 import com.sofiamarchinskaya.hw1.databinding.FragmentNotesListBinding
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.presenters.NotesListViewModel
+import kotlinx.coroutines.launch
 
 
 /**
@@ -49,12 +50,14 @@ class NotesListFragment : Fragment() {
             )
         binding.notesList.adapter = notesListAdapter
         binding.notesList.addItemDecoration(dividerItemDecoration)
-        viewModel.setCoroutineScope(lifecycleScope)
         viewModel.list.observe(this) {
             notesListAdapter.update(it)
         }
         registerForContextMenu(binding.notesList)
         activity?.invalidateOptionsMenu()
+        lifecycleScope.launch {
+            viewModel.updateNotesList()
+        }
         return binding.root
     }
 
@@ -98,11 +101,6 @@ class NotesListFragment : Fragment() {
     private fun openAddNoteFragment() {
         activity?.supportFragmentManager?.beginTransaction()
             ?.replace(R.id.host, NoteInfoFragment())?.addToBackStack(TAG)?.commit()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.updateNotesList()
     }
 
     companion object {

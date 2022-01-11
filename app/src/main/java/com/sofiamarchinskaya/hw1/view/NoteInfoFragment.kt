@@ -16,6 +16,7 @@ import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.presenters.NoteInfoViewModel
 import com.sofiamarchinskaya.hw1.states.SavingState
 import com.sofiamarchinskaya.hw1.states.States
+import kotlinx.coroutines.launch
 
 /**
  * Фрагмент для отображения деталей о заметке
@@ -37,7 +38,6 @@ class NoteInfoFragment : Fragment() {
         binding = FragmentNoteInfoBinding.inflate(inflater, container, false)
         binding.title.setText(arguments?.getString(Constants.TITLE))
         binding.text.setText(arguments?.getString(Constants.TEXT))
-        viewModel.setCoroutineScope(lifecycleScope)
         viewModel.noteId = arguments?.getLong(Constants.ID) ?: Constants.INVALID_ID
         if (arguments == null) {
             activity?.invalidateOptionsMenu()
@@ -92,10 +92,12 @@ class NoteInfoFragment : Fragment() {
                 null
             )
             setPositiveButton(getString(R.string.dialog_positive)) { _, _ ->
-                viewModel.onSaveNote(
-                    binding.title.text.toString(),
-                    binding.text.text.toString()
-                )
+                lifecycleScope.launch {
+                    viewModel.onSaveNote(
+                        binding.title.text.toString(),
+                        binding.text.text.toString()
+                    )
+                }
             }
             create()
         }
