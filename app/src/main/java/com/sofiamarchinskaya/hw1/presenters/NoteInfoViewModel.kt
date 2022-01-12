@@ -11,14 +11,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 class NoteInfoViewModel : ViewModel() {
-    private lateinit var coroutineScope: CoroutineScope
     private val repository = NoteRepositoryImpl()
     val savingState = MutableLiveData<SavingState>()
     var noteId = Constants.INVALID_ID
     var isNewNote = false
 
-    fun onSaveNote(title: String, text: String, isSavingToCloud: Boolean) {
-        coroutineScope.launch {
+    suspend fun onSaveNote(title: String, text: String, isSavingToCloud: Boolean) {
             savingState.value = SavingState(States.SAVING)
             if (noteId != Constants.INVALID_ID) {
                 repository.insert(Note(noteId, title, text))
@@ -32,7 +30,6 @@ class NoteInfoViewModel : ViewModel() {
 
             savingState.value = SavingState(States.SAVED)
             savingState.value = SavingState(States.NOTHING)
-        }
     }
 
     fun checkNote(title: String, text: String) {
@@ -42,9 +39,5 @@ class NoteInfoViewModel : ViewModel() {
         } else {
             savingState.value = SavingState(States.ALLOWED)
         }
-    }
-
-    fun setCoroutineScope(coroutineScope: CoroutineScope) {
-        this.coroutineScope = coroutineScope
     }
 }

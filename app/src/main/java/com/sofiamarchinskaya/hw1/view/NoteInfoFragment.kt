@@ -14,6 +14,7 @@ import com.sofiamarchinskaya.hw1.databinding.FragmentNoteInfoBinding
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.presenters.NoteInfoViewModel
 import com.sofiamarchinskaya.hw1.states.States
+import kotlinx.coroutines.launch
 
 /**
  * Фрагмент для отображения деталей о заметке
@@ -35,7 +36,6 @@ class NoteInfoFragment : Fragment() {
         binding = FragmentNoteInfoBinding.inflate(inflater, container, false)
         binding.title.setText(arguments?.getString(Constants.TITLE))
         binding.text.setText(arguments?.getString(Constants.TEXT))
-        viewModel.setCoroutineScope(lifecycleScope)
         viewModel.noteId = arguments?.getLong(Constants.ID) ?: Constants.INVALID_ID
         if (arguments == null) {
             activity?.invalidateOptionsMenu()
@@ -83,7 +83,7 @@ class NoteInfoFragment : Fragment() {
 
     private fun createSaveDialog() {
         val layoutInflater = LayoutInflater.from(requireContext())
-        val checkBoxView = layoutInflater.inflate(R.layout.check_box,null)
+        val checkBoxView = layoutInflater.inflate(R.layout.check_box, null)
         val checkBox = checkBoxView.findViewById<CheckBox>(R.id.checkbox)
         val dialogFragment = AlertDialog.Builder(requireActivity()).apply {
             setTitle(getString(R.string.dialog_title))
@@ -93,11 +93,13 @@ class NoteInfoFragment : Fragment() {
                 null
             )
             setPositiveButton(getString(R.string.dialog_positive)) { _, _ ->
-                viewModel.onSaveNote(
-                    binding.title.text.toString(),
-                    binding.text.text.toString(),
-                    checkBox.isChecked
-                )
+                lifecycleScope.launch {
+                    viewModel.onSaveNote(
+                        binding.title.text.toString(),
+                        binding.text.text.toString(),
+                        checkBox.isChecked
+                    )
+                }
             }
             create()
         }
