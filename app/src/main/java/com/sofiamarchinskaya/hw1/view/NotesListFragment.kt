@@ -68,14 +68,14 @@ class NotesListFragment : Fragment(), NotesListView {
 
     override fun initAdapter(listFlow: Flow<List<Note>>) {
         lifecycleScope.launch {
-            listFlow.collect{notesListAdapter.update(it)}
+            listFlow.collect { notesListAdapter.update(it) }
         }
         notesList.adapter = notesListAdapter
     }
 
     override fun update(notesFlow: Flow<List<Note>>) {
         lifecycleScope.launch {
-            notesFlow.collect{notesListAdapter.update(it)}
+            notesFlow.collect { notesListAdapter.update(it) }
         }
     }
 
@@ -84,7 +84,6 @@ class NotesListFragment : Fragment(), NotesListView {
             type = Constants.TYPE
             putExtra(Intent.EXTRA_TEXT, dataForExtra)
         })
-
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {

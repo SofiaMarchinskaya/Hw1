@@ -24,12 +24,13 @@ import kotlinx.coroutines.flow.collect
 class NotesPagerActivity : AppCompatActivity(), NotesPagerActivityView {
     private lateinit var viewPager: ViewPager2
     private lateinit var presenter: NotesPagerPresenter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notes_pager)
         setSupportActionBar(findViewById(R.id.toolBar))
-        presenter = NotesPagerPresenterImpl(NoteModelImpl(), this, lifecycleScope)
-        presenter.init(intent.extras?.getLong(Constants.ID))
+        presenter = NotesPagerPresenterImpl(NoteModelImpl(), this)
+        presenter.init(intent.extras?.getLong(Constants.ID)?:Constants.INVALID_ID)
     }
 
     override fun init(listFlow: Flow<List<Note>>, index: Long) {

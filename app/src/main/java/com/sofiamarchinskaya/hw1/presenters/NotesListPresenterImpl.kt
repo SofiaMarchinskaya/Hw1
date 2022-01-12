@@ -5,14 +5,11 @@ import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.models.framework.NoteModel
 import com.sofiamarchinskaya.hw1.presenters.framework.NotesListPresenter
 import com.sofiamarchinskaya.hw1.view.framework.NotesListView
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
 class NotesListPresenterImpl(
     private val model: NoteModel,
     private var view: NotesListView?,
-) : NotesListPresenter{
+) : NotesListPresenter {
     private var clickedNote: Note? = null
 
     override fun init() {

@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface NoteModel {
 
-    suspend fun insert(note: Note): Long
+    suspend fun insert(note: Note)
 
     fun getAll(): Flow<List<Note>>
 }

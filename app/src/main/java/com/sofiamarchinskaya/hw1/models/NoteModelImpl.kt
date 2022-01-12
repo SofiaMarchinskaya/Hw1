@@ -8,8 +8,8 @@ import kotlinx.coroutines.flow.Flow
 class NoteModelImpl : NoteModel {
     private val noteDao = AppDatabase.getDataBase().noteDao()
 
-    override suspend fun insert(note: Note): Long {
-        return noteDao.insert(note)
+    override suspend fun insert(note: Note) {
+        noteDao.insert(note)
     }
 
     override fun getAll(): Flow<List<Note>> {
