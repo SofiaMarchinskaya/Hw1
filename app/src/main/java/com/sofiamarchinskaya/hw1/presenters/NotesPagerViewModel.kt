@@ -24,8 +24,8 @@ class NotesPagerViewModel : ViewModel() {
         var i = 0L
         while (id != list.value?.get(i.toInt())?.id) {
             i++
-            index.value = i
         }
+        index.value = i
     }
 
 }
