@@ -10,11 +10,19 @@ class NotesPagerPresenterImpl(
     private var view: NotesPagerActivityView?
 ) : NotesPagerPresenter {
 
-    override fun init(id: Long, list: List<Note>) {
+    override fun listCollected(list: List<Note>, id: Long): Int {
         var i = 0L
         while (id != list[i.toInt()].id) {
             i++
         }
-        view?.init(model.getAll(), i)
+        return i.toInt()
+    }
+
+    override fun init() {
+        view?.init(model.getAll())
+    }
+
+    override fun onNoteSaved(id: Long) {
+        view?.onNoteSaved(model.getAll(), id)
     }
 }

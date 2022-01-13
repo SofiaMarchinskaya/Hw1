@@ -5,5 +5,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface NotesPagerActivityView {
 
-    fun init(listFlow: Flow<List<Note>>, index: Long)
+    fun init(listFlow: Flow<List<Note>>)
+    fun onNoteSaved(listFlow: Flow<List<Note>>, index: Long)
 }

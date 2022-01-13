@@ -3,10 +3,10 @@ package com.sofiamarchinskaya.hw1.view
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.Fragment
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.sofiamarchinskaya.hw1.*
 import com.sofiamarchinskaya.hw1.models.NoteModelImpl
@@ -27,6 +27,7 @@ class NoteInfoFragment : Fragment(), NoteInfoView {
     private var isNewNote = false
     private lateinit var presenter: NoteInfoPresenter
     private var isSaveDialogOpen = false
+    private lateinit var onSave: (Long) -> Unit
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
@@ -89,6 +90,12 @@ class NoteInfoFragment : Fragment(), NoteInfoView {
 
     override fun onSuccessfullySaved() {
         Toast.makeText(requireContext(), getString(R.string.success), Toast.LENGTH_LONG).show()
+        if (noteId != Constants.INVALID_ID)
+            onSave.invoke(noteId)
+    }
+
+    fun setOnSave(onSave: (Long) -> Unit) {
+        this.onSave = onSave
     }
 
     private fun createSaveDialog() {
