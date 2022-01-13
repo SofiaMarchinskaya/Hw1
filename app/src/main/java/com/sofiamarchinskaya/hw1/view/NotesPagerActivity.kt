@@ -30,7 +30,10 @@ class NotesPagerActivity : AppCompatActivity(), NotesPagerActivityView {
         setContentView(R.layout.activity_notes_pager)
         setSupportActionBar(findViewById(R.id.toolBar))
         presenter = NotesPagerPresenterImpl(NoteModelImpl(), this)
-        presenter.init(intent.extras?.getLong(Constants.ID)?:Constants.INVALID_ID)
+        lifecycleScope.launch {
+            NoteModelImpl().getAll().collect { presenter.init(intent.extras?.getLong(Constants.ID)?:Constants.INVALID_ID,it) }
+        }
+
     }
 
     override fun init(listFlow: Flow<List<Note>>, index: Long) {
