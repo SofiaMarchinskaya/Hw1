@@ -1,12 +1,9 @@
-package com.sofiamarchinskaya.hw1.presenters
+package com.sofiamarchinskaya.hw1.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.sofiamarchinskaya.hw1.models.NoteRepositoryImpl
 import com.sofiamarchinskaya.hw1.models.entity.Note
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
 class NotesPagerViewModel : ViewModel() {
     val list = MutableLiveData<List<Note>>()
@@ -27,5 +24,4 @@ class NotesPagerViewModel : ViewModel() {
         }
         index.value = i
     }
-
 }

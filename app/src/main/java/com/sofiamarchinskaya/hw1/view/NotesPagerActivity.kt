@@ -8,7 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import com.sofiamarchinskaya.hw1.Constants
 import com.sofiamarchinskaya.hw1.R
 import com.sofiamarchinskaya.hw1.databinding.ActivityNotesPagerBinding
-import com.sofiamarchinskaya.hw1.presenters.NotesPagerViewModel
+import com.sofiamarchinskaya.hw1.viewmodels.NotesPagerViewModel
 import kotlinx.coroutines.launch
 
 

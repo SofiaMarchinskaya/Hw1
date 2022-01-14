@@ -1,10 +1,9 @@
-package com.sofiamarchinskaya.hw1.presenters
+package com.sofiamarchinskaya.hw1.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.sofiamarchinskaya.hw1.models.NoteRepositoryImpl
 import com.sofiamarchinskaya.hw1.models.entity.Note
-import kotlinx.coroutines.flow.collect
 
 class NotesListViewModel : ViewModel() {
     private val repository = NoteRepositoryImpl()
