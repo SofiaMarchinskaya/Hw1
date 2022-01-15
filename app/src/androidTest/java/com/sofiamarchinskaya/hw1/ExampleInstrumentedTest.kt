@@ -1,12 +1,15 @@
 package com.sofiamarchinskaya.hw1
 
+import android.content.Context
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.sofiamarchinskaya.hw1.models.entity.Note
 
 import org.junit.Test
 import org.junit.runner.RunWith
 
 import org.junit.Assert.*
+import org.mockito.Mockito.mock
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -17,8 +20,6 @@ import org.junit.Assert.*
 class ExampleInstrumentedTest {
     @Test
     fun useAppContext() {
-        // Context of the app under test.
-        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.sofiamarchinskaya.hw1", appContext.packageName)
+        val buik = mock(Note::class.java)
     }
 }
