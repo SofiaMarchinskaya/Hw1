@@ -27,11 +27,13 @@ class NotesPagerActivity : AppCompatActivity(), NotesPagerActivityView {
     private lateinit var viewPager: ViewPager2
     private lateinit var presenter: NotesPagerPresenter
     private lateinit var job: Job
+    private lateinit var pagerAdapter: NotesPagerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notes_pager)
         setSupportActionBar(findViewById(R.id.toolBar))
+        pagerAdapter = NotesPagerAdapter(this,presenter::onNoteSaved)
         presenter = NotesPagerPresenterImpl(NoteModelImpl(), this)
         presenter.init()
     }
@@ -40,7 +42,7 @@ class NotesPagerActivity : AppCompatActivity(), NotesPagerActivityView {
         job = lifecycleScope.launch {
             listFlow.cancellable().collect {
                 viewPager = findViewById<ViewPager2>(R.id.note_view_pager).apply {
-                    adapter = NotesPagerAdapter(this@NotesPagerActivity, it, presenter::onNoteSaved)
+                    adapter = pagerAdapter
                     setCurrentItem(
                         presenter.listCollected(
                             it,
@@ -63,7 +65,7 @@ class NotesPagerActivity : AppCompatActivity(), NotesPagerActivityView {
         job = lifecycleScope.launch {
             listFlow.cancellable().collect {
                 viewPager.apply {
-                    (adapter as NotesPagerAdapter).updateList(it)
+                    (adapter as NotesPagerAdapter).update(it)
                     setCurrentItem(presenter.listCollected(it, index), false)
                 }
             }
