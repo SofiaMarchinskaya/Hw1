@@ -14,9 +14,7 @@ import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.presenters.NotesPagerPresenterImpl
 import com.sofiamarchinskaya.hw1.presenters.framework.NotesPagerPresenter
 import com.sofiamarchinskaya.hw1.view.framework.NotesPagerActivityView
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.collect
 
@@ -26,31 +24,30 @@ import kotlinx.coroutines.flow.collect
 class NotesPagerActivity : AppCompatActivity(), NotesPagerActivityView {
     private lateinit var viewPager: ViewPager2
     private lateinit var presenter: NotesPagerPresenter
-    private lateinit var job: Job
     private lateinit var pagerAdapter: NotesPagerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notes_pager)
         setSupportActionBar(findViewById(R.id.toolBar))
-        pagerAdapter = NotesPagerAdapter(this,presenter::onNoteSaved)
         presenter = NotesPagerPresenterImpl(NoteModelImpl(), this)
-        presenter.init()
+        pagerAdapter = NotesPagerAdapter(this, presenter::init)
+        viewPager = findViewById<ViewPager2>(R.id.note_view_pager).apply {
+            adapter = pagerAdapter
+        }
+        presenter.init(intent.extras?.getLong(Constants.ID) ?: Constants.INVALID_ID)
     }
 
-    override fun init(listFlow: Flow<List<Note>>) {
-        job = lifecycleScope.launch {
-            listFlow.cancellable().collect {
-                viewPager = findViewById<ViewPager2>(R.id.note_view_pager).apply {
-                    adapter = pagerAdapter
+    override fun init(listFlow: Flow<List<Note>>, id: Long) {
+        lifecycleScope.launch {
+            listFlow.collect {
+                viewPager.apply {
+                    pagerAdapter.update(it)
                     setCurrentItem(
-                        presenter.listCollected(
-                            it,
-                            intent.extras?.getLong(Constants.ID) ?: Constants.INVALID_ID
-                        ), false
+                        presenter.getIndex(it, id),
+                        false
                     )
                 }
-                job.cancel()
             }
         }
     }
@@ -58,18 +55,6 @@ class NotesPagerActivity : AppCompatActivity(), NotesPagerActivityView {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_add, menu)
         return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onNoteSaved(listFlow: Flow<List<Note>>, index: Long) {
-        job.cancel()
-        job = lifecycleScope.launch {
-            listFlow.cancellable().collect {
-                viewPager.apply {
-                    (adapter as NotesPagerAdapter).update(it)
-                    setCurrentItem(presenter.listCollected(it, index), false)
-                }
-            }
-        }
     }
 
     companion object {

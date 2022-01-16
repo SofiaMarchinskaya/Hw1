@@ -27,7 +27,7 @@ class NoteInfoFragment : Fragment(), NoteInfoView {
     private var isNewNote = false
     private lateinit var presenter: NoteInfoPresenter
     private var isSaveDialogOpen = false
-    private lateinit var onSave: (Long) -> Unit
+    lateinit var onSave: (Long) -> Unit
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
@@ -92,10 +92,6 @@ class NoteInfoFragment : Fragment(), NoteInfoView {
         Toast.makeText(requireContext(), getString(R.string.success), Toast.LENGTH_LONG).show()
         if (noteId != Constants.INVALID_ID)
             onSave.invoke(noteId)
-    }
-
-    fun setOnSave(onSave: (Long) -> Unit) {
-        this.onSave = onSave
     }
 
     private fun createSaveDialog() {

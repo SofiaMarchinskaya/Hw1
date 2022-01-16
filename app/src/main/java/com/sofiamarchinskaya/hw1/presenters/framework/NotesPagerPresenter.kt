@@ -4,9 +4,7 @@ import com.sofiamarchinskaya.hw1.models.entity.Note
 
 interface NotesPagerPresenter {
 
-    fun init()
+    fun init(id: Long)
 
-    fun onNoteSaved(id: Long)
-
-    fun listCollected(list: List<Note>, id: Long): Int
+    fun getIndex(list: List<Note>, id: Long): Int
 }

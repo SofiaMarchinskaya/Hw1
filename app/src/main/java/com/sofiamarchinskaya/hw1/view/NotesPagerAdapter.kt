@@ -15,7 +15,7 @@ class NotesPagerAdapter(
 
     override fun createFragment(position: Int): Fragment =
         NoteInfoFragment.newInstance(list[position]).apply {
-            setOnSave(onSave)
+            onSave = this@NotesPagerAdapter.onSave
         }
 
     fun update(list: List<Note>) {
