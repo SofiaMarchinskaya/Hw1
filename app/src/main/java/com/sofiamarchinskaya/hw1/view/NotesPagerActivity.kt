@@ -3,6 +3,7 @@ package com.sofiamarchinskaya.hw1.view
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -25,17 +26,20 @@ class NotesPagerActivity : AppCompatActivity(), NotesPagerActivityView {
     private lateinit var viewPager: ViewPager2
     private lateinit var presenter: NotesPagerPresenter
     private lateinit var pagerAdapter: NotesPagerAdapter
+    private var isFirstOpen = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notes_pager)
         setSupportActionBar(findViewById(R.id.toolBar))
         presenter = NotesPagerPresenterImpl(NoteModelImpl(), this)
-        pagerAdapter = NotesPagerAdapter(this, presenter::init)
+        pagerAdapter = NotesPagerAdapter(this)
         viewPager = findViewById<ViewPager2>(R.id.note_view_pager).apply {
             adapter = pagerAdapter
         }
         presenter.init(intent.extras?.getLong(Constants.ID) ?: Constants.INVALID_ID)
+        isFirstOpen = true
+
     }
 
     override fun init(listFlow: Flow<List<Note>>, id: Long) {
@@ -43,10 +47,16 @@ class NotesPagerActivity : AppCompatActivity(), NotesPagerActivityView {
             listFlow.collect {
                 viewPager.apply {
                     pagerAdapter.update(it)
-                    setCurrentItem(
-                        presenter.getIndex(it, id),
-                        false
-                    )
+                    if (isFirstOpen) {
+                        isFirstOpen = false
+                        setCurrentItem(
+                            id.toInt() - 1,
+                            false
+                        )
+                    } else {
+                        setCurrentItem(currentItem, false)
+                    }
+
                 }
             }
         }

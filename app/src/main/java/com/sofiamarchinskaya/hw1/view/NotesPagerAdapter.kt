@@ -7,7 +7,6 @@ import com.sofiamarchinskaya.hw1.models.entity.Note
 
 class NotesPagerAdapter(
     fragmentActivity: FragmentActivity,
-    private val onSave: (Long) -> Unit
 ) : FragmentStateAdapter(fragmentActivity) {
     private var list: List<Note> = ArrayList()
 
@@ -15,7 +14,6 @@ class NotesPagerAdapter(
 
     override fun createFragment(position: Int): Fragment =
         NoteInfoFragment.newInstance(list[position]).apply {
-            onSave = this@NotesPagerAdapter.onSave
         }
 
     fun update(list: List<Note>) {
