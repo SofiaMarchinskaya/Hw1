@@ -1,27 +1,31 @@
 package com.sofiamarchinskaya.hw1.presenters
 
 import android.view.ContextMenu
-import com.sofiamarchinskaya.hw1.models.Note
-import com.sofiamarchinskaya.hw1.view.framework.NotesListView
-import com.sofiamarchinskaya.hw1.models.NotesModel
+import com.sofiamarchinskaya.hw1.models.entity.Note
+import com.sofiamarchinskaya.hw1.models.framework.NoteModel
 import com.sofiamarchinskaya.hw1.presenters.framework.NotesListPresenter
+import com.sofiamarchinskaya.hw1.view.framework.NotesListView
 
 class NotesListPresenterImpl(
+    private val model: NoteModel,
     private var view: NotesListView?,
-    private val model: NotesModel,
 ) : NotesListPresenter {
     private var clickedNote: Note? = null
 
     override fun init() {
-        view?.initAdapter(model.list)
+        view?.initAdapter(model.getAll())
     }
 
     override fun onItemClick(note: Note) {
-        view?.openAboutItemFragment(note)
+        view?.openAboutItemActivity(note)
     }
 
     override fun createMenu(menu: ContextMenu?) {
         view?.onMenuCreated(menu)
+    }
+
+    override fun onResume() {
+        view?.update(model.getAll())
     }
 
     override fun longClick(note: Note) {
@@ -36,7 +40,10 @@ class NotesListPresenterImpl(
         view = null
     }
 
-    private fun getDataToExtra(): String =
-        clickedNote?.title + "\n" + clickedNote?.text
+    override fun addNote() {
+        view?.openAddNoteFragment()
+    }
 
+    private fun getDataToExtra(): String =
+        clickedNote?.title + "\n" + clickedNote?.body
 }

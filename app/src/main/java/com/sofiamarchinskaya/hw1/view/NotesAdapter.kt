@@ -7,8 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.sofiamarchinskaya.hw1.models.Note
 import com.sofiamarchinskaya.hw1.R
+import com.sofiamarchinskaya.hw1.models.entity.Note
 
 class NotesAdapter(
     context: Context,
@@ -42,7 +42,7 @@ class NotesAdapter(
 
         fun bind(data: Note) {
             title.text = data.title
-            text.text = data.text
+            text.text = data.body
             itemView.apply {
                 setOnClickListener { onClick.invoke(data) }
                 setOnCreateContextMenuListener { menu, _, _ -> onMenuCreated.invoke(menu) }

@@ -1,7 +1,7 @@
 package com.sofiamarchinskaya.hw1.presenters.framework
 
 import android.view.ContextMenu
-import com.sofiamarchinskaya.hw1.models.Note
+import com.sofiamarchinskaya.hw1.models.entity.Note
 
 interface NotesListPresenter {
 
@@ -17,4 +17,7 @@ interface NotesListPresenter {
 
     fun onDestroyView()
 
+    fun addNote()
+
+    fun onResume()
 }

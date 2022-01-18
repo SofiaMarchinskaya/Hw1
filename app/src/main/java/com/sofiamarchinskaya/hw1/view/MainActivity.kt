@@ -2,7 +2,6 @@ package com.sofiamarchinskaya.hw1.view
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.sofiamarchinskaya.hw1.presenters.MainActivityPresenterImpl
@@ -21,11 +20,7 @@ class MainActivity : AppCompatActivity(), MainActivityView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return super.onCreateOptionsMenu(menu)
+        setSupportActionBar(findViewById(R.id.toolBar))
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -42,8 +37,4 @@ class MainActivity : AppCompatActivity(), MainActivityView {
         startActivity(Intent(this, AboutActivity::class.java))
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        supportFragmentManager.popBackStack()
-    }
 }

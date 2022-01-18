@@ -1,10 +1,15 @@
 <resources>
     <string name="app_name">Notes</string>
     <string name="save">Save</string>
-    <string name="success">Successfully saved</string>
+    <string name="success">Успешно сохранено</string>
     <string name="no_content">No content</string>
     <string name="share">share</string>
     <string name="about">about</string>
     <string name="app_description">App for working with notes</string>
     <string name="author">Author: Marchinskaya Sofia</string>
+    <string name="empty_note">Заметка пуста!</string>
+    <string name="dialog_title">Сохранение</string>
+    <string name="dialog_message">Сохранить изменения?</string>
+    <string name="dialog_negative">Нет</string>
+    <string name="dialog_positive">Да</string>
 </resources>
