@@ -1,6 +1,7 @@
 package com.sofiamarchinskaya.hw1.view
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -16,21 +17,32 @@ class NotesPagerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityNotesPagerBinding
     private val viewModel by lazy { ViewModelProvider(this)[NotesPagerViewModel::class.java] }
+    private var isCurrentItem = true
+    private lateinit var pagerAdapter: NotesPagerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityNotesPagerBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolBar)
+        pagerAdapter = NotesPagerAdapter(this@NotesPagerActivity).also {
+            binding.noteViewPager.adapter = it
+        }
         viewModel.apply {
             lifecycleScope.launch {
                 init(intent.extras?.getLong(Constants.ID))
             }
             list.observe(this@NotesPagerActivity) {
-                binding.noteViewPager.adapter = NotesPagerAdapter(this@NotesPagerActivity, it)
+                pagerAdapter.update(it)
             }
             index.observe(this@NotesPagerActivity) {
-                binding.noteViewPager.setCurrentItem(it.toInt(), false)
+                if (isCurrentItem) {
+                    binding.noteViewPager.setCurrentItem(it.toInt(), false)
+                    isCurrentItem = false
+                } else {
+                    binding.noteViewPager.setCurrentItem(binding.noteViewPager.currentItem, false)
+                }
+
             }
         }
     }

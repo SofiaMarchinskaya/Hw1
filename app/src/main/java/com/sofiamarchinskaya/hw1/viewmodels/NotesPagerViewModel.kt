@@ -14,15 +14,11 @@ class NotesPagerViewModel : ViewModel() {
     suspend fun init(id: Long?) {
         repository.getAll().collect {
             list.value = it
-            getIndex(id)
+            index.value=getIndex(id)?.toLong()
         }
     }
 
-    private fun getIndex(id: Long?) {
-        var i = 0L
-        while (id != list.value?.get(i.toInt())?.id) {
-            i++
-        }
-        index.value = i
-    }
+    private fun getIndex(id: Long?) =
+        list.value?.indexOfFirst { it.id == id }
+
 }

@@ -61,28 +61,6 @@ class NotesListFragment : Fragment() {
         return binding.root
     }
 
-
-    private fun openAboutItemActivity(note: Note) {
-        val intent = Intent(context, NotesPagerActivity::class.java).apply {
-            putExtra(Constants.TITLE, note.title)
-            putExtra(Constants.TEXT, note.body)
-            putExtra(Constants.ID, note.id)
-        }
-        startActivity(intent)
-    }
-
-    private fun onMenuCreated(menu: ContextMenu?) {
-        requireActivity().menuInflater.inflate(R.menu.context_menu, menu)
-    }
-
-    private fun onShare(dataForExtra: String) {
-        startActivity(Intent(Intent.ACTION_SEND).apply {
-            type = Constants.TYPE
-            putExtra(Intent.EXTRA_TEXT, dataForExtra)
-        })
-
-    }
-
     override fun onContextItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.share -> {
@@ -101,6 +79,27 @@ class NotesListFragment : Fragment() {
     private fun openAddNoteFragment() {
         activity?.supportFragmentManager?.beginTransaction()
             ?.replace(R.id.host, NoteInfoFragment())?.addToBackStack(TAG)?.commit()
+    }
+
+    private fun onMenuCreated(menu: ContextMenu?) {
+        requireActivity().menuInflater.inflate(R.menu.context_menu, menu)
+    }
+
+    private fun onShare(dataForExtra: String) {
+        startActivity(Intent(Intent.ACTION_SEND).apply {
+            type = Constants.TYPE
+            putExtra(Intent.EXTRA_TEXT, dataForExtra)
+        })
+
+    }
+
+    private fun openAboutItemActivity(note: Note) {
+        val intent = Intent(context, NotesPagerActivity::class.java).apply {
+            putExtra(Constants.TITLE, note.title)
+            putExtra(Constants.TEXT, note.body)
+            putExtra(Constants.ID, note.id)
+        }
+        startActivity(intent)
     }
 
     companion object {
