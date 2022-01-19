@@ -47,7 +47,7 @@ class NotesPagerViewModelTest {
     @Test
     fun when_init_called() = runBlocking {
         viewModel.init(testId)
-         verify(listObserver).onChanged(viewModel.list.value)
-         verify(indexObserver).onChanged(viewModel.index.value)
+        verify(listObserver).onChanged(viewModel.list.value)
+        verify(indexObserver).onChanged(viewModel.index.value)
     }
 }
