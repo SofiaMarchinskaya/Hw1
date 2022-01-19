@@ -16,16 +16,16 @@ abstract class AppDatabase : RoomDatabase() {
         @Volatile
         private lateinit var INSTANCE: AppDatabase
 
-        fun getDataBase(): AppDatabase {
-            return INSTANCE
-        }
-
         fun createDataBase(context: Context) {
             INSTANCE = Room.databaseBuilder(
                 context,
                 AppDatabase::class.java,
                 Constants.DATABASE_NAME
             ).build()
+        }
+
+        fun getDataBase(): AppDatabase {
+            return INSTANCE
         }
     }
 }

@@ -7,14 +7,14 @@ import com.sofiamarchinskaya.hw1.models.entity.Note
 import kotlinx.coroutines.flow.collect
 
 class NotesPagerViewModel : ViewModel() {
-    val list = MutableLiveData<List<Note>>()
+    var list = MutableLiveData<List<Note>>()
     val index = MutableLiveData<Long>()
     private val repository = NoteRepositoryImpl()
 
     suspend fun init(id: Long?) {
         repository.getAll().collect {
             list.value = it
-            index.value=getIndex(id)?.toLong()
+            index.value = getIndex(id)?.toLong()
         }
     }
 
