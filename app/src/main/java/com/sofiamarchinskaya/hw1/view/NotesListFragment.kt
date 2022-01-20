@@ -3,6 +3,8 @@ package com.sofiamarchinskaya.hw1.view
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import android.widget.Filter
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -95,7 +97,7 @@ class NotesListFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.launch_from_cloud->{
+            R.id.launch_from_cloud -> {
                 viewModel.getNotesFromCloud(lifecycleScope)
                 return true
             }
@@ -105,7 +107,23 @@ class NotesListFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_main, menu)
+        setupSearch(menu)
         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    private fun setupSearch(menu: Menu?) {
+        (menu?.findItem(R.id.search_note)
+            ?.actionView as SearchView)
+            .setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean = false
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    ItemsFilter().filter(newText, viewModel.list.value)
+                        ?.let { notesListAdapter.update(it) }
+                    return false
+                }
+
+            })
     }
 
     private fun openAddNoteFragment() {
@@ -116,4 +134,13 @@ class NotesListFragment : Fragment() {
     companion object {
         private const val TAG = "NotesList"
     }
+}
+
+interface QueryFilter<T> {
+    fun filter(query: String?, list: List<T>?): List<T>?
+}
+
+class ItemsFilter : QueryFilter<Note> {
+    override fun filter(query: String?, list: List<Note>?): List<Note>? =
+        list?.filter { it.title.contains(query.toString()) }
 }
