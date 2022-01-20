@@ -3,7 +3,6 @@ package com.sofiamarchinskaya.hw1.view
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
-import android.widget.Filter
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider

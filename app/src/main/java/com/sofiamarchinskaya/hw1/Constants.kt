@@ -10,4 +10,5 @@ object Constants {
     const val INVALID_ID = -1L
     const val DIALOG_STATE = "dialogState"
     const val FIREBASE_NAME = "notes"
+    const val NOTE_SENT = "com.sofiamarchinskaya.hw1.NOTE_SENT"
 }

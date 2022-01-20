@@ -1,7 +1,9 @@
 package com.sofiamarchinskaya.hw1.view
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.CheckBox
 import androidx.fragment.app.Fragment
@@ -100,6 +102,10 @@ class NoteInfoFragment : Fragment() {
                         checkBox.isChecked
                     )
                 }
+                activity?.sendBroadcast(Intent().apply {
+                    action = Constants.NOTE_SENT
+                    putExtra(Constants.TITLE, binding.title.text.toString())
+                })
             }
             create()
         }

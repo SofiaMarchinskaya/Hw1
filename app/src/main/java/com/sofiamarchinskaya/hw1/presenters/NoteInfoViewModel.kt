@@ -30,6 +30,7 @@ class NoteInfoViewModel : ViewModel() {
 
             savingState.value = SavingState(States.SAVED)
             savingState.value = SavingState(States.NOTHING)
+
     }
 
     fun checkNote(title: String, text: String) {
