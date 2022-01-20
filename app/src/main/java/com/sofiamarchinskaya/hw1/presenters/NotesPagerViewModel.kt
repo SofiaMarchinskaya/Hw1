@@ -11,23 +11,14 @@ import kotlinx.coroutines.launch
 class NotesPagerViewModel : ViewModel() {
     val list = MutableLiveData<List<Note>>()
     val index = MutableLiveData<Long>()
-    lateinit var coroutineScope: CoroutineScope
     private val repository = NoteRepositoryImpl()
-    fun init(id: Long?) {
-        coroutineScope.launch {
-            repository.getAll().collect {
-                list.value = it
-                getIndex(id)
-            }
+    suspend fun init(id: Long?) {
+        repository.getAll().collect {
+            list.value = it
+            index.value = getIndex(id)?.toLong()
         }
     }
 
-    private fun getIndex(id: Long?) {
-        var i = 0L
-        while (id != list.value?.get(i.toInt())?.id) {
-            i++
-            index.value = i
-        }
-    }
-
+    private fun getIndex(id: Long?) =
+        list.value?.indexOfFirst { it.id == id }
 }

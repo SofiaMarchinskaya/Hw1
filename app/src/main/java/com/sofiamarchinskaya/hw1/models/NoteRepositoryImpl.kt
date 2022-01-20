@@ -1,6 +1,5 @@
 package com.sofiamarchinskaya.hw1.models
 
-import android.util.Log
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.sofiamarchinskaya.hw1.Constants

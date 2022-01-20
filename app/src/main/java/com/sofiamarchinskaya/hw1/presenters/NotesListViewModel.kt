@@ -15,7 +15,7 @@ class NotesListViewModel : ViewModel() {
 
     val list = MutableLiveData<List<Note>>()
 
-    fun updateNotesList() {
+    suspend fun updateNotesList() {
         coroutineScope.launch {
             repository.getAll().collect { list.value = it }
         }
@@ -28,10 +28,6 @@ class NotesListViewModel : ViewModel() {
     fun getDataToExtra(): String =
         clickedNote?.title + "\n" + clickedNote?.body
 
-    fun setCoroutineScope(coroutineScope: CoroutineScope) {
-        this.coroutineScope = coroutineScope
-    }
-
     fun getNotesFromCloud() {
         repository.getAllFromCloud { list1 ->
             list1.forEach {
@@ -41,5 +37,4 @@ class NotesListViewModel : ViewModel() {
             }
         }
     }
-
 }
