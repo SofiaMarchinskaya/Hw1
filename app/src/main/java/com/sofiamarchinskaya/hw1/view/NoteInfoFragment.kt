@@ -4,12 +4,16 @@ import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.sofiamarchinskaya.hw1.*
 import com.sofiamarchinskaya.hw1.databinding.FragmentNoteInfoBinding
+import com.sofiamarchinskaya.hw1.models.NoteModelImpl
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.viewmodels.NoteInfoViewModel
 import com.sofiamarchinskaya.hw1.states.States

@@ -51,4 +51,13 @@ class NotesPagerActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.menu_add, menu)
         return super.onCreateOptionsMenu(menu)
     }
+
+    companion object {
+        fun getStartIntent(context: Context, note: Note): Intent =
+            Intent(context, NotesPagerActivity::class.java).apply {
+                putExtra(Constants.TITLE, note.title)
+                putExtra(Constants.TEXT, note.body)
+                putExtra(Constants.ID, note.id)
+            }
+    }
 }
