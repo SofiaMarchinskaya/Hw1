@@ -6,25 +6,14 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.sofiamarchinskaya.hw1.Constants
 import com.sofiamarchinskaya.hw1.R
 import com.sofiamarchinskaya.hw1.databinding.FragmentNotesListBinding
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.sofiamarchinskaya.hw1.*
-import com.sofiamarchinskaya.hw1.models.NoteModelImpl
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.viewmodels.NotesListViewModel
 import kotlinx.coroutines.launch
-
-import com.sofiamarchinskaya.hw1.presenters.NotesListPresenterImpl
-import com.sofiamarchinskaya.hw1.presenters.framework.NotesListPresenter
-import com.sofiamarchinskaya.hw1.view.framework.NotesListView
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.flow.collect
 
 /**
  * Фрагмент для отображения списка заметок
@@ -104,12 +93,7 @@ class NotesListFragment : Fragment() {
     }
 
     private fun openAboutItemActivity(note: Note) {
-        val intent = Intent(context, NotesPagerActivity::class.java).apply {
-            putExtra(Constants.TITLE, note.title)
-            putExtra(Constants.TEXT, note.body)
-            putExtra(Constants.ID, note.id)
-        }
-        startActivity(intent)
+        startActivity(NotesPagerActivity.getStartIntent(requireContext(), note))
     }
 
     companion object {

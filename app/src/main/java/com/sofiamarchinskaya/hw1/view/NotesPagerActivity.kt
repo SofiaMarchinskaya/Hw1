@@ -1,5 +1,7 @@
 package com.sofiamarchinskaya.hw1.view
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -9,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import com.sofiamarchinskaya.hw1.Constants
 import com.sofiamarchinskaya.hw1.R
 import com.sofiamarchinskaya.hw1.databinding.ActivityNotesPagerBinding
+import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.viewmodels.NotesPagerViewModel
 import kotlinx.coroutines.launch
 
