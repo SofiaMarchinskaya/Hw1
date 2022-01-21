@@ -34,19 +34,22 @@ class NoteInfoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentNoteInfoBinding.inflate(inflater, container, false)
-        binding.title.setText(arguments?.getString(Constants.TITLE))
-        binding.text.setText(arguments?.getString(Constants.TEXT))
-        viewModel.noteId = arguments?.getLong(Constants.ID) ?: Constants.INVALID_ID
-        if (arguments == null) {
+        arguments?.apply {
+            binding.title.setText(this.getString(Constants.TITLE))
+            binding.text.setText(this.getString(Constants.TEXT))
+            viewModel.noteId = this.getLong(Constants.ID)
+        } ?: kotlin.run {
+            viewModel.noteId = Constants.INVALID_ID
             activity?.invalidateOptionsMenu()
             viewModel.isNewNote = true
         }
+
         viewModel.savingState.observe(this) {
             when (it.state) {
                 States.SAVING -> {}
                 States.SAVED -> onSuccessfullySaved()
                 States.ERROR -> onSaveDisabled()
-                States.ALLOWED -> onSaveAllowed()
+                States.ALLOWED -> createSaveDialog()
                 States.NOTHING -> {}//Nothing
             }
         }
@@ -62,15 +65,16 @@ class NoteInfoFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.save -> {
-                viewModel.checkNote(binding.title.text.toString(), binding.text.text.toString())
+                with(binding) {
+                    viewModel.checkNote(
+                        title.text.toString(),
+                        text.text.toString()
+                    )
+                }
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun onSaveAllowed() {
-        createSaveDialog()
     }
 
     private fun onSaveDisabled() {

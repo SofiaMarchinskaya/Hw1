@@ -24,8 +24,6 @@ abstract class AppDatabase : RoomDatabase() {
             ).build()
         }
 
-        fun getDataBase(): AppDatabase {
-            return INSTANCE
-        }
+        fun getDataBase(): AppDatabase = INSTANCE
     }
 }
