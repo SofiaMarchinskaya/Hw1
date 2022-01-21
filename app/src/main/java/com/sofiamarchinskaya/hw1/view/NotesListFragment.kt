@@ -14,6 +14,7 @@ import com.sofiamarchinskaya.hw1.R
 import com.sofiamarchinskaya.hw1.databinding.FragmentNotesListBinding
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.presenters.NotesListViewModel
+import com.sofiamarchinskaya.hw1.view.instruments.ItemsFilter
 import kotlinx.coroutines.launch
 
 
@@ -61,7 +62,6 @@ class NotesListFragment : Fragment() {
         activity?.invalidateOptionsMenu()
         return binding.root
     }
-
 
     private fun openAboutItemActivity(note: Note) {
         val intent = Intent(context, NotesPagerActivity::class.java).apply {
@@ -121,7 +121,6 @@ class NotesListFragment : Fragment() {
                         ?.let { notesListAdapter.update(it) }
                     return false
                 }
-
             })
     }
 
@@ -133,13 +132,4 @@ class NotesListFragment : Fragment() {
     companion object {
         private const val TAG = "NotesList"
     }
-}
-
-interface QueryFilter<T> {
-    fun filter(query: String?, list: List<T>?): List<T>?
-}
-
-class ItemsFilter : QueryFilter<Note> {
-    override fun filter(query: String?, list: List<Note>?): List<Note>? =
-        list?.filter { it.title.contains(query.toString()) }
 }
