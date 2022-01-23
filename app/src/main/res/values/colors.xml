@@ -8,4 +8,10 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="light_gray_divider">#b5b5b5</color>
+    <color name="gray_note_item_text">#696969</color>
+    <color name="light_orange">#EAB47C</color>
+    <color name="smooth_orange">#F5DEB4</color>
+    <color name="brown">#B49578</color>
+    <color name="dirty_brown">#8F8271</color>
+    <color name="milky">#E7D8C4</color>
 </resources>
