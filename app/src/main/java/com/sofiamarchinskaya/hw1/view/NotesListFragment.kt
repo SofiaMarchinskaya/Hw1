@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -12,15 +13,19 @@ import com.sofiamarchinskaya.hw1.Constants
 import com.sofiamarchinskaya.hw1.R
 import com.sofiamarchinskaya.hw1.databinding.FragmentNotesListBinding
 import com.sofiamarchinskaya.hw1.models.entity.Note
+import com.sofiamarchinskaya.hw1.states.FabState
+import com.sofiamarchinskaya.hw1.states.FabStates
 import com.sofiamarchinskaya.hw1.viewmodels.NotesListViewModel
+import com.sofiamarchinskaya.hw1.viewmodels.NotesPagerViewModel
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
  * Фрагмент для отображения списка заметок
  */
 class NotesListFragment : Fragment() {
 
-    private val viewModel by lazy { ViewModelProvider(this)[NotesListViewModel::class.java] }
+    private val viewModel: NotesListViewModel by viewModel()
     private lateinit var notesListAdapter: NotesAdapter
     private lateinit var binding: FragmentNotesListBinding
 
@@ -37,7 +42,7 @@ class NotesListFragment : Fragment() {
         dividerItemDecoration.setDrawable(resources.getDrawable(R.drawable.divider, null))
         binding = FragmentNotesListBinding.inflate(inflater, container, false).apply {
             fab.setOnClickListener {
-                openAddNoteFragment()
+                viewModel.onFabClicked()
             }
         }
         notesListAdapter =
@@ -47,26 +52,21 @@ class NotesListFragment : Fragment() {
                 this::onMenuCreated,
                 viewModel::longClick
             )
-        binding.notesList.adapter = notesListAdapter
-        binding.notesList.addItemDecoration(dividerItemDecoration)
-        viewModel.list.observe(this) {
-            notesListAdapter.update(it)
+        with(binding) {
+            notesList.adapter = notesListAdapter
+            notesList.addItemDecoration(dividerItemDecoration)
         }
         registerForContextMenu(binding.notesList)
         activity?.invalidateOptionsMenu()
         lifecycleScope.launch {
             viewModel.updateNotesList()
         }
+        initLiveData()
         return binding.root
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.share -> {
-                onShare(viewModel.getDataToExtra())
-                return true
-            }
-        }
+        viewModel.selectContextMenuItem(item.itemId)
         return super.onContextItemSelected(item)
     }
 
@@ -75,26 +75,37 @@ class NotesListFragment : Fragment() {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    private fun openAddNoteFragment() {
+    private fun openAddNoteFragment() =
         activity?.supportFragmentManager?.beginTransaction()
             ?.replace(R.id.host, NoteInfoFragment())?.addToBackStack(TAG)?.commit()
-    }
 
-    private fun onMenuCreated(menu: ContextMenu?) {
+    private fun onMenuCreated(menu: ContextMenu?) =
         requireActivity().menuInflater.inflate(R.menu.context_menu, menu)
-    }
 
-    private fun onShare(dataForExtra: String) {
+    private fun onShare(dataForExtra: String) =
         startActivity(Intent(Intent.ACTION_SEND).apply {
             type = Constants.TYPE
             putExtra(Intent.EXTRA_TEXT, dataForExtra)
         })
 
-    }
-
-    private fun openAboutItemActivity(note: Note) {
+    private fun openAboutItemActivity(note: Note) =
         startActivity(NotesPagerActivity.getStartIntent(requireContext(), note))
-    }
+
+    private fun initLiveData() =
+        viewModel.apply {
+            fabState.observe(this@NotesListFragment) {
+                when (it.state) {
+                    FabStates.OnClicked -> openAddNoteFragment()
+                    FabStates.NotClicked -> {}
+                }
+            }
+            list.observe(this@NotesListFragment) {
+                notesListAdapter.update(it)
+            }
+            contextMenuState.observe(this@NotesListFragment) {
+                onShare(it)
+            }
+        }
 
     companion object {
         private const val TAG = "NotesList"

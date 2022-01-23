@@ -6,7 +6,6 @@ import android.view.*
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.sofiamarchinskaya.hw1.Constants
 import com.sofiamarchinskaya.hw1.R
@@ -15,6 +14,7 @@ import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.states.States
 import com.sofiamarchinskaya.hw1.viewmodels.NoteInfoViewModel
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
  * Фрагмент для отображения деталей о заметке
@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 class NoteInfoFragment : Fragment() {
 
     private lateinit var binding: FragmentNoteInfoBinding
-    private val viewModel by lazy { ViewModelProvider(this)[NoteInfoViewModel::class.java] }
+    private val viewModel: NoteInfoViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
@@ -39,14 +39,13 @@ class NoteInfoFragment : Fragment() {
             binding.text.setText(this.getString(Constants.TEXT))
             viewModel.noteId = this.getLong(Constants.ID)
         } ?: kotlin.run {
-            viewModel.noteId = Constants.INVALID_ID
             activity?.invalidateOptionsMenu()
+            viewModel.noteId = Constants.INVALID_ID
             viewModel.isNewNote = true
         }
 
         viewModel.savingState.observe(this) {
             when (it.state) {
-                States.SAVING -> {}
                 States.SAVED -> onSuccessfullySaved()
                 States.ERROR -> onSaveDisabled()
                 States.ALLOWED -> createSaveDialog()
@@ -95,10 +94,12 @@ class NoteInfoFragment : Fragment() {
             )
             setPositiveButton(getString(R.string.dialog_positive)) { _, _ ->
                 lifecycleScope.launch {
-                    viewModel.onSaveNote(
-                        binding.title.text.toString(),
-                        binding.text.text.toString()
-                    )
+                    with(binding) {
+                        viewModel.onSaveNote(
+                            title.text.toString(),
+                            text.text.toString()
+                        )
+                    }
                 }
             }
             create()

@@ -2,15 +2,18 @@ package com.sofiamarchinskaya.hw1.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.sofiamarchinskaya.hw1.models.NoteRepositoryImpl
+import com.sofiamarchinskaya.hw1.R
 import com.sofiamarchinskaya.hw1.models.entity.Note
-import kotlinx.coroutines.flow.collect
+import com.sofiamarchinskaya.hw1.models.framework.NoteRepository
+import com.sofiamarchinskaya.hw1.states.FabState
+import com.sofiamarchinskaya.hw1.states.FabStates
 
-class NotesListViewModel : ViewModel() {
-    private val repository = NoteRepositoryImpl()
+class NotesListViewModel(private val repository: NoteRepository) : ViewModel() {
     private var clickedNote: Note? = null
 
     val list = MutableLiveData<List<Note>>()
+    val fabState = MutableLiveData<FabState>()
+    val contextMenuState = MutableLiveData<String>()
 
     suspend fun updateNotesList() {
         repository.getAll().collect { list.value = it }
@@ -20,7 +23,16 @@ class NotesListViewModel : ViewModel() {
         clickedNote = note
     }
 
-    fun getDataToExtra(): String =
-        clickedNote?.title + "\n" + clickedNote?.body
+    fun onFabClicked() {
+        fabState.value = FabState(FabStates.OnClicked)
+        fabState.value = FabState(FabStates.NotClicked)
+    }
 
+    fun selectContextMenuItem(itemId: Int) {
+        when (itemId) {
+            R.id.share -> {
+                contextMenuState.value = clickedNote?.title + "\n" + clickedNote?.body
+            }
+        }
+    }
 }

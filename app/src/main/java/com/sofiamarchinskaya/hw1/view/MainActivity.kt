@@ -5,11 +5,11 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.sofiamarchinskaya.hw1.R
 import com.sofiamarchinskaya.hw1.databinding.ActivityMainBinding
-import com.sofiamarchinskaya.hw1.states.MenuStates
+import com.sofiamarchinskaya.hw1.states.MainMenuStates
 import com.sofiamarchinskaya.hw1.viewmodels.MainActivityViewModel
 import com.sofiamarchinskaya.hw1.viewmodels.NotesPagerViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
  * Активити, в которой находится основной интерфейс пирложения: фрагмент со списком,
@@ -17,7 +17,7 @@ import com.sofiamarchinskaya.hw1.viewmodels.NotesPagerViewModel
  */
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private val viewModel by lazy { ViewModelProvider(this)[MainActivityViewModel::class.java] }
+    private val viewModel: MainActivityViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolBar)
         viewModel.menuState.observe(this) {
             when (it.state) {
-                MenuStates.ABOUT -> openAboutScreen()
+                MainMenuStates.ABOUT -> openAboutScreen()
             }
         }
     }

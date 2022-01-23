@@ -2,23 +2,18 @@ package com.sofiamarchinskaya.hw1.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.sofiamarchinskaya.hw1.models.NoteRepositoryImpl
+import com.sofiamarchinskaya.hw1.models.ListWithIndex
 import com.sofiamarchinskaya.hw1.models.entity.Note
-import kotlinx.coroutines.flow.collect
+import com.sofiamarchinskaya.hw1.models.framework.NoteRepository
 
-class NotesPagerViewModel : ViewModel() {
-    var list = MutableLiveData<List<Note>>()
-    val index = MutableLiveData<Long>()
-    private val repository = NoteRepositoryImpl()
+class NotesPagerViewModel(private val repository: NoteRepository) : ViewModel() {
+    val listWithIndex = MutableLiveData<ListWithIndex>()
 
-    suspend fun init(id: Long?) {
+    suspend fun init(id: Long?) =
         repository.getAll().collect {
-            list.value = it
-            index.value = getIndex(id)?.toLong()
+            listWithIndex.value = ListWithIndex(it, getIndex(id, it).toLong())
         }
-    }
 
-    private fun getIndex(id: Long?) =
-        list.value?.indexOfFirst { it.id == id }
-
+    private fun getIndex(id: Long?, list: List<Note>) =
+        list.indexOfFirst { it.id == id }
 }
