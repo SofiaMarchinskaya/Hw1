@@ -7,13 +7,17 @@ import android.widget.CheckBox
 import androidx.fragment.app.Fragment
 import android.widget.Toast
 import androidx.core.os.bundleOf
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.sofiamarchinskaya.hw1.*
+import com.sofiamarchinskaya.hw1.Constants
+import com.sofiamarchinskaya.hw1.R
 import com.sofiamarchinskaya.hw1.databinding.FragmentNoteInfoBinding
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.presenters.NoteInfoViewModel
 import com.sofiamarchinskaya.hw1.states.States
+import com.sofiamarchinskaya.hw1.viewmodels.NoteInfoViewModel
+import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlinx.coroutines.launch
 
 /**
@@ -22,7 +26,7 @@ import kotlinx.coroutines.launch
 class NoteInfoFragment : Fragment() {
 
     private lateinit var binding: FragmentNoteInfoBinding
-    private val viewModel by lazy { ViewModelProvider(this)[NoteInfoViewModel::class.java] }
+    private val viewModel: NoteInfoViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
@@ -32,21 +36,23 @@ class NoteInfoFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentNoteInfoBinding.inflate(inflater, container, false)
-        binding.title.setText(arguments?.getString(Constants.TITLE))
-        binding.text.setText(arguments?.getString(Constants.TEXT))
-        viewModel.noteId = arguments?.getLong(Constants.ID) ?: Constants.INVALID_ID
-        if (arguments == null) {
+        arguments?.apply {
+            binding.title.setText(this.getString(Constants.TITLE))
+            binding.text.setText(this.getString(Constants.TEXT))
+            viewModel.noteId = this.getLong(Constants.ID)
+        } ?: kotlin.run {
             activity?.invalidateOptionsMenu()
+            viewModel.noteId = Constants.INVALID_ID
             viewModel.isNewNote = true
         }
+
         viewModel.savingState.observe(this) {
             when (it.state) {
-                States.SAVING -> {}
                 States.SAVED -> onSuccessfullySaved()
                 States.ERROR -> onSaveDisabled()
-                States.ALLOWED -> onSaveAllowed()
+                States.ALLOWED -> createSaveDialog()
                 States.NOTHING -> {}//Nothing
             }
         }
@@ -62,15 +68,16 @@ class NoteInfoFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.save -> {
-                viewModel.checkNote(binding.title.text.toString(), binding.text.text.toString())
+                with(binding) {
+                    viewModel.checkNote(
+                        title.text.toString(),
+                        text.text.toString()
+                    )
+                }
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun onSaveAllowed() {
-        createSaveDialog()
     }
 
     private fun onSaveDisabled() {
@@ -94,11 +101,13 @@ class NoteInfoFragment : Fragment() {
             )
             setPositiveButton(getString(R.string.dialog_positive)) { _, _ ->
                 lifecycleScope.launch {
-                    viewModel.onSaveNote(
-                        binding.title.text.toString(),
-                        binding.text.text.toString(),
-                        checkBox.isChecked
-                    )
+                    with(binding) {
+                        viewModel.onSaveNote(
+                            title.text.toString(),
+                            text.text.toString(),
+                            checkBox.isChecked
+                        )
+                    }
                 }
             }
             create()

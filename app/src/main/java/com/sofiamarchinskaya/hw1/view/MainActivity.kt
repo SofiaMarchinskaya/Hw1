@@ -4,8 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import com.sofiamarchinskaya.hw1.R
+import androidx.lifecycle.ViewModelProvider
 import com.sofiamarchinskaya.hw1.databinding.ActivityMainBinding
+import com.sofiamarchinskaya.hw1.states.MainMenuStates
+import com.sofiamarchinskaya.hw1.viewmodels.MainActivityViewModel
+import com.sofiamarchinskaya.hw1.viewmodels.NotesPagerViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
  * Активити, в которой находится основной интерфейс пирложения: фрагмент со списком,
@@ -13,20 +17,22 @@ import com.sofiamarchinskaya.hw1.databinding.ActivityMainBinding
  */
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private val viewModel: MainActivityViewModel by viewModel()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolBar)
+        viewModel.menuState.observe(this) {
+            when (it.state) {
+                MainMenuStates.ABOUT -> openAboutScreen()
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.about -> {
-                openAboutScreen()
-                return true
-            }
-        }
+        viewModel.selectMenuItem(item.itemId)
         return super.onOptionsItemSelected(item)
     }
 

@@ -16,10 +16,6 @@ abstract class AppDatabase : RoomDatabase() {
         @Volatile
         private lateinit var INSTANCE: AppDatabase
 
-        fun getDataBase(): AppDatabase {
-            return INSTANCE
-        }
-
         fun createDataBase(context: Context) {
             INSTANCE = Room.databaseBuilder(
                 context,
@@ -27,5 +23,7 @@ abstract class AppDatabase : RoomDatabase() {
                 Constants.DATABASE_NAME
             ).build()
         }
+
+        fun getDataBase(): AppDatabase = INSTANCE
     }
 }

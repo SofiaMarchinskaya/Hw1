@@ -1,14 +1,10 @@
 package com.sofiamarchinskaya.hw1.view
 
 import android.content.Context
-import android.util.Log
 import android.view.ContextMenu
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.sofiamarchinskaya.hw1.R
 import com.sofiamarchinskaya.hw1.databinding.NoteItemBinding
 import com.sofiamarchinskaya.hw1.models.entity.Note
 
@@ -41,14 +37,16 @@ class NotesAdapter(
     inner class NoteViewHolder(private val binding: NoteItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: Note) {
-            binding.title.text = data.title
-            binding.text.text = data.body
-            binding.root.apply {
-                setOnClickListener { onClick.invoke(data) }
-                setOnCreateContextMenuListener { menu, _, _ -> onMenuCreated.invoke(menu) }
-                setOnLongClickListener {
-                    onItemLongClick.invoke(data)
-                    false
+            binding.apply {
+                title.text = data.title
+                text.text = data.body
+                root.apply {
+                    setOnClickListener { onClick.invoke(data) }
+                    setOnCreateContextMenuListener { menu, _, _ -> onMenuCreated.invoke(menu) }
+                    setOnLongClickListener {
+                        onItemLongClick.invoke(data)
+                        false
+                    }
                 }
             }
         }

@@ -10,6 +10,9 @@ import kotlinx.coroutines.flow.Flow
 
 class NoteRepositoryImpl : NoteRepository {
     private val noteDao = AppDatabase.getDataBase().noteDao()
+
+    override suspend fun insert(note: Note) {
+        noteDao.insert(note)
     private val fireBase = Firebase.database.reference
     override suspend fun insert(note: Note) {
         noteDao.insert(note)
