@@ -13,16 +13,19 @@ class NoteInfoViewModel(private val repository: NoteRepository) : ViewModel() {
     var noteId = Constants.INVALID_ID
     var isNewNote = false
 
-    suspend fun onSaveNote(title: String, text: String) {
-        with(savingState) {
-            if (noteId == Constants.INVALID_ID) {
-                repository.insert(Note(title = title, body = text))
-            } else {
-                repository.insert(Note(noteId, title, text))
-            }
-            value = SavingState(States.SAVED)
-            value = SavingState(States.NOTHING)
+    suspend fun onSaveNote(title: String, text: String, isSavingToCloud: Boolean) {
+        if (noteId != Constants.INVALID_ID) {
+            repository.insert(Note(noteId, title, text))
+            if (isSavingToCloud)
+                repository.insertCloud(Note(noteId, title, text))
+        } else {
+            repository.insert(Note(title = title, body = text))
+            if (isSavingToCloud)
+                repository.insertCloud(Note(repository.getLast(), title, text))
         }
+
+        savingState.value = SavingState(States.SAVED)
+        savingState.value = SavingState(States.NOTHING)
     }
 
     fun checkNote(title: String, text: String) {

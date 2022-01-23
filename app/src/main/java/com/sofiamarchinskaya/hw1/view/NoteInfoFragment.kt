@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
 import android.widget.CheckBox
-import androidx.fragment.app.Fragment
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -13,12 +12,10 @@ import com.sofiamarchinskaya.hw1.Constants
 import com.sofiamarchinskaya.hw1.R
 import com.sofiamarchinskaya.hw1.databinding.FragmentNoteInfoBinding
 import com.sofiamarchinskaya.hw1.models.entity.Note
-import com.sofiamarchinskaya.hw1.presenters.NoteInfoViewModel
 import com.sofiamarchinskaya.hw1.states.States
 import com.sofiamarchinskaya.hw1.viewmodels.NoteInfoViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import kotlinx.coroutines.launch
 
 /**
  * Фрагмент для отображения деталей о заметке
@@ -101,20 +98,17 @@ class NoteInfoFragment : Fragment() {
             )
             setPositiveButton(getString(R.string.dialog_positive)) { _, _ ->
                 lifecycleScope.launch {
-                    with(binding) {
-                        viewModel.onSaveNote(
-                            title.text.toString(),
-                            text.text.toString(),
-                            checkBox.isChecked
-                        )
-                    }
+                    viewModel.onSaveNote(
+                        binding.title.text.toString(),
+                        binding.text.text.toString(),
+                        checkBox.isChecked
+                    )
                 }
             }
             create()
         }
         activity?.supportFragmentManager?.let { dialogFragment.show() }
     }
-
     companion object {
         fun newInstance(note: Note): NoteInfoFragment =
             NoteInfoFragment().apply {

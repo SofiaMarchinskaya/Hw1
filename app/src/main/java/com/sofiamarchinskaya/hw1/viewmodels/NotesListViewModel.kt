@@ -7,6 +7,8 @@ import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.models.framework.NoteRepository
 import com.sofiamarchinskaya.hw1.states.FabState
 import com.sofiamarchinskaya.hw1.states.FabStates
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 class NotesListViewModel(private val repository: NoteRepository) : ViewModel() {
     private var clickedNote: Note? = null
@@ -32,6 +34,16 @@ class NotesListViewModel(private val repository: NoteRepository) : ViewModel() {
         when (itemId) {
             R.id.share -> {
                 contextMenuState.value = clickedNote?.title + "\n" + clickedNote?.body
+            }
+        }
+    }
+
+    fun getNotesFromCloud(coroutineScope: CoroutineScope) {
+        repository.getAllFromCloud { list1 ->
+            list1.forEach {
+                coroutineScope.launch {
+                    repository.insert(it)
+                }
             }
         }
     }

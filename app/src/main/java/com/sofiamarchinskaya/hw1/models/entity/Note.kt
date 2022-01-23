@@ -12,6 +12,6 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class Note(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    @SerializedName("title") @ColumnInfo(name = "note_title") val title: String ="",
-    @SerializedName("text") @ColumnInfo(name = "note_text") val body: String =""
+    @SerializedName("title") @ColumnInfo(name = "note_title") val title: String = "",
+    @SerializedName("text") @ColumnInfo(name = "note_text") val body: String = ""
 ) : Parcelable
