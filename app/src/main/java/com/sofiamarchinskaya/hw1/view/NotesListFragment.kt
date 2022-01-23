@@ -28,6 +28,7 @@ class NotesListFragment : Fragment() {
     private val viewModel: NotesListViewModel by viewModel()
     private lateinit var notesListAdapter: NotesAdapter
     private lateinit var binding: FragmentNotesListBinding
+    private lateinit var fabObserver: Observer<FabState>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
@@ -91,14 +92,15 @@ class NotesListFragment : Fragment() {
     private fun openAboutItemActivity(note: Note) =
         startActivity(NotesPagerActivity.getStartIntent(requireContext(), note))
 
-    private fun initLiveData() =
-        viewModel.apply {
-            fabState.observe(this@NotesListFragment) {
-                when (it.state) {
-                    FabStates.OnClicked -> openAddNoteFragment()
-                    FabStates.NotClicked -> {}
-                }
+    private fun initLiveData() {
+        fabObserver = Observer {
+            when (it.state) {
+                FabStates.OnClicked -> openAddNoteFragment()
+                FabStates.NotClicked -> {}
             }
+        }
+        viewModel.apply {
+            fabState.observe(this@NotesListFragment, fabObserver)
             list.observe(this@NotesListFragment) {
                 notesListAdapter.update(it)
             }
@@ -106,6 +108,12 @@ class NotesListFragment : Fragment() {
                 onShare(it)
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.fabState.removeObserver(fabObserver)
+    }
 
     companion object {
         private const val TAG = "NotesList"
