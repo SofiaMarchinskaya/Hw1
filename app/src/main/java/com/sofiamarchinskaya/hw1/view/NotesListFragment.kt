@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
@@ -11,6 +12,7 @@ import com.sofiamarchinskaya.hw1.Constants
 import com.sofiamarchinskaya.hw1.R
 import com.sofiamarchinskaya.hw1.databinding.FragmentNotesListBinding
 import com.sofiamarchinskaya.hw1.models.entity.Note
+import com.sofiamarchinskaya.hw1.states.FabState
 import com.sofiamarchinskaya.hw1.states.FabStates
 import com.sofiamarchinskaya.hw1.viewmodels.NotesListViewModel
 import kotlinx.coroutines.launch
@@ -24,6 +26,7 @@ class NotesListFragment : Fragment() {
     private val viewModel: NotesListViewModel by viewModel()
     private lateinit var notesListAdapter: NotesAdapter
     private lateinit var binding: FragmentNotesListBinding
+    private lateinit var fabObserver: Observer<FabState>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
@@ -68,7 +71,7 @@ class NotesListFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.launch_from_cloud->{
+            R.id.launch_from_cloud -> {
                 viewModel.getNotesFromCloud(lifecycleScope)
                 return true
             }
@@ -97,14 +100,15 @@ class NotesListFragment : Fragment() {
     private fun openAboutItemActivity(note: Note) =
         startActivity(NotesPagerActivity.getStartIntent(requireContext(), note))
 
-    private fun initLiveData() =
-        viewModel.apply {
-            fabState.observe(this@NotesListFragment) {
-                when (it.state) {
-                    FabStates.OnClicked -> openAddNoteFragment()
-                    FabStates.NotClicked -> {}
-                }
+    private fun initLiveData() {
+        fabObserver = Observer {
+            when (it.state) {
+                FabStates.OnClicked -> openAddNoteFragment()
+                FabStates.NotClicked -> {}
             }
+        }
+        viewModel.apply {
+            fabState.observe(this@NotesListFragment, fabObserver)
             list.observe(this@NotesListFragment) {
                 notesListAdapter.update(it)
             }
@@ -112,6 +116,12 @@ class NotesListFragment : Fragment() {
                 onShare(it)
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.fabState.removeObserver(fabObserver)
+    }
 
     companion object {
         private const val TAG = "NotesList"
