@@ -72,7 +72,7 @@ class NotesListFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.launch_from_cloud -> {
-                viewModel.getNotesFromCloud(lifecycleScope)
+                viewModel.getNotesFromCloud()
                 return true
             }
         }
@@ -114,6 +114,9 @@ class NotesListFragment : Fragment() {
             }
             contextMenuState.observe(this@NotesListFragment) {
                 onShare(it)
+            }
+            downloadState.observe(viewLifecycleOwner){
+
             }
         }
     }

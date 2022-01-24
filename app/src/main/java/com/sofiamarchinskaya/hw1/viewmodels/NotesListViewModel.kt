@@ -2,9 +2,12 @@ package com.sofiamarchinskaya.hw1.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.sofiamarchinskaya.hw1.R
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.models.framework.NoteRepository
+import com.sofiamarchinskaya.hw1.states.DownloadState
+import com.sofiamarchinskaya.hw1.states.DownloadStates
 import com.sofiamarchinskaya.hw1.states.FabState
 import com.sofiamarchinskaya.hw1.states.FabStates
 import kotlinx.coroutines.CoroutineScope
@@ -16,6 +19,7 @@ class NotesListViewModel(private val repository: NoteRepository) : ViewModel() {
     val list = MutableLiveData<List<Note>>()
     val fabState = MutableLiveData<FabState>()
     val contextMenuState = MutableLiveData<String>()
+    val downloadState = MutableLiveData<DownloadState>()
 
     suspend fun updateNotesList() {
         repository.getAll().collect { list.value = it }
@@ -38,13 +42,19 @@ class NotesListViewModel(private val repository: NoteRepository) : ViewModel() {
         }
     }
 
-    fun getNotesFromCloud(coroutineScope: CoroutineScope) {
-        repository.getAllFromCloud { list1 ->
-            list1.forEach {
-                coroutineScope.launch {
-                    repository.insert(it)
+    fun getNotesFromCloud() {
+        try {
+            downloadState.value = DownloadState(DownloadStates.RUNNING)
+            repository.getAllFromCloud { list1 ->
+                list1.forEach {
+                    viewModelScope.launch {
+                        repository.insert(it)
+                    }
                 }
+                downloadState.value = DownloadState(DownloadStates.SUCCESS)
             }
+        } catch (e: Exception) {
+            downloadState.value = DownloadState(DownloadStates.FAILED)
         }
     }
 }
