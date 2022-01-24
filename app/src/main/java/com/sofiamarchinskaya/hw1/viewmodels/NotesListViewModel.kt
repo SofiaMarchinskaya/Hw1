@@ -14,6 +14,7 @@ class NotesListViewModel(private val repository: NoteRepository) : ViewModel() {
     val list = MutableLiveData<List<Note>>()
     val fabState = MutableLiveData<FabState>()
     val contextMenuState = MutableLiveData<String>()
+    val listItemState = MutableLiveData<Note>()
 
     suspend fun updateNotesList() {
         repository.getAll().collect { list.value = it }
@@ -26,6 +27,10 @@ class NotesListViewModel(private val repository: NoteRepository) : ViewModel() {
     fun onFabClicked() {
         fabState.value = FabState(FabStates.OnClicked)
         fabState.value = FabState(FabStates.NotClicked)
+    }
+
+    fun onAboutItemClicked(note: Note) {
+        listItemState.value = note
     }
 
     fun selectContextMenuItem(itemId: Int) {

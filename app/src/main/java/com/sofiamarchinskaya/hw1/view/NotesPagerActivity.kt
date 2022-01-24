@@ -3,10 +3,8 @@ package com.sofiamarchinskaya.hw1.view
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.sofiamarchinskaya.hw1.Constants
 import com.sofiamarchinskaya.hw1.R
@@ -15,7 +13,6 @@ import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.viewmodels.NotesPagerViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.component.KoinComponent
 
 
 class NotesPagerActivity : AppCompatActivity() {
@@ -35,21 +32,10 @@ class NotesPagerActivity : AppCompatActivity() {
         }
         viewModel.apply {
             lifecycleScope.launch {
-                init(intent.extras?.getLong(Constants.ID))
+                init(intent.extras?.getInt(Constants.ID))
             }
             listWithIndex.observe(this@NotesPagerActivity) {
-                pagerAdapter.update(it.list)
-                with(binding) {
-                    if (isCurrentItem) {
-                        noteViewPager.setCurrentItem(it.index.toInt(), false)
-                        isCurrentItem = false
-                    } else {
-                        noteViewPager.setCurrentItem(
-                            noteViewPager.currentItem,
-                            false
-                        )
-                    }
-                }
+                observeListWithIndex()
             }
         }
     }
@@ -57,6 +43,22 @@ class NotesPagerActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_add, menu)
         return super.onCreateOptionsMenu(menu)
+    }
+
+    private fun observeListWithIndex() {
+        viewModel.listWithIndex.value?.list?.let { pagerAdapter.update(it) }
+        with(binding) {
+            if (isCurrentItem) {
+                viewModel.listWithIndex.value?.index?.toInt()
+                    ?.let { noteViewPager.setCurrentItem(it, false) }
+                isCurrentItem = false
+            } else {
+                noteViewPager.setCurrentItem(
+                    noteViewPager.currentItem,
+                    false
+                )
+            }
+        }
     }
 
     companion object {
