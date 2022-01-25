@@ -16,6 +16,8 @@ import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.states.DownloadStates
 import com.sofiamarchinskaya.hw1.states.FabState
 import com.sofiamarchinskaya.hw1.states.FabStates
+import com.sofiamarchinskaya.hw1.states.ListItemState
+import com.sofiamarchinskaya.hw1.states.ListItemStates
 import com.sofiamarchinskaya.hw1.viewmodels.NotesListViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -118,7 +120,7 @@ class NotesListFragment : Fragment() {
                 onShare(it)
             }
             listItemState.observe(viewLifecycleOwner) {
-                openAboutItemActivity(it)
+                observeListItem(it)
             }
             downloadState.observe(viewLifecycleOwner) {
                 observeDownloadState()
@@ -146,6 +148,13 @@ class NotesListFragment : Fragment() {
                 viewModel.downloadState.value?.msg,
                 Toast.LENGTH_LONG
             ).show()
+        }
+    }
+
+    private fun observeListItem(listItemState: ListItemState) {
+        when (listItemState.state) {
+            ListItemStates.OnClicked -> listItemState.note?.let { it1 -> openAboutItemActivity(it1) }
+            ListItemStates.NotClicked -> {}
         }
     }
 

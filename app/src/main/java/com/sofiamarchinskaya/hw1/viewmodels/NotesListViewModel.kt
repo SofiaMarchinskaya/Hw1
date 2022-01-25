@@ -12,6 +12,8 @@ import com.sofiamarchinskaya.hw1.states.DownloadStates
 import com.sofiamarchinskaya.hw1.states.FabState
 import com.sofiamarchinskaya.hw1.states.FabStates
 import kotlinx.coroutines.launch
+import com.sofiamarchinskaya.hw1.states.ListItemState
+import com.sofiamarchinskaya.hw1.states.ListItemStates
 
 class NotesListViewModel(private val repository: NoteRepository) : ViewModel() {
     private var clickedNote: Note? = null
@@ -19,8 +21,8 @@ class NotesListViewModel(private val repository: NoteRepository) : ViewModel() {
     val list = MutableLiveData<List<Note>>()
     val fabState = MutableLiveData<FabState>()
     val contextMenuState = MutableLiveData<String>()
+    val listItemState = MutableLiveData<ListItemState>()
     var downloadState = MutableLiveData<DownloadState>()
-    val listItemState = MutableLiveData<Note>()
 
     suspend fun updateNotesList() {
         repository.getAll().collect { list.value = it }
@@ -36,7 +38,8 @@ class NotesListViewModel(private val repository: NoteRepository) : ViewModel() {
     }
 
     fun onAboutItemClicked(note: Note) {
-        listItemState.value = note
+        listItemState.value = ListItemState(ListItemStates.OnClicked,note)
+        listItemState.value = ListItemState(ListItemStates.NotClicked)
     }
 
     fun onShareContextItemClick() {
