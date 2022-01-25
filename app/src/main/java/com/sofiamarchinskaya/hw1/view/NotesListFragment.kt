@@ -62,7 +62,12 @@ class NotesListFragment : Fragment() {
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
-        viewModel.selectContextMenuItem(item.itemId)
+        when (item.itemId) {
+            R.id.share -> {
+                viewModel.onShareContextItemClick()
+                return true
+            }
+        }
         return super.onContextItemSelected(item)
     }
 
@@ -88,12 +93,9 @@ class NotesListFragment : Fragment() {
         startActivity(NotesPagerActivity.getStartIntent(requireContext(), note))
 
     private fun initLiveData() {
-        with((viewModel)) {
+        with(viewModel) {
             fabState.observe(viewLifecycleOwner) {
-                when (it.state) {
-                    FabStates.OnClicked -> openAddNoteFragment()
-                    FabStates.NotClicked -> {}
-                }
+                observeFab(it.state)
             }
             list.observe(viewLifecycleOwner) {
                 notesListAdapter.update(it)
@@ -104,6 +106,13 @@ class NotesListFragment : Fragment() {
             listItemState.observe(viewLifecycleOwner) {
                 openAboutItemActivity(it)
             }
+        }
+    }
+
+    private fun observeFab(fabState: FabStates) {
+        when (fabState) {
+            FabStates.OnClicked -> openAddNoteFragment()
+            FabStates.NotClicked -> {}
         }
     }
 

@@ -29,7 +29,7 @@ class NotesPagerViewModelTest {
 
     @Before
     fun setup() {
-        list = listOf(Note(1, "title1", "text1"),Note(2, "title2", "text3"))
+        list = listOf(Note(1, "title1", "text1"), Note(2, "title2", "text3"))
         repository = mock()
         `when`(repository.getAll()) doReturn (flow {
             emit(list)

@@ -35,7 +35,7 @@ class NotesPagerActivity : AppCompatActivity() {
                 init(intent.extras?.getInt(Constants.ID))
             }
             listWithIndex.observe(this@NotesPagerActivity) {
-                observeListWithIndex()
+                observeListWithIndex(it.list, it.index)
             }
         }
     }
@@ -45,12 +45,11 @@ class NotesPagerActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
-    private fun observeListWithIndex() {
-        viewModel.listWithIndex.value?.list?.let { pagerAdapter.update(it) }
+    private fun observeListWithIndex(list: List<Note>, index: Int) {
+        pagerAdapter.update(list)
         with(binding) {
             if (isCurrentItem) {
-                viewModel.listWithIndex.value?.index?.toInt()
-                    ?.let { noteViewPager.setCurrentItem(it, false) }
+                noteViewPager.setCurrentItem(index, false)
                 isCurrentItem = false
             } else {
                 noteViewPager.setCurrentItem(

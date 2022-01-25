@@ -32,8 +32,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.about -> run {
+            R.id.about -> {
                 viewModel.onInfoIconClick()
+                return true
             }
         }
         return super.onOptionsItemSelected(item)

@@ -33,11 +33,7 @@ class NotesListViewModel(private val repository: NoteRepository) : ViewModel() {
         listItemState.value = note
     }
 
-    fun selectContextMenuItem(itemId: Int) {
-        when (itemId) {
-            R.id.share -> {
-                contextMenuState.value = clickedNote?.title + "\n" + clickedNote?.body
-            }
-        }
+    fun onShareContextItemClick() {
+        contextMenuState.value = clickedNote?.title + "\n" + clickedNote?.body
     }
 }
