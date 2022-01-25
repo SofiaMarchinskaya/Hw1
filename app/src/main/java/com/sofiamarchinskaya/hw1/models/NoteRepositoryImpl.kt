@@ -3,10 +3,12 @@ package com.sofiamarchinskaya.hw1.models
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.sofiamarchinskaya.hw1.Constants
+import com.sofiamarchinskaya.hw1.DownloadCallback
 import com.sofiamarchinskaya.hw1.models.database.AppDatabase
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.models.framework.NoteRepository
 import kotlinx.coroutines.flow.Flow
+import java.lang.Exception
 
 class NoteRepositoryImpl : NoteRepository {
     private val noteDao = AppDatabase.getDataBase().noteDao()
@@ -19,14 +21,18 @@ class NoteRepositoryImpl : NoteRepository {
         return noteDao.getAll()
     }
 
-    override fun getAllFromCloud(callback: (List<Note>) -> Unit) {
+    override fun getAllFromCloud(callback: DownloadCallback) {
         fireBase.child(Constants.FIREBASE_NAME).get().addOnCompleteListener { task ->
-            task.result?.children?.map {
-                it.getValue(Note::class.java) ?: Note()
-            }?.let { it1 ->
-                callback(
-                    it1
-                )
+            try {
+                task.result?.children?.map {
+                    it.getValue(Note::class.java) ?: Note()
+                }?.let { it1 ->
+                    callback.onSuccess(
+                        it1
+                    )
+                }
+            } catch (e: Exception) {
+                callback.onFailed("Что-то пошло не так\n Проверьте подключение к Интернету")
             }
         }
     }
