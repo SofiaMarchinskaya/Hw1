@@ -9,6 +9,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import com.sofiamarchinskaya.hw1.BackupWorker
 import com.sofiamarchinskaya.hw1.Constants
 import com.sofiamarchinskaya.hw1.R
 import com.sofiamarchinskaya.hw1.databinding.FragmentNotesListBinding
@@ -16,6 +20,7 @@ import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.presenters.NotesListViewModel
 import com.sofiamarchinskaya.hw1.view.instruments.ItemsFilter
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 
 
 /**
@@ -60,6 +65,7 @@ class NotesListFragment : Fragment() {
         }
         registerForContextMenu(binding.notesList)
         activity?.invalidateOptionsMenu()
+        setupWorker()
         return binding.root
     }
 
@@ -127,6 +133,17 @@ class NotesListFragment : Fragment() {
     private fun openAddNoteFragment() {
         activity?.supportFragmentManager?.beginTransaction()
             ?.replace(R.id.host, NoteInfoFragment())?.addToBackStack(TAG)?.commit()
+    }
+
+    private fun setupWorker() {
+        val workerRequest =
+            PeriodicWorkRequestBuilder<BackupWorker>(15, TimeUnit.MINUTES).build()
+        WorkManager.getInstance(requireActivity().applicationContext)
+            .enqueueUniquePeriodicWork(
+                BackupWorker.WORK_NAME,
+                ExistingPeriodicWorkPolicy.KEEP,
+                workerRequest
+            )
     }
 
     companion object {

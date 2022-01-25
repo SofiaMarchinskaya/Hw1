@@ -39,5 +39,7 @@ class NoteRepositoryImpl : NoteRepository {
         return noteDao.getLast()
     }
 
+    override suspend fun count(): Int = noteDao.count()
+
 }
 

@@ -16,5 +16,8 @@ interface NoteDao {
     suspend fun insert(note: Note): Long
 
     @Query("SELECT id FROM notes ORDER BY id DESC LIMIT 1 ")
-    suspend fun getLast():Long
+    suspend fun getLast(): Long
+
+    @Query("SELECT COUNT(*) FROM notes")
+    suspend fun count(): Int
 }

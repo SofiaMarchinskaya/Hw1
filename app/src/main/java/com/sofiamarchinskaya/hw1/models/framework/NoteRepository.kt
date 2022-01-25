@@ -14,4 +14,6 @@ interface NoteRepository {
     fun insertCloud(note: Note)
 
     suspend fun getLast():Long
+
+    suspend fun count():Int
 }
