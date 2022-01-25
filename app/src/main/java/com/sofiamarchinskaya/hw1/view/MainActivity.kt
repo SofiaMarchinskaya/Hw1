@@ -4,11 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
+import com.sofiamarchinskaya.hw1.R
 import com.sofiamarchinskaya.hw1.databinding.ActivityMainBinding
 import com.sofiamarchinskaya.hw1.states.MainMenuStates
 import com.sofiamarchinskaya.hw1.viewmodels.MainActivityViewModel
-import com.sofiamarchinskaya.hw1.viewmodels.NotesPagerViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
@@ -32,7 +31,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        viewModel.selectMenuItem(item.itemId)
+        when (item.itemId) {
+            R.id.about -> {
+                viewModel.onInfoIconClick()
+                return true
+            }
+        }
         return super.onOptionsItemSelected(item)
     }
 

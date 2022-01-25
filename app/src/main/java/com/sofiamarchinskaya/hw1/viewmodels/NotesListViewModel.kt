@@ -20,6 +20,7 @@ class NotesListViewModel(private val repository: NoteRepository) : ViewModel() {
     val fabState = MutableLiveData<FabState>()
     val contextMenuState = MutableLiveData<String>()
     var downloadState = MutableLiveData<DownloadState>()
+    val listItemState = MutableLiveData<Note>()
 
     suspend fun updateNotesList() {
         repository.getAll().collect { list.value = it }
@@ -34,12 +35,12 @@ class NotesListViewModel(private val repository: NoteRepository) : ViewModel() {
         fabState.value = FabState(FabStates.NotClicked)
     }
 
-    fun selectContextMenuItem(itemId: Int) {
-        when (itemId) {
-            R.id.share -> {
-                contextMenuState.value = clickedNote?.title + "\n" + clickedNote?.body
-            }
-        }
+    fun onAboutItemClicked(note: Note) {
+        listItemState.value = note
+    }
+
+    fun onShareContextItemClick() {
+        contextMenuState.value = clickedNote?.title + "\n" + clickedNote?.body
     }
 
     fun getNotesFromCloud() {

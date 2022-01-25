@@ -28,7 +28,6 @@ class NotesListFragment : Fragment() {
     private val viewModel: NotesListViewModel by viewModel()
     private lateinit var notesListAdapter: NotesAdapter
     private lateinit var binding: FragmentNotesListBinding
-    private lateinit var fabObserver: Observer<FabState>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
@@ -49,8 +48,8 @@ class NotesListFragment : Fragment() {
         notesListAdapter =
             NotesAdapter(
                 requireContext(),
-                this::openAboutItemActivity,
-                this::onMenuCreated,
+                viewModel::onAboutItemClicked,
+                ::onMenuCreated,
                 viewModel::longClick
             )
         with(binding) {
@@ -67,7 +66,12 @@ class NotesListFragment : Fragment() {
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
-        viewModel.selectContextMenuItem(item.itemId)
+        when (item.itemId) {
+            R.id.share -> {
+                viewModel.onShareContextItemClick()
+                return true
+            }
+        }
         return super.onContextItemSelected(item)
     }
 
@@ -103,25 +107,32 @@ class NotesListFragment : Fragment() {
         startActivity(NotesPagerActivity.getStartIntent(requireContext(), note))
 
     private fun initLiveData() {
-        fabObserver = Observer {
-            when (it.state) {
-                FabStates.OnClicked -> openAddNoteFragment()
-                FabStates.NotClicked -> {}
+        with(viewModel) {
+            fabState.observe(viewLifecycleOwner) {
+                observeFab(it.state)
             }
-        }
-        viewModel.apply {
-            fabState.observe(this@NotesListFragment, fabObserver)
-            list.observe(this@NotesListFragment) {
+            list.observe(viewLifecycleOwner) {
                 notesListAdapter.update(it)
             }
-            contextMenuState.observe(this@NotesListFragment) {
+            contextMenuState.observe(viewLifecycleOwner) {
                 onShare(it)
+            }
+            listItemState.observe(viewLifecycleOwner) {
+                openAboutItemActivity(it)
             }
             downloadState.observe(viewLifecycleOwner) {
                 observeDownloadState()
             }
         }
     }
+
+    private fun observeFab(fabState: FabStates) {
+        when (fabState) {
+            FabStates.OnClicked -> openAddNoteFragment()
+            FabStates.NotClicked -> {}
+        }
+    }
+
 
     private fun observeDownloadState() {
         when (viewModel.downloadState.value?.status) {
@@ -136,11 +147,6 @@ class NotesListFragment : Fragment() {
                 Toast.LENGTH_LONG
             ).show()
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        viewModel.fabState.removeObserver(fabObserver)
     }
 
     companion object {

@@ -36,16 +36,16 @@ class NoteInfoFragment : Fragment() {
     ): View {
         binding = FragmentNoteInfoBinding.inflate(inflater, container, false)
         arguments?.apply {
-            binding.title.setText(this.getString(Constants.TITLE))
-            binding.text.setText(this.getString(Constants.TEXT))
-            viewModel.noteId = this.getLong(Constants.ID)
-        } ?: kotlin.run {
+            binding.title.setText(getString(Constants.TITLE))
+            binding.text.setText(getString(Constants.TEXT))
+            viewModel.noteId = getInt(Constants.ID)
+        } ?: run {
             activity?.invalidateOptionsMenu()
             viewModel.noteId = Constants.INVALID_ID
             viewModel.isNewNote = true
         }
 
-        viewModel.savingState.observe(this) {
+        viewModel.savingState.observe(viewLifecycleOwner) {
             when (it.state) {
                 States.SAVED -> onSuccessfullySaved()
                 States.ERROR -> onSaveDisabled()

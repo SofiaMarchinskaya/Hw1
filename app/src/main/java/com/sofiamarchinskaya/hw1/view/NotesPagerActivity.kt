@@ -32,21 +32,10 @@ class NotesPagerActivity : AppCompatActivity() {
         }
         viewModel.apply {
             lifecycleScope.launch {
-                init(intent.extras?.getLong(Constants.ID))
+                init(intent.extras?.getInt(Constants.ID))
             }
             listWithIndex.observe(this@NotesPagerActivity) {
-                pagerAdapter.update(it.list)
-                with(binding) {
-                    if (isCurrentItem) {
-                        noteViewPager.setCurrentItem(it.index.toInt(), false)
-                        isCurrentItem = false
-                    } else {
-                        noteViewPager.setCurrentItem(
-                            noteViewPager.currentItem,
-                            false
-                        )
-                    }
-                }
+                observeListWithIndex(it.list, it.index)
             }
         }
     }
@@ -54,6 +43,21 @@ class NotesPagerActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_add, menu)
         return super.onCreateOptionsMenu(menu)
+    }
+
+    private fun observeListWithIndex(list: List<Note>, index: Int) {
+        pagerAdapter.update(list)
+        with(binding) {
+            if (isCurrentItem) {
+                noteViewPager.setCurrentItem(index, false)
+                isCurrentItem = false
+            } else {
+                noteViewPager.setCurrentItem(
+                    noteViewPager.currentItem,
+                    false
+                )
+            }
+        }
     }
 
     companion object {

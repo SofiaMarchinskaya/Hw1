@@ -7,7 +7,6 @@ object Constants {
     const val TABLE_NAME = "notes"
     const val DATABASE_NAME = "database"
     const val ID = "id"
-    const val INVALID_ID = -1L
-    const val DIALOG_STATE = "dialogState"
+    const val INVALID_ID = -1
     const val FIREBASE_NAME = "notes"
 }
