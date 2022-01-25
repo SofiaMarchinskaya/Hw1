@@ -4,16 +4,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sofiamarchinskaya.hw1.DownloadCallback
-import com.sofiamarchinskaya.hw1.R
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.models.framework.NoteRepository
-import com.sofiamarchinskaya.hw1.states.DownloadState
-import com.sofiamarchinskaya.hw1.states.DownloadStates
-import com.sofiamarchinskaya.hw1.states.FabState
-import com.sofiamarchinskaya.hw1.states.FabStates
+import com.sofiamarchinskaya.hw1.states.*
 import kotlinx.coroutines.launch
-import com.sofiamarchinskaya.hw1.states.ListItemState
-import com.sofiamarchinskaya.hw1.states.ListItemStates
 
 class NotesListViewModel(private val repository: NoteRepository) : ViewModel() {
     private var clickedNote: Note? = null
@@ -38,7 +32,7 @@ class NotesListViewModel(private val repository: NoteRepository) : ViewModel() {
     }
 
     fun onAboutItemClicked(note: Note) {
-        listItemState.value = ListItemState(ListItemStates.OnClicked,note)
+        listItemState.value = ListItemState(ListItemStates.OnClicked, note)
         listItemState.value = ListItemState(ListItemStates.NotClicked)
     }
 
@@ -47,20 +41,18 @@ class NotesListViewModel(private val repository: NoteRepository) : ViewModel() {
     }
 
     fun getNotesFromCloud() {
-            repository.getAllFromCloud(object : DownloadCallback{
-                override fun onSuccess(list: List<Note>) {
-                    list.forEach {
-                        viewModelScope.launch {
-                            repository.insert(it)
-                        }
+        repository.getAllFromCloud(object : DownloadCallback {
+            override fun onSuccess(list: List<Note>) {
+                list.forEach {
+                    viewModelScope.launch {
+                        repository.insert(it)
                     }
-                    downloadState.value = DownloadState(DownloadStates.SUCCESS)
                 }
-
-                override fun onFailed(msg: String) {
-                    downloadState.value = DownloadState(DownloadStates.FAILED,msg)
-                }
-
-            })
+                downloadState.value = DownloadState(DownloadStates.SUCCESS)
+            }
+            override fun onFailed(msg: String) {
+                downloadState.value = DownloadState(DownloadStates.FAILED, msg)
+            }
+        })
     }
 }

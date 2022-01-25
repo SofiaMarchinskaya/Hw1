@@ -9,6 +9,7 @@ import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.models.framework.NoteRepository
 import kotlinx.coroutines.flow.Flow
 import java.lang.Exception
+import kotlin.reflect.typeOf
 
 class NoteRepositoryImpl : NoteRepository {
     private val noteDao = AppDatabase.getDataBase().noteDao()
@@ -32,7 +33,7 @@ class NoteRepositoryImpl : NoteRepository {
                     )
                 }
             } catch (e: Exception) {
-                callback.onFailed("Что-то пошло не так\n Проверьте подключение к Интернету")
+                callback.onFailed(e.message.toString())
             }
         }
     }
@@ -41,7 +42,7 @@ class NoteRepositoryImpl : NoteRepository {
         fireBase.child(Constants.FIREBASE_NAME).child(note.id.toString()).setValue(note)
     }
 
-    override suspend fun getLast(): Long {
+    override suspend fun getLast(): Int {
         return noteDao.getLast()
     }
 }

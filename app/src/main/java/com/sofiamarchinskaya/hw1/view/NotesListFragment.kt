@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
@@ -13,11 +12,7 @@ import com.sofiamarchinskaya.hw1.Constants
 import com.sofiamarchinskaya.hw1.R
 import com.sofiamarchinskaya.hw1.databinding.FragmentNotesListBinding
 import com.sofiamarchinskaya.hw1.models.entity.Note
-import com.sofiamarchinskaya.hw1.states.DownloadStates
-import com.sofiamarchinskaya.hw1.states.FabState
-import com.sofiamarchinskaya.hw1.states.FabStates
-import com.sofiamarchinskaya.hw1.states.ListItemState
-import com.sofiamarchinskaya.hw1.states.ListItemStates
+import com.sofiamarchinskaya.hw1.states.*
 import com.sofiamarchinskaya.hw1.viewmodels.NotesListViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -123,7 +118,7 @@ class NotesListFragment : Fragment() {
                 observeListItem(it)
             }
             downloadState.observe(viewLifecycleOwner) {
-                observeDownloadState()
+                observeDownloadState(it)
             }
         }
     }
@@ -135,9 +130,8 @@ class NotesListFragment : Fragment() {
         }
     }
 
-
-    private fun observeDownloadState() {
-        when (viewModel.downloadState.value?.status) {
+    private fun observeDownloadState(state: DownloadState) {
+        when (state.status) {
             DownloadStates.SUCCESS -> Toast.makeText(
                 requireContext(),
                 resources.getString(R.string.successfully_download),
@@ -145,7 +139,7 @@ class NotesListFragment : Fragment() {
             ).show()
             DownloadStates.FAILED -> Toast.makeText(
                 requireContext(),
-                viewModel.downloadState.value?.msg,
+                state.msg,
                 Toast.LENGTH_LONG
             ).show()
         }
