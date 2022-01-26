@@ -10,8 +10,5 @@ interface NoteDao {
     fun getAll(): Flow<List<Note>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(note: Note)
-
-    @Query("SELECT id FROM notes ORDER BY id DESC LIMIT 1 ")
-    suspend fun getLast(): Int
+    suspend fun insert(note: Note): Long
 }

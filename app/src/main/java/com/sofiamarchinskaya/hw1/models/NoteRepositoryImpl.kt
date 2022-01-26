@@ -17,9 +17,8 @@ class NoteRepositoryImpl : NoteRepository {
     private val noteDao = AppDatabase.getDataBase().noteDao()
     private val fireBase = Firebase.database.reference
 
-    override suspend fun insert(note: Note) {
-        noteDao.insert(note)
-    }
+    override suspend fun insert(note: Note): Int =
+        noteDao.insert(note).toInt()
 
     override fun getAll(): Flow<List<Note>> {
         return noteDao.getAll()
@@ -45,10 +44,6 @@ class NoteRepositoryImpl : NoteRepository {
 
     override fun insertCloud(note: Note) {
         fireBase.child(Constants.FIREBASE_NAME).child(note.id.toString()).setValue(note)
-    }
-
-    override suspend fun getLast(): Int {
-        return noteDao.getLast()
     }
 
     override fun loadNoteJson(callback: Callback<Note>) {

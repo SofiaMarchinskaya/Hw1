@@ -7,15 +7,13 @@ import retrofit2.Callback
 
 interface NoteRepository {
 
-    suspend fun insert(note: Note)
+    suspend fun insert(note: Note): Int
 
     fun getAll(): Flow<List<Note>>
 
     fun getAllFromCloud(callback: DownloadCallback)
 
     fun insertCloud(note: Note)
-
-    suspend fun getLast(): Int
 
     fun loadNoteJson(callback: Callback<Note>)
 }
