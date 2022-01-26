@@ -17,5 +17,6 @@
     <string name="dialog_save">Save note?</string>
     <string name="save_dialog_cloud">Save to cloud?</string>
     <string name="successfully_download">Succesfully downloaded!</string>
-    <string name="fail">Something went wrong. Check your Internet connection</string>
+    <string name="fail_to_connect">Something went wrong. Check your Internet connection</string>
+    <string name="problems_with_cloud">Problems with cloud storage</string>
 </resources>

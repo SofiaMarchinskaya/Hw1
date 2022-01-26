@@ -139,11 +139,18 @@ class NotesListFragment : Fragment() {
             ).show()
             DownloadStates.FAILED -> Toast.makeText(
                 requireContext(),
-                state.msg,
+                chooseExceptionMessage(state.msg),
                 Toast.LENGTH_LONG
             ).show()
+            DownloadStates.FINISH -> {}
         }
     }
+
+    private fun chooseExceptionMessage(exceptionType: ExceptionTypes?): String =
+        if (exceptionType == ExceptionTypes.CLIENT_IS_OFFLINE)
+            resources.getString(R.string.fail_to_connect)
+        else
+            resources.getString(R.string.problems_with_cloud)
 
     private fun observeListItem(listItemState: ListItemState) {
         when (listItemState.state) {

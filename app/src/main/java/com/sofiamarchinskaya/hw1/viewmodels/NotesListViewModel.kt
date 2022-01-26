@@ -49,9 +49,12 @@ class NotesListViewModel(private val repository: NoteRepository) : ViewModel() {
                     }
                 }
                 downloadState.value = DownloadState(DownloadStates.SUCCESS)
+                downloadState.value = DownloadState((DownloadStates.FINISH))
             }
-            override fun onFailed(msg: String) {
+
+            override fun onFailed(msg: ExceptionTypes) {
                 downloadState.value = DownloadState(DownloadStates.FAILED, msg)
+                downloadState.value = DownloadState((DownloadStates.FINISH))
             }
         })
     }

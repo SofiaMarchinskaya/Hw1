@@ -1,5 +1,9 @@
 package com.sofiamarchinskaya.hw1.models
 
+import android.util.Log
+import com.google.firebase.FirebaseError
+import com.google.firebase.FirebaseException
+import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.sofiamarchinskaya.hw1.Constants
@@ -7,6 +11,7 @@ import com.sofiamarchinskaya.hw1.DownloadCallback
 import com.sofiamarchinskaya.hw1.models.database.AppDatabase
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.models.framework.NoteRepository
+import com.sofiamarchinskaya.hw1.states.ExceptionTypes
 import kotlinx.coroutines.flow.Flow
 import java.lang.Exception
 import kotlin.reflect.typeOf
@@ -14,6 +19,7 @@ import kotlin.reflect.typeOf
 class NoteRepositoryImpl : NoteRepository {
     private val noteDao = AppDatabase.getDataBase().noteDao()
     private val fireBase = Firebase.database.reference
+
     override suspend fun insert(note: Note) {
         noteDao.insert(note)
     }
@@ -33,7 +39,9 @@ class NoteRepositoryImpl : NoteRepository {
                     )
                 }
             } catch (e: Exception) {
-                callback.onFailed(e.message.toString())
+                callback.onFailed(ExceptionTypes.CLIENT_IS_OFFLINE)
+            } catch (fe: FirebaseException) {
+                callback.onFailed(ExceptionTypes.FIREBASE_EXC)
             }
         }
     }

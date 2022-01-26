@@ -12,9 +12,10 @@
     <string name="dialog_negative">Нет</string>
     <string name="dialog_positive">Да</string>
     <string name="from_cloud">загрузить из облака</string>
-    <string name="save_to_cloud">сохранить в...</string>
+    <string name="save_to_cloud">сохранить в…</string>
     <string name="dialog_save">Сохранить заметку?</string>
     <string name="save_dialog_cloud">сохранить в облако?</string>
     <string name="successfully_download">Успешно загружено!</string>
-    <string name="fail">"Что-то пошло не так.\n Проверьте подключение к Интернету"</string>
+    <string name="fail_to_connect">"Что-то пошло не так.\n Проверьте подключение к Интернету"</string>
+    <string name="problems_with_cloud">"Ошибка облачного хранилища"</string>
 </resources>
