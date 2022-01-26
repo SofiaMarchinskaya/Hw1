@@ -41,6 +41,7 @@ class NotesListViewModel(private val repository: NoteRepository) : ViewModel() {
     }
 
     fun getNotesFromCloud() {
+        downloadState.value = DownloadState(DownloadStates.DOWNLOAD)
         repository.getAllFromCloud(object : DownloadCallback {
             override fun onSuccess(list: List<Note>) {
                 list.forEach {

@@ -19,4 +19,6 @@
     <string name="successfully_download">Succesfully downloaded!</string>
     <string name="fail_to_connect">Something went wrong. Check your Internet connection</string>
     <string name="problems_with_cloud">Problems with cloud storage</string>
+    <string name="failed">loading error</string>
+    <string name="load_from_file">load from file</string>
 </resources>

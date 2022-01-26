@@ -1,17 +1,27 @@
 package com.sofiamarchinskaya.hw1.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.sofiamarchinskaya.hw1.Constants
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.models.framework.NoteRepository
+import com.sofiamarchinskaya.hw1.states.JsonLoadingState
+import com.sofiamarchinskaya.hw1.states.JsonLoadingStates
 import com.sofiamarchinskaya.hw1.states.SavingState
 import com.sofiamarchinskaya.hw1.states.States
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class NoteInfoViewModel(private val repository: NoteRepository) : ViewModel() {
     val savingState = MutableLiveData<SavingState>()
     var noteId = Constants.INVALID_ID
     var isNewNote = false
+    val noteFromJson = MutableLiveData<JsonLoadingState>()
 
     suspend fun onSaveNote(title: String, text: String, isSavingToCloud: Boolean) {
         if (noteId != Constants.INVALID_ID) {
@@ -38,4 +48,24 @@ class NoteInfoViewModel(private val repository: NoteRepository) : ViewModel() {
             }
         }
     }
+
+    fun getJsonNote() {
+        noteFromJson.value = JsonLoadingState(JsonLoadingStates.LOADING)
+        repository.loadNoteJson(object : Callback<Note> {
+            override fun onResponse(call: Call<Note>, response: Response<Note>) {
+                noteFromJson.value =
+                    JsonLoadingState(
+                        JsonLoadingStates.SUCCESS,
+                        response.body()
+                    )
+                noteFromJson.value = JsonLoadingState(JsonLoadingStates.FINISH)
+            }
+
+            override fun onFailure(call: Call<Note>, t: Throwable) {
+                noteFromJson.value = JsonLoadingState(JsonLoadingStates.FAILED)
+                noteFromJson.value = JsonLoadingState(JsonLoadingStates.FINISH)
+            }
+        })
+    }
 }
+

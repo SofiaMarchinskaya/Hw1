@@ -2,6 +2,7 @@ package com.sofiamarchinskaya.hw1.view
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.text.Editable
 import android.view.*
 import android.widget.CheckBox
 import android.widget.Toast
@@ -12,6 +13,9 @@ import com.sofiamarchinskaya.hw1.Constants
 import com.sofiamarchinskaya.hw1.R
 import com.sofiamarchinskaya.hw1.databinding.FragmentNoteInfoBinding
 import com.sofiamarchinskaya.hw1.models.entity.Note
+import com.sofiamarchinskaya.hw1.states.JsonLoadingState
+import com.sofiamarchinskaya.hw1.states.JsonLoadingStates
+import com.sofiamarchinskaya.hw1.states.SavingState
 import com.sofiamarchinskaya.hw1.states.States
 import com.sofiamarchinskaya.hw1.viewmodels.NoteInfoViewModel
 import kotlinx.coroutines.launch
@@ -44,15 +48,7 @@ class NoteInfoFragment : Fragment() {
             viewModel.noteId = Constants.INVALID_ID
             viewModel.isNewNote = true
         }
-
-        viewModel.savingState.observe(viewLifecycleOwner) {
-            when (it.state) {
-                States.SAVED -> onSuccessfullySaved()
-                States.ERROR -> onSaveDisabled()
-                States.ALLOWED -> createSaveDialog()
-                States.NOTHING -> {}//Nothing
-            }
-        }
+        initLiveData()
         return binding.root
     }
 
@@ -71,6 +67,10 @@ class NoteInfoFragment : Fragment() {
                         text.text.toString()
                     )
                 }
+                return true
+            }
+            R.id.load_json -> {
+                viewModel.getJsonNote()
                 return true
             }
         }
@@ -109,6 +109,65 @@ class NoteInfoFragment : Fragment() {
         }
         activity?.supportFragmentManager?.let { dialogFragment.show() }
     }
+
+    private fun setLoadedNote(note: Note) {
+        binding.title.setText(note.title)
+        binding.text.setText(note.body)
+    }
+
+    private fun initLiveData() {
+        viewModel.savingState.observe(viewLifecycleOwner) {
+            observeSavingState(it)
+        }
+        viewModel.noteFromJson.observe(viewLifecycleOwner) {
+            observeNoteFromJson(it)
+        }
+    }
+
+    private fun observeSavingState(savingState: SavingState) {
+        when (savingState.state) {
+            States.SAVED -> onSuccessfullySaved()
+            States.ERROR -> onSaveDisabled()
+            States.ALLOWED -> createSaveDialog()
+            States.NOTHING -> {}//Nothing
+        }
+    }
+
+    private fun observeNoteFromJson(jsonLoadingState: JsonLoadingState) {
+        when (jsonLoadingState.state) {
+            JsonLoadingStates.SUCCESS -> {
+                jsonLoadingState.note?.let { note -> setLoadedNote(note) }
+                makeToast(jsonLoadingState.state)
+            }
+            JsonLoadingStates.FAILED -> makeToast(jsonLoadingState.state)
+            JsonLoadingStates.LOADING -> showProgressBar()
+            JsonLoadingStates.FINISH -> hideProgressBar()
+        }
+    }
+
+    private fun makeToast(state: JsonLoadingStates) {
+        val msg =
+            if (state == JsonLoadingStates.SUCCESS) resources.getString(R.string.successfully_download)
+            else resources.getString(R.string.failed)
+        Toast.makeText(
+            requireContext(),
+            msg,
+            Toast.LENGTH_LONG
+        ).show()
+    }
+
+    private fun hideProgressBar() {
+        binding.progressCircular.visibility = View.INVISIBLE
+        binding.title.visibility = View.VISIBLE
+        binding.text.visibility = View.VISIBLE
+    }
+
+    private fun showProgressBar() {
+        binding.title.visibility = View.INVISIBLE
+        binding.text.visibility = View.INVISIBLE
+        binding.progressCircular.visibility = View.VISIBLE
+    }
+
     companion object {
         fun newInstance(note: Note): NoteInfoFragment =
             NoteInfoFragment().apply {

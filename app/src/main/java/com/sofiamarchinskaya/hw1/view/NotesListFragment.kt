@@ -142,8 +142,19 @@ class NotesListFragment : Fragment() {
                 chooseExceptionMessage(state.msg),
                 Toast.LENGTH_LONG
             ).show()
-            DownloadStates.FINISH -> {}
+            DownloadStates.DOWNLOAD -> showProgressBar()
+            DownloadStates.FINISH -> hideProgressBar()
         }
+    }
+
+    private fun hideProgressBar() {
+        binding.notesList.visibility = View.VISIBLE
+        binding.progressCircular.visibility = View.INVISIBLE
+    }
+
+    private fun showProgressBar() {
+        binding.notesList.visibility = View.INVISIBLE
+        binding.progressCircular.visibility = View.VISIBLE
     }
 
     private fun chooseExceptionMessage(exceptionType: ExceptionTypes?): String =

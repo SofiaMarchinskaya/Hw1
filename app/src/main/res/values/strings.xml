@@ -18,4 +18,6 @@
     <string name="successfully_download">Успешно загружено!</string>
     <string name="fail_to_connect">"Что-то пошло не так.\n Проверьте подключение к Интернету"</string>
     <string name="problems_with_cloud">"Ошибка облачного хранилища"</string>
+    <string name="failed">"Ошибка загрузки"</string>
+    <string name="load_from_file">загрузить из файла</string>
 </resources>
