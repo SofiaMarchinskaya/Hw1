@@ -154,7 +154,7 @@ class NotesListFragment : Fragment() {
 
     private fun observeListItem(listItemState: ListItemState) {
         when (listItemState.state) {
-            ListItemStates.OnClicked -> listItemState.note?.let { it1 -> openAboutItemActivity(it1) }
+            ListItemStates.OnClicked -> listItemState.note?.let { note -> openAboutItemActivity(note) }
             ListItemStates.NotClicked -> {}
         }
     }
