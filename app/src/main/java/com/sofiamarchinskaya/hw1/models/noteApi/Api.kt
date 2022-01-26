@@ -3,7 +3,6 @@ package com.sofiamarchinskaya.hw1.models.noteApi
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import retrofit2.Call
 import retrofit2.http.GET
-import retrofit2.http.Query
 
 interface Api {
     @GET("file1.json?alt=media")

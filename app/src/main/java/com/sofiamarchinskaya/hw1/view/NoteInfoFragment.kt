@@ -2,7 +2,6 @@ package com.sofiamarchinskaya.hw1.view
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.text.Editable
 import android.view.*
 import android.widget.CheckBox
 import android.widget.Toast

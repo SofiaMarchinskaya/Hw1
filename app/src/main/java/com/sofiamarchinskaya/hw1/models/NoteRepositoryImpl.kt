@@ -8,13 +8,10 @@ import com.sofiamarchinskaya.hw1.DownloadCallback
 import com.sofiamarchinskaya.hw1.models.database.AppDatabase
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.models.framework.NoteRepository
-import com.sofiamarchinskaya.hw1.models.noteApi.Api
 import com.sofiamarchinskaya.hw1.models.noteApi.Data
 import com.sofiamarchinskaya.hw1.states.ExceptionTypes
 import kotlinx.coroutines.flow.Flow
-import retrofit2.Call
 import retrofit2.Callback
-import retrofit2.Response
 
 class NoteRepositoryImpl : NoteRepository {
     private val noteDao = AppDatabase.getDataBase().noteDao()
@@ -54,7 +51,7 @@ class NoteRepositoryImpl : NoteRepository {
         return noteDao.getLast()
     }
 
-    override fun loadNoteJson(callback: Callback<Note>){
+    override fun loadNoteJson(callback: Callback<Note>) {
         Data().getNoteData().getNote().enqueue(callback)
     }
 
