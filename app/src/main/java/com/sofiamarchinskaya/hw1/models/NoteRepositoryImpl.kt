@@ -33,9 +33,9 @@ class NoteRepositoryImpl : NoteRepository {
             try {
                 task.result?.children?.map {
                     it.getValue(Note::class.java) ?: Note()
-                }?.let { it1 ->
+                }?.let { list ->
                     callback.onSuccess(
-                        it1
+                        list
                     )
                 }
             } catch (e: Exception) {
