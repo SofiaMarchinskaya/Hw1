@@ -1,9 +1,6 @@
 package com.sofiamarchinskaya.hw1.models
 
-import android.util.Log
-import com.google.firebase.FirebaseError
 import com.google.firebase.FirebaseException
-import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.sofiamarchinskaya.hw1.Constants
@@ -13,8 +10,6 @@ import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.models.framework.NoteRepository
 import com.sofiamarchinskaya.hw1.states.ExceptionTypes
 import kotlinx.coroutines.flow.Flow
-import java.lang.Exception
-import kotlin.reflect.typeOf
 
 class NoteRepositoryImpl : NoteRepository {
     private val noteDao = AppDatabase.getDataBase().noteDao()
