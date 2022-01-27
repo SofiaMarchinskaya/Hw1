@@ -6,15 +6,14 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.sofiamarchinskaya.hw1.models.entity.Note
 
 class NotesPagerAdapter(
-    fragmentActivity: FragmentActivity,
+    fragmentActivity: FragmentActivity
 ) : FragmentStateAdapter(fragmentActivity) {
     private var list: List<Note> = ArrayList()
 
     override fun getItemCount(): Int = list.size
 
     override fun createFragment(position: Int): Fragment =
-        NoteInfoFragment.newInstance(list[position]).apply {
-        }
+        NoteInfoFragment.newInstance(list[position])
 
     fun update(list: List<Note>) {
         this.list = list

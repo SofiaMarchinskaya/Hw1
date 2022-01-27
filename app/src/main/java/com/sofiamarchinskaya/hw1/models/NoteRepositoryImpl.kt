@@ -2,10 +2,10 @@ package com.sofiamarchinskaya.hw1.models
 
 import com.sofiamarchinskaya.hw1.models.database.AppDatabase
 import com.sofiamarchinskaya.hw1.models.entity.Note
-import com.sofiamarchinskaya.hw1.models.framework.NoteModel
+import com.sofiamarchinskaya.hw1.models.framework.NoteRepository
 import kotlinx.coroutines.flow.Flow
 
-class NoteModelImpl : NoteModel {
+class NoteRepositoryImpl : NoteRepository {
     private val noteDao = AppDatabase.getDataBase().noteDao()
 
     override suspend fun insert(note: Note) {
@@ -16,3 +16,4 @@ class NoteModelImpl : NoteModel {
         return noteDao.getAll()
     }
 }
+

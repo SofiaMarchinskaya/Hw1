@@ -4,37 +4,43 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import com.sofiamarchinskaya.hw1.presenters.MainActivityPresenterImpl
-import com.sofiamarchinskaya.hw1.view.framework.MainActivityView
 import com.sofiamarchinskaya.hw1.R
-import com.sofiamarchinskaya.hw1.presenters.framework.MainActivityPresenter
+import com.sofiamarchinskaya.hw1.databinding.ActivityMainBinding
+import com.sofiamarchinskaya.hw1.states.MainMenuStates
+import com.sofiamarchinskaya.hw1.viewmodels.MainActivityViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
  * Активити, в которой находится основной интерфейс пирложения: фрагмент со списком,
  * фрагмент с основной информацией о заметке, меню
  */
-class MainActivity : AppCompatActivity(), MainActivityView {
-
-    private var presenter: MainActivityPresenter = MainActivityPresenterImpl(this)
+class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
+    private val viewModel: MainActivityViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        setSupportActionBar(findViewById(R.id.toolBar))
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolBar)
+        viewModel.menuState.observe(this) {
+            when (it.state) {
+                MainMenuStates.ABOUT -> openAboutScreen()
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.about -> {
-                presenter.aboutOnClick()
+                viewModel.onInfoIconClick()
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
-    override fun openAboutScreen() {
+    private fun openAboutScreen() {
         startActivity(Intent(this, AboutActivity::class.java))
     }
-
 }
