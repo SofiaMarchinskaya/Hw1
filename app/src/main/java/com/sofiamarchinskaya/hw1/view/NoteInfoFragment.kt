@@ -41,10 +41,10 @@ class NoteInfoFragment : Fragment() {
         binding = FragmentNoteInfoBinding.inflate(inflater, container, false)
         arguments?.apply {
             viewModel.note.value = getString(Constants.TITLE)?.let {
-                getString(Constants.TEXT)?.let { it1 ->
+                getString(Constants.TEXT)?.let { text ->
                     Note(
                         getInt(Constants.ID),
-                        it, it1
+                        it, text
                     )
                 }
             }
@@ -132,7 +132,7 @@ class NoteInfoFragment : Fragment() {
         viewModel.noteFromJson.observe(viewLifecycleOwner) {
             observeNoteFromJson(it)
         }
-        viewModel.note.observe(viewLifecycleOwner){
+        viewModel.note.observe(viewLifecycleOwner) {
             binding.title.setText(it.title)
             binding.text.setText(it.body)
         }
