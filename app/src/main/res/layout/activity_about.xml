@@ -8,20 +8,19 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_marginStart="@dimen/text_margin"
-        android:layout_marginTop="@dimen/text_margin"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
-        android:textSize="@dimen/app_description_text_size"
+        android:layout_marginStart="@dimen/text_margin"
+        android:layout_marginTop="@dimen/text_margin"
         android:text="@string/app_description"
-        />
+        android:textSize="@dimen/app_description_text_size" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
         android:layout_marginStart="@dimen/text_margin"
-        android:textSize="@dimen/about_author_text_size"
         android:text="@string/author"
-        />
+        android:textSize="@dimen/about_author_text_size" />
 
 </LinearLayout>

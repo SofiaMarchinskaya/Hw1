@@ -17,4 +17,5 @@
     <string name="dialog_save">Сохранить заметку?</string>
     <string name="save_dialog_cloud">сохранить в облако?</string>
     <string name="search">search</string>
+    <string name="notes_saved">Сохранено заметок</string>
 </resources>

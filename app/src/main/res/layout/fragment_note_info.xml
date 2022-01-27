@@ -3,23 +3,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.NoteInfoFragment"
     android:orientation="vertical"
-    >
+    tools:context=".view.NoteInfoFragment">
+
     <EditText
         android:id="@+id/title"
-        android:textSize="@dimen/note_info_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/note_info_title_margin"
         android:minHeight="@dimen/min_height"
-        />
+        android:textSize="@dimen/note_info_title" />
+
     <EditText
         android:id="@+id/text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/note_info_text"
         android:layout_margin="@dimen/note_info_text_margin"
         android:minHeight="@dimen/min_height"
-        />
+        android:textSize="@dimen/note_info_text" />
 </LinearLayout>

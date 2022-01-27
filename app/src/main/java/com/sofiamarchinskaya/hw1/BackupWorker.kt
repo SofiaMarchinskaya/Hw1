@@ -18,9 +18,9 @@ class BackupWorker(
         Log.d(TAG, "Сохранено заметок: ${repository.count()}")
         return@runBlocking Result.success()
     }
-    companion object{
+
+    companion object {
         const val WORK_NAME = "BACK_UP_WORK"
         private const val TAG = "NOTE_TAG"
     }
-
 }
