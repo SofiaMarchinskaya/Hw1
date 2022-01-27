@@ -9,4 +9,11 @@
     <color name="brown">#B49578</color>
     <color name="dirty_brown">#8F8271</color>
     <color name="milky">#E7D8C4</color>
+    <color name="gray">#5F5F5F</color>
+    <color name="dark_orcid">#9932CC</color>
+    <color name="dark_gray">#121212</color>
+    <color name="indigo">#4B0082</color>
+    <color name="medium_orcid">#BA55D3</color>
+    <color name="cyan">#40E0D0</color>
+    <color name="dark_cyan">#00675C</color>
 </resources>

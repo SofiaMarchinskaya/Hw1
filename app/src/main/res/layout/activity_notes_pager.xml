@@ -12,7 +12,6 @@
         android:layout_height="?attr/actionBarSize"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/note_view_pager"
-        android:background="@color/smooth_orange"
         />
 
     <androidx.viewpager2.widget.ViewPager2
