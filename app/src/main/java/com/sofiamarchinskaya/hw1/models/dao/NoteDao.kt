@@ -9,14 +9,8 @@ interface NoteDao {
     @Query("SELECT * FROM notes")
     fun getAll(): Flow<List<Note>>
 
-    @Query("SELECT * FROM notes WHERE id=:id")
-    suspend fun findById(id: Long): Note
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(note: Note): Long
-
-    @Query("SELECT id FROM notes ORDER BY id DESC LIMIT 1 ")
-    suspend fun getLast(): Long
 
     @Query("SELECT COUNT(*) FROM notes")
     suspend fun count(): Int

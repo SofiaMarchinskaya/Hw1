@@ -37,14 +37,16 @@ class NotesAdapter(
     inner class NoteViewHolder(private val binding: NoteItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: Note) {
-            binding.title.text = data.title
-            binding.text.text = data.body
-            binding.root.apply {
-                setOnClickListener { onClick.invoke(data) }
-                setOnCreateContextMenuListener { menu, _, _ -> onMenuCreated.invoke(menu) }
-                setOnLongClickListener {
-                    onItemLongClick.invoke(data)
-                    false
+            binding.apply {
+                title.text = data.title
+                text.text = data.body
+                root.apply {
+                    setOnClickListener { onClick.invoke(data) }
+                    setOnCreateContextMenuListener { menu, _, _ -> onMenuCreated.invoke(menu) }
+                    setOnLongClickListener {
+                        onItemLongClick.invoke(data)
+                        false
+                    }
                 }
             }
         }

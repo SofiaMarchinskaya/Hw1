@@ -8,17 +8,26 @@
 
     <EditText
         android:id="@+id/title"
+        style="@style/AboutNoteTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/note_info_title_margin"
         android:minHeight="@dimen/min_height"
-        android:textSize="@dimen/note_info_title" />
+        />
 
     <EditText
         android:id="@+id/text"
+        style="@style/AboutNoteText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/note_info_text_margin"
         android:minHeight="@dimen/min_height"
-        android:textSize="@dimen/note_info_text" />
+        />
+
+    <ProgressBar
+        android:id="@+id/progress_circular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="invisible"
+        />
+
 </LinearLayout>

@@ -7,20 +7,18 @@
     tools:context=".view.AboutActivity">
 
     <TextView
+        style="@style/AboutAppTextDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
-        android:layout_marginStart="@dimen/text_margin"
-        android:layout_marginTop="@dimen/text_margin"
         android:text="@string/app_description"
-        android:textSize="@dimen/app_description_text_size" />
-
+        />
     <TextView
+        style="@style/AboutAppTextAuthor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
-        android:layout_marginStart="@dimen/text_margin"
         android:text="@string/author"
-        android:textSize="@dimen/about_author_text_size" />
+        />
 
 </LinearLayout>

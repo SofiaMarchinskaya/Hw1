@@ -10,9 +10,10 @@
         android:id="@+id/toolBar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/design_default_color_secondary"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/host"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:background="?toolbarColor"
+        />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/host"
@@ -20,5 +21,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolBar" />
+        app:layout_constraintTop_toBottomOf="@id/toolBar"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

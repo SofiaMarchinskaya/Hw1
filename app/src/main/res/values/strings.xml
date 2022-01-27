@@ -1,21 +1,25 @@
 <resources>
-    <string name="app_name">Notes</string>
-    <string name="save">Save</string>
+    <string name="app_name">Заметки</string>
+    <string name="save">сохранить</string>
     <string name="success">Успешно сохранено</string>
-    <string name="no_content">No content</string>
-    <string name="share">share</string>
-    <string name="about">about</string>
-    <string name="app_description">App for working with notes</string>
-    <string name="author">Author: Marchinskaya Sofia</string>
+    <string name="share">поделиться</string>
+    <string name="about">о приложении</string>
+    <string name="app_description">Приложение для работы с заметками</string>
+    <string name="author">Автор: Марчинская Софья</string>
     <string name="empty_note">Заметка пуста!</string>
     <string name="dialog_title">Сохранение</string>
     <string name="dialog_message">Сохранить изменения?</string>
     <string name="dialog_negative">Нет</string>
     <string name="dialog_positive">Да</string>
-    <string name="from_cloud">add from cloud</string>
-    <string name="save_to_cloud">save to…</string>
+    <string name="from_cloud">загрузить из облака</string>
+    <string name="save_to_cloud">сохранить в…</string>
     <string name="dialog_save">Сохранить заметку?</string>
     <string name="save_dialog_cloud">сохранить в облако?</string>
     <string name="search">search</string>
     <string name="notes_saved">Сохранено заметок</string>
+    <string name="successfully_download">Успешно загружено!</string>
+    <string name="fail_to_connect">"Что-то пошло не так.\n Проверьте подключение к Интернету"</string>
+    <string name="problems_with_cloud">"Ошибка облачного хранилища"</string>
+    <string name="failed">"Ошибка загрузки"</string>
+    <string name="load_from_file">загрузить из файла</string>
 </resources>
