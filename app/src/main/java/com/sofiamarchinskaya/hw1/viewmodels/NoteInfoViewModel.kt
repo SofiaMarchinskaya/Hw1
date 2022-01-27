@@ -3,15 +3,10 @@ package com.sofiamarchinskaya.hw1.viewmodels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.sofiamarchinskaya.hw1.Constants
+import com.sofiamarchinskaya.hw1.NoteCallback
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.models.framework.NoteRepository
-import com.sofiamarchinskaya.hw1.states.JsonLoadingState
-import com.sofiamarchinskaya.hw1.states.JsonLoadingStates
-import com.sofiamarchinskaya.hw1.states.SavingState
-import com.sofiamarchinskaya.hw1.states.States
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.sofiamarchinskaya.hw1.states.*
 
 class NoteInfoViewModel(private val repository: NoteRepository) : ViewModel() {
     val savingState = MutableLiveData<SavingState>()
@@ -20,17 +15,20 @@ class NoteInfoViewModel(private val repository: NoteRepository) : ViewModel() {
     val noteFromJson = MutableLiveData<JsonLoadingState>()
 
     suspend fun onSaveNote(isSavingToCloud: Boolean) {
-        if (note.value?.id!=Constants.INVALID_ID) {
-            note.value?.let { repository.insert(it) }
-            if (isSavingToCloud)
-                note.value?.let { repository.insertCloud(it) }
-        } else {
-            repository.insert(Note(title = note.value?.title, body = note.value?.body)).also {
+        note.value?.let {
+            if (it.id != Constants.INVALID_ID) {
+                repository.insert(it)
                 if (isSavingToCloud)
-                    repository.insertCloud(Note(it,note.value?.title , note.value?.body))
+                    repository.insertCloud(it)
+            } else {
+                repository.insert(Note(title = it.title, body = it.body)).also { newId ->
+                    if (isSavingToCloud)
+                        repository.insertCloud(Note(newId, it.title, it.body))
+                    it.id = newId
+                }
             }
+            savingState.value = SavingState(States.SAVED)
         }
-        savingState.value = SavingState(States.SAVED)
         savingState.value = SavingState(States.NOTHING)
     }
 
@@ -47,21 +45,26 @@ class NoteInfoViewModel(private val repository: NoteRepository) : ViewModel() {
 
     fun getJsonNote() {
         noteFromJson.value = JsonLoadingState(JsonLoadingStates.LOADING)
-        repository.loadNoteJson(object : Callback<Note> {
-            override fun onResponse(call: Call<Note>, response: Response<Note>) {
-                noteFromJson.value =
-                    JsonLoadingState(
-                        JsonLoadingStates.SUCCESS,
-                        response.body()
-                    )
+        repository.loadNoteJson(object : NoteCallback {
+            override fun onSuccess(note: Note?) {
+                this@NoteInfoViewModel.note.value = note
+                noteFromJson.value = JsonLoadingState(JsonLoadingStates.SUCCESS)
                 noteFromJson.value = JsonLoadingState(JsonLoadingStates.FINISH)
             }
 
-            override fun onFailure(call: Call<Note>, t: Throwable) {
+            override fun onFailed() {
                 noteFromJson.value = JsonLoadingState(JsonLoadingStates.FAILED)
                 noteFromJson.value = JsonLoadingState(JsonLoadingStates.FINISH)
             }
         })
+    }
+
+    fun setNoteTitle(title: String) {
+        note.value?.title = title
+    }
+
+    fun setNoteText(text: String) {
+        note.value?.body = text
     }
 }
 

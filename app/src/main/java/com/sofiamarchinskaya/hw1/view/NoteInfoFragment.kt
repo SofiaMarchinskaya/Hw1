@@ -6,6 +6,7 @@ import android.view.*
 import android.widget.CheckBox
 import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
@@ -57,6 +58,12 @@ class NoteInfoFragment : Fragment() {
             binding.title.setText(viewModel.note.value?.title)
             binding.text.setText(viewModel.note.value?.body)
         }
+        binding.text.addTextChangedListener {
+            viewModel.setNoteText(it.toString())
+        }
+        binding.title.addTextChangedListener {
+            viewModel.setNoteTitle(it.toString())
+        }
         return binding.root
     }
 
@@ -69,14 +76,6 @@ class NoteInfoFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.save -> {
-                val id = viewModel.note.value?.id
-                viewModel.note.value = id?.let {
-                    Note(
-                        it,
-                        binding.title.text.toString(),
-                        binding.text.text.toString()
-                    )
-                }
                 viewModel.checkNote()
                 return true
             }

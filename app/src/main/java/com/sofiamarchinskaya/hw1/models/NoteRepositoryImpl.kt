@@ -5,13 +5,16 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.sofiamarchinskaya.hw1.Constants
 import com.sofiamarchinskaya.hw1.DownloadCallback
+import com.sofiamarchinskaya.hw1.NoteCallback
 import com.sofiamarchinskaya.hw1.models.database.AppDatabase
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.models.framework.NoteRepository
 import com.sofiamarchinskaya.hw1.models.noteApi.Data
 import com.sofiamarchinskaya.hw1.states.ExceptionTypes
 import kotlinx.coroutines.flow.Flow
+import retrofit2.Call
 import retrofit2.Callback
+import retrofit2.Response
 
 class NoteRepositoryImpl : NoteRepository {
     private val noteDao = AppDatabase.getDataBase().noteDao()
@@ -46,9 +49,24 @@ class NoteRepositoryImpl : NoteRepository {
         fireBase.child(Constants.FIREBASE_NAME).child(note.id.toString()).setValue(note)
     }
 
-    override fun loadNoteJson(callback: Callback<Note>) {
-        Data().getNoteData().getNote().enqueue(callback)
-    }
+    override fun loadNoteJson(callback: NoteCallback) {
+        Data().getNoteData().getNote().enqueue(object : Callback<Note> {
+            override fun onResponse(call: Call<Note>, response: Response<Note>) {
+                if (response.code() == SUCCESS)
+                    callback.onSuccess(response.body())
+                else
+                    callback.onFailed()
+            }
 
+            override fun onFailure(call: Call<Note>, t: Throwable) {
+                callback.onFailed()
+            }
+
+        })
+    }
+    companion object{
+        private const val SUCCESS = 200
+    }
 }
+
 
