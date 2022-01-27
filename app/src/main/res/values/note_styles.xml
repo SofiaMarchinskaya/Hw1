@@ -2,7 +2,6 @@
 <resources>
     <style name="NoteItemTitle">
         <item name="android:textSize">@dimen/note_title</item>
-        <item name="android:textColor">@color/black</item>
         <item name="android:typeface">monospace</item>
     </style>
 
@@ -14,26 +13,22 @@
 
     <style name="AboutNoteTitle">
         <item name="android:textSize">@dimen/note_info_title</item>
-        <item name="android:textColor">@color/black</item>
         <item name="android:layout_margin">@dimen/note_info_title_margin</item>
     </style>
 
     <style name="AboutNoteText">
         <item name="android:textSize">@dimen/note_info_text</item>
-        <item name="android:textColor">@color/black</item>
         <item name="android:layout_margin">@dimen/note_info_text_margin</item>
     </style>
 
     <style name = "AboutAppTextAuthor">
         <item name="android:textSize">@dimen/about_author_text_size</item>
-        <item name="android:textColor">@color/black</item>
         <item name="android:layout_marginStart">@dimen/text_margin</item>
         <item name="android:layout_marginTop">@dimen/text_margin</item>
     </style>
 
     <style name = "AboutAppTextDescription">
         <item name="android:textSize">@dimen/app_description_text_size</item>
-        <item name="android:textColor">@color/black</item>
         <item name="android:layout_marginStart">@dimen/text_margin</item>
     </style>
 
