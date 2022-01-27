@@ -14,7 +14,6 @@ import com.sofiamarchinskaya.hw1.viewmodels.NotesPagerViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-
 class NotesPagerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityNotesPagerBinding

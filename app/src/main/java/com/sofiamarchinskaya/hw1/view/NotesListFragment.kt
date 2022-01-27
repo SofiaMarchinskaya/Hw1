@@ -24,7 +24,6 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.concurrent.TimeUnit
 
-
 /**
  * Фрагмент для отображения списка заметок
  */
