@@ -64,4 +64,3 @@ class NoteInfoViewModel(private val repository: NoteRepository) : ViewModel() {
         })
     }
 }
-

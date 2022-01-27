@@ -18,6 +18,7 @@ import com.sofiamarchinskaya.hw1.R
 import com.sofiamarchinskaya.hw1.databinding.FragmentNotesListBinding
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.states.*
+import com.sofiamarchinskaya.hw1.view.instruments.ItemsFilter
 import com.sofiamarchinskaya.hw1.viewmodels.NotesListViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -110,7 +111,6 @@ class NotesListFragment : Fragment() {
             })
     }
 
-    private fun openAddNoteFragment() {
     private fun openAddNoteFragment() =
         activity?.supportFragmentManager?.beginTransaction()
             ?.replace(R.id.host, NoteInfoFragment())?.addToBackStack(TAG)?.commit()
@@ -189,7 +189,11 @@ class NotesListFragment : Fragment() {
 
     private fun observeListItem(listItemState: ListItemState) {
         when (listItemState.state) {
-            ListItemStates.OnClicked -> listItemState.note?.let { note -> openAboutItemActivity(note) }
+            ListItemStates.OnClicked -> listItemState.note?.let { note ->
+                openAboutItemActivity(
+                    note
+                )
+            }
             ListItemStates.NotClicked -> {}
         }
     }
@@ -209,3 +213,4 @@ class NotesListFragment : Fragment() {
         private const val TAG = "NotesList"
     }
 }
+

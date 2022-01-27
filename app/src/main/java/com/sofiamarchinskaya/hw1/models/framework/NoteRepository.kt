@@ -15,6 +15,7 @@ interface NoteRepository {
 
     fun insertCloud(note: Note)
 
-    suspend fun count():Int
+    suspend fun count(): Int
+
     fun loadNoteJson(callback: Callback<Note>)
 }
