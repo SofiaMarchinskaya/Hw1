@@ -10,24 +10,24 @@ import com.sofiamarchinskaya.hw1.states.States
 
 class NoteInfoViewModel(private val repository: NoteRepository) : ViewModel() {
     val savingState = MutableLiveData<SavingState>()
-    var noteId = Constants.INVALID_ID
+    val note = MutableLiveData<Note>()
     var isNewNote = false
 
-    suspend fun onSaveNote(title: String, text: String) {
+    suspend fun onSaveNote() {
         with(savingState) {
-            if (noteId == Constants.INVALID_ID) {
-                repository.insert(Note(title = title, body = text))
+            if (note.value?.id == Constants.INVALID_ID) {
+                repository.insert(Note(title = note.value?.title, body = note.value?.body))
             } else {
-                repository.insert(Note(noteId, title, text))
+                note.value?.let { repository.insert(it) }
             }
             value = SavingState(States.SAVED)
             value = SavingState(States.NOTHING)
         }
     }
 
-    fun checkNote(title: String, text: String) {
+    fun checkNote() {
         with(savingState) {
-            if (title.isBlank() || text.isBlank()) {
+            if (note.value?.title?.isBlank() == true || note.value?.body?.isBlank() == true) {
                 value = SavingState(States.ERROR)
                 value = SavingState(States.NOTHING)
             } else {

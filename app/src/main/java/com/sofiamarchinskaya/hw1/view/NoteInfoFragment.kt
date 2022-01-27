@@ -2,11 +2,13 @@ package com.sofiamarchinskaya.hw1.view
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import com.sofiamarchinskaya.hw1.Constants
 import com.sofiamarchinskaya.hw1.R
 import com.sofiamarchinskaya.hw1.databinding.FragmentNoteInfoBinding
@@ -35,12 +37,15 @@ class NoteInfoFragment : Fragment() {
     ): View {
         binding = FragmentNoteInfoBinding.inflate(inflater, container, false)
         arguments?.apply {
-            binding.title.setText(getString(Constants.TITLE))
-            binding.text.setText(getString(Constants.TEXT))
-            viewModel.noteId = getInt(Constants.ID)
+            viewModel.note.value =
+                Note(getInt(Constants.ID), getString(Constants.TITLE), getString(Constants.TEXT))
         } ?: run {
             activity?.invalidateOptionsMenu()
-            viewModel.noteId = Constants.INVALID_ID
+            viewModel.note.value = Note(
+                Constants.INVALID_ID,
+                arguments?.getString(Constants.TITLE),
+                arguments?.getString(Constants.TEXT)
+            )
             viewModel.isNewNote = true
         }
 
@@ -51,6 +56,10 @@ class NoteInfoFragment : Fragment() {
                 States.ALLOWED -> createSaveDialog()
                 States.NOTHING -> {}//Nothing
             }
+        }
+        viewModel.note.observe(viewLifecycleOwner) {
+            binding.title.setText(viewModel.note.value?.title)
+            binding.text.setText(viewModel.note.value?.body)
         }
         return binding.root
     }
@@ -64,12 +73,15 @@ class NoteInfoFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.save -> {
-                with(binding) {
-                    viewModel.checkNote(
-                        title.text.toString(),
-                        text.text.toString()
+                val id = viewModel.note.value?.id
+                viewModel.note.value = id?.let {
+                    Note(
+                        it,
+                        binding.title.text.toString(),
+                        binding.text.text.toString()
                     )
                 }
+                viewModel.checkNote()
                 return true
             }
         }
@@ -94,12 +106,7 @@ class NoteInfoFragment : Fragment() {
             )
             setPositiveButton(getString(R.string.dialog_positive)) { _, _ ->
                 lifecycleScope.launch {
-                    with(binding) {
-                        viewModel.onSaveNote(
-                            title.text.toString(),
-                            text.text.toString()
-                        )
-                    }
+                    viewModel.onSaveNote()
                 }
             }
             create()
