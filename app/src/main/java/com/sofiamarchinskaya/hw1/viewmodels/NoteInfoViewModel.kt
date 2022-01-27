@@ -25,9 +25,9 @@ class NoteInfoViewModel(private val repository: NoteRepository) : ViewModel() {
             if (isSavingToCloud)
                 note.value?.let { repository.insertCloud(it) }
         } else {
-            repository.insert(Note(title = note.value.title, body = note.value.body)).also {
+            repository.insert(Note(title = note.value?.title, body = note.value?.body)).also {
                 if (isSavingToCloud)
-                    repository.insertCloud(Note(it,note.value.title , note.value.body))
+                    repository.insertCloud(Note(it,note.value?.title , note.value?.body))
             }
         }
         savingState.value = SavingState(States.SAVED)
