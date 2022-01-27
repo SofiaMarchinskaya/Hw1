@@ -15,19 +15,19 @@ import retrofit2.Response
 
 class NoteInfoViewModel(private val repository: NoteRepository) : ViewModel() {
     val savingState = MutableLiveData<SavingState>()
-    var noteId = Constants.INVALID_ID
     var isNewNote = false
     val noteFromJson = MutableLiveData<JsonLoadingState>()
+    var note = MutableLiveData<Note>()
 
-    suspend fun onSaveNote(title: String, text: String, isSavingToCloud: Boolean) {
-        if (noteId != Constants.INVALID_ID) {
-            repository.insert(Note(noteId, title, text))
+    suspend fun onSaveNote(note: Note, isSavingToCloud: Boolean) {
+        if (note.id != Constants.INVALID_ID) {
+            repository.insert(note)
             if (isSavingToCloud)
-                repository.insertCloud(Note(noteId, title, text))
+                repository.insertCloud(note)
         } else {
-            repository.insert(Note(title = title, body = text)).also {
+            repository.insert(Note(title = note.title, body = note.body)).also {
                 if (isSavingToCloud)
-                    repository.insertCloud(Note(it, title, text))
+                    repository.insertCloud(Note(it, title = note.title, body = note.body))
             }
         }
         savingState.value = SavingState(States.SAVED)

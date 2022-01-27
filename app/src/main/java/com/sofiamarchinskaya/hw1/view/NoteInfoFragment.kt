@@ -40,12 +40,17 @@ class NoteInfoFragment : Fragment() {
     ): View {
         binding = FragmentNoteInfoBinding.inflate(inflater, container, false)
         arguments?.apply {
-            binding.title.setText(getString(Constants.TITLE))
-            binding.text.setText(getString(Constants.TEXT))
-            viewModel.noteId = getInt(Constants.ID)
+            viewModel.note.value = getString(Constants.TITLE)?.let {
+                getString(Constants.TEXT)?.let { it1 ->
+                    Note(
+                        getInt(Constants.ID),
+                        it, it1
+                    )
+                }
+            }
         } ?: run {
             activity?.invalidateOptionsMenu()
-            viewModel.noteId = Constants.INVALID_ID
+            viewModel.note.value?.id = Constants.INVALID_ID
             viewModel.isNewNote = true
         }
         initLiveData()
@@ -98,15 +103,16 @@ class NoteInfoFragment : Fragment() {
             )
             setPositiveButton(getString(R.string.dialog_positive)) { _, _ ->
                 lifecycleScope.launch {
-                    viewModel.onSaveNote(
-                        binding.title.text.toString(),
-                        binding.text.text.toString(),
-                        checkBox.isChecked
-                    )
+                    viewModel.note.value?.let {
+                        viewModel.onSaveNote(
+                            it,
+                            checkBox.isChecked
+                        )
+                    }
                 }
                 activity?.sendBroadcast(Intent().apply {
                     action = Constants.NOTE_SENT
-                    putExtra(Constants.TITLE, binding.title.text.toString())
+                    putExtra(Constants.TITLE, viewModel.note.value?.title)
                 })
             }
             create()
@@ -115,7 +121,7 @@ class NoteInfoFragment : Fragment() {
     }
 
     private fun setLoadedNote(note: Note) {
-        binding.title.setText(note.title)
+        viewModel.note
         binding.text.setText(note.body)
     }
 
@@ -125,6 +131,10 @@ class NoteInfoFragment : Fragment() {
         }
         viewModel.noteFromJson.observe(viewLifecycleOwner) {
             observeNoteFromJson(it)
+        }
+        viewModel.note.observe(viewLifecycleOwner){
+            binding.title.setText(it.title)
+            binding.text.setText(it.body)
         }
     }
 
@@ -173,13 +183,15 @@ class NoteInfoFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(note: Note): NoteInfoFragment =
+        fun newInstance(): NoteInfoFragment =
             NoteInfoFragment().apply {
-                arguments = bundleOf(
-                    Constants.TITLE to note.title,
-                    Constants.TEXT to note.body,
-                    Constants.ID to note.id
-                )
+                with(viewModel.note) {
+                    arguments = bundleOf(
+                        Constants.TITLE to value?.title,
+                        Constants.TEXT to value?.body,
+                        Constants.ID to value?.id
+                    )
+                }
             }
     }
 }
