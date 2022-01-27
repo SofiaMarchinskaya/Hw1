@@ -15,8 +15,6 @@
     <string name="save_to_cloud">сохранить в…</string>
     <string name="dialog_save">Сохранить заметку?</string>
     <string name="save_dialog_cloud">сохранить в облако?</string>
-    <string name="search">search</string>
-    <string name="notes_saved">Сохранено заметок</string>
     <string name="successfully_download">Успешно загружено!</string>
     <string name="fail_to_connect">"Что-то пошло не так.\n Проверьте подключение к Интернету"</string>
     <string name="problems_with_cloud">"Ошибка облачного хранилища"</string>

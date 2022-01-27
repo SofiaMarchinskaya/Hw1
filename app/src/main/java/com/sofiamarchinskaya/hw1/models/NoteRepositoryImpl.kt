@@ -51,6 +51,5 @@ class NoteRepositoryImpl : NoteRepository {
     }
 
     override suspend fun count(): Int = noteDao.count()
-
 }
 
