@@ -15,28 +15,28 @@ import retrofit2.Response
 
 class NoteInfoViewModel(private val repository: NoteRepository) : ViewModel() {
     val savingState = MutableLiveData<SavingState>()
-    var noteId = Constants.INVALID_ID
+    val note = MutableLiveData<Note>()
     var isNewNote = false
     val noteFromJson = MutableLiveData<JsonLoadingState>()
 
-    suspend fun onSaveNote(title: String, text: String, isSavingToCloud: Boolean) {
-        if (noteId != Constants.INVALID_ID) {
-            repository.insert(Note(noteId, title, text))
+    suspend fun onSaveNote(isSavingToCloud: Boolean) {
+        if (note.value?.id!=Constants.INVALID_ID) {
+            note.value?.let { repository.insert(it) }
             if (isSavingToCloud)
-                repository.insertCloud(Note(noteId, title, text))
+                note.value?.let { repository.insertCloud(it) }
         } else {
-            repository.insert(Note(title = title, body = text)).also {
+            repository.insert(Note(title = note.value.title, body = note.value.body)).also {
                 if (isSavingToCloud)
-                    repository.insertCloud(Note(it, title, text))
+                    repository.insertCloud(Note(it,note.value.title , note.value.body))
             }
         }
         savingState.value = SavingState(States.SAVED)
         savingState.value = SavingState(States.NOTHING)
     }
 
-    fun checkNote(title: String, text: String) {
+    fun checkNote() {
         with(savingState) {
-            if (title.isBlank() || text.isBlank()) {
+            if (note.value?.title?.isBlank() == true || note.value?.body?.isBlank() == true) {
                 value = SavingState(States.ERROR)
                 value = SavingState(States.NOTHING)
             } else {
