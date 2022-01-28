@@ -12,4 +12,13 @@
     <string name="dialog_message">Save changes</string>
     <string name="dialog_negative">no</string>
     <string name="dialog_positive">yes</string>
+    <string name="from_cloud">add from cloud</string>
+    <string name="save_to_cloud">save to...</string>
+    <string name="dialog_save">Save note?</string>
+    <string name="save_dialog_cloud">Save to cloud?</string>
+    <string name="successfully_download">Succesfully downloaded!</string>
+    <string name="fail_to_connect">Something went wrong. Check your Internet connection</string>
+    <string name="problems_with_cloud">Problems with cloud storage</string>
+    <string name="failed">loading error</string>
+    <string name="load_from_file">load from file</string>
 </resources>

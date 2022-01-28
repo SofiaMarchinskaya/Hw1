@@ -3,8 +3,10 @@ package com.sofiamarchinskaya.hw1.view
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
+import android.widget.CheckBox
 import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.sofiamarchinskaya.hw1.Constants
@@ -46,18 +48,16 @@ class NoteInfoFragment : Fragment() {
             viewModel.isNewNote = true
         }
 
-        viewModel.onSaveSuccessEvent.observe(viewLifecycleOwner) {
-            onSuccessfullySaved()
-        }
-        viewModel.onSaveAllowedEvent.observe(viewLifecycleOwner) {
-            createSaveDialog()
-        }
-        viewModel.onSaveFailureEvent.observe(viewLifecycleOwner) {
-            onSaveDisabled()
-        }
+        initEvents()
         viewModel.note.observe(viewLifecycleOwner) {
             binding.title.setText(viewModel.note.value?.title)
             binding.text.setText(viewModel.note.value?.body)
+        }
+        binding.text.addTextChangedListener {
+            viewModel.setNoteText(it.toString())
+        }
+        binding.title.addTextChangedListener {
+            viewModel.setNoteTitle(it.toString())
         }
         return binding.root
     }
@@ -71,15 +71,11 @@ class NoteInfoFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.save -> {
-                val id = viewModel.note.value?.id
-                viewModel.note.value = id?.let {
-                    Note(
-                        it,
-                        binding.title.text.toString(),
-                        binding.text.text.toString()
-                    )
-                }
                 viewModel.checkNote()
+                return true
+            }
+            R.id.load_json -> {
+                viewModel.getJsonNote()
                 return true
             }
         }
@@ -95,21 +91,72 @@ class NoteInfoFragment : Fragment() {
     }
 
     private fun createSaveDialog() {
+        val layoutInflater = LayoutInflater.from(requireContext())
+        val checkBoxView = layoutInflater.inflate(R.layout.check_box, null)
+        val checkBox = checkBoxView.findViewById<CheckBox>(R.id.checkbox)
         val dialogFragment = AlertDialog.Builder(requireActivity()).apply {
             setTitle(getString(R.string.dialog_title))
-            setMessage(getString(R.string.dialog_message))
+            setView(checkBoxView)
             setNegativeButton(
                 getString(R.string.dialog_negative),
                 null
             )
             setPositiveButton(getString(R.string.dialog_positive)) { _, _ ->
                 lifecycleScope.launch {
-                    viewModel.onSaveNote()
+                    viewModel.onSaveNote(checkBox.isChecked)
                 }
             }
             create()
         }
         activity?.supportFragmentManager?.let { dialogFragment.show() }
+    }
+
+    private fun setLoadedNote(note: Note) {
+        binding.title.setText(note.title)
+        binding.text.setText(note.body)
+    }
+
+    private fun makeToast(msg: String) {
+        Toast.makeText(requireContext(), msg, Toast.LENGTH_LONG).show()
+    }
+
+    private fun hideProgressBar() {
+        binding.progressCircular.visibility = View.INVISIBLE
+        binding.title.visibility = View.VISIBLE
+        binding.text.visibility = View.VISIBLE
+    }
+
+    private fun showProgressBar() {
+        binding.title.visibility = View.INVISIBLE
+        binding.text.visibility = View.INVISIBLE
+        binding.progressCircular.visibility = View.VISIBLE
+    }
+
+    private fun initEvents() {
+        viewModel.onSaveSuccessEvent.observe(viewLifecycleOwner) {
+            onSuccessfullySaved()
+        }
+        viewModel.onSaveAllowedEvent.observe(viewLifecycleOwner) {
+            createSaveDialog()
+        }
+        viewModel.onSaveFailureEvent.observe(viewLifecycleOwner) {
+            onSaveDisabled()
+        }
+        viewModel.onLoadFailureEvent.observe(viewLifecycleOwner) {
+            makeToast(resources.getString(R.string.failed))
+        }
+        viewModel.onLoadSuccessEvent.observe(viewLifecycleOwner) {
+            if (it != null) {
+                setLoadedNote(it)
+            }
+            makeToast(resources.getString(R.string.successfully_download))
+        }
+        viewModel.onShowProgressBarEvent.observe(viewLifecycleOwner) {
+            showProgressBar()
+        }
+        viewModel.onHideProgressBarEvent.observe(viewLifecycleOwner) {
+            hideProgressBar()
+        }
     }
 
     companion object {

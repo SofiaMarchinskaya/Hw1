@@ -9,5 +9,9 @@
         android:orderInCategory="100"
         android:title="@string/about"
         app:showAsAction="never" />
-
+    <item
+        android:id="@+id/launch_from_cloud"
+        android:orderInCategory="100"
+        android:title="@string/from_cloud"
+        app:showAsAction="never"/>
 </menu>

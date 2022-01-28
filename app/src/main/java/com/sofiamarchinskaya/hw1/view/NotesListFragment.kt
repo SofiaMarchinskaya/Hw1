@@ -3,6 +3,7 @@ package com.sofiamarchinskaya.hw1.view
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -11,6 +12,7 @@ import com.sofiamarchinskaya.hw1.Constants
 import com.sofiamarchinskaya.hw1.R
 import com.sofiamarchinskaya.hw1.databinding.FragmentNotesListBinding
 import com.sofiamarchinskaya.hw1.models.entity.Note
+import com.sofiamarchinskaya.hw1.states.*
 import com.sofiamarchinskaya.hw1.viewmodels.NotesListViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -40,13 +42,7 @@ class NotesListFragment : Fragment() {
                 viewModel.onFabClicked()
             }
         }
-        viewModel.onNoteItemClickEvent.observe(viewLifecycleOwner) {
-            openAboutItemActivity(it)
-        }
-        viewModel.onFabClickEvent.observe(viewLifecycleOwner) {
-            openAddNoteFragment()
-        }
-
+        initEvents()
         notesListAdapter =
             NotesAdapter(
                 requireContext(),
@@ -75,6 +71,16 @@ class NotesListFragment : Fragment() {
             }
         }
         return super.onContextItemSelected(item)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.launch_from_cloud -> {
+                viewModel.getNotesFromCloud()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -106,6 +112,47 @@ class NotesListFragment : Fragment() {
             contextMenuState.observe(viewLifecycleOwner) {
                 onShare(it)
             }
+        }
+    }
+
+    private fun makeToast(msg: String) {
+        Toast.makeText(requireContext(), msg, Toast.LENGTH_LONG).show()
+    }
+
+    private fun hideProgressBar() {
+        binding.notesList.visibility = View.VISIBLE
+        binding.progressCircular.visibility = View.INVISIBLE
+    }
+
+    private fun showProgressBar() {
+        binding.notesList.visibility = View.INVISIBLE
+        binding.progressCircular.visibility = View.VISIBLE
+    }
+
+    private fun chooseExceptionMessage(exceptionType: ExceptionTypes?): String =
+        if (exceptionType == ExceptionTypes.CLIENT_IS_OFFLINE)
+            resources.getString(R.string.fail_to_connect)
+        else
+            resources.getString(R.string.problems_with_cloud)
+
+    private fun initEvents() {
+        viewModel.onNoteItemClickEvent.observe(viewLifecycleOwner) {
+            openAboutItemActivity(it)
+        }
+        viewModel.onFabClickEvent.observe(viewLifecycleOwner) {
+            openAddNoteFragment()
+        }
+        viewModel.onLoadSuccessEvent.observe(viewLifecycleOwner) {
+            makeToast(resources.getString(R.string.successfully_download))
+        }
+        viewModel.onLoadFailureEvent.observe(viewLifecycleOwner) {
+            makeToast(chooseExceptionMessage(it))
+        }
+        viewModel.onShowProgressBarEvent.observe(viewLifecycleOwner) {
+            showProgressBar()
+        }
+        viewModel.onHideProgressBarEvent.observe(viewLifecycleOwner) {
+            hideProgressBar()
         }
     }
 

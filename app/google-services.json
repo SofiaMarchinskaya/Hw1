@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "404275094086",
+    "firebase_url": "https://notes-7f67b-default-rtdb.firebaseio.com",
+    "project_id": "notes-7f67b",
+    "storage_bucket": "notes-7f67b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:404275094086:android:11c5aef3c6338fd6956047",
+        "android_client_info": {
+          "package_name": "com.sofiamarchinskaya.hw1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "404275094086-9ddojnpkkk0femkb8vd5h9vungjr6uc4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhUXugIGSI-VOWu3AkgX8NZmUj0tSORq0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "404275094086-9ddojnpkkk0femkb8vd5h9vungjr6uc4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

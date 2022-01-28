@@ -6,16 +6,16 @@
     android:layout_margin="@dimen/note_item_margin"
     >
     <TextView
+        style="@style/NoteItemTitle"
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/note_title"
        />
     <TextView
+        style="@style/NoteItemText"
         android:id ="@+id/text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/note_text"
         android:maxLines="1"
         android:ellipsize="end"
        />

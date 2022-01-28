@@ -5,7 +5,12 @@
     <item
         android:id="@+id/save"
         android:orderInCategory="100"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         android:icon="@drawable/save"
         android:title="@string/save" />
+    <item
+        android:id="@+id/load_json"
+        app:showAsAction="never"
+        android:title="@string/load_from_file"
+        />
 </menu>

@@ -8,4 +8,5 @@ object Constants {
     const val DATABASE_NAME = "database"
     const val ID = "id"
     const val INVALID_ID = -1
+    const val FIREBASE_NAME = "notes"
 }
