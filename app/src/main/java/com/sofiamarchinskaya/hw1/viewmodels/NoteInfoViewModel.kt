@@ -4,12 +4,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.sofiamarchinskaya.hw1.Constants
 import com.sofiamarchinskaya.hw1.NoteCallback
+import com.sofiamarchinskaya.hw1.SingleLiveEvent
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.models.framework.NoteRepository
 import com.sofiamarchinskaya.hw1.states.*
 
 class NoteInfoViewModel(private val repository: NoteRepository) : ViewModel() {
-    val savingState = MutableLiveData<SavingState>()
+    val onSaveSuccessEvent = SingleLiveEvent<Unit>()
+    val onSaveFailureEvent = SingleLiveEvent<Unit>()
+    val onSaveAllowedEvent = SingleLiveEvent<Unit>()
     val note = MutableLiveData<Note>()
     var isNewNote = false
     val noteFromJson = MutableLiveData<JsonLoadingState>()
@@ -32,14 +35,11 @@ class NoteInfoViewModel(private val repository: NoteRepository) : ViewModel() {
         savingState.value = SavingState(States.NOTHING)
     }
 
-    fun checkNote() {
-        with(savingState) {
-            if (note.value?.title?.isBlank() == true || note.value?.body?.isBlank() == true) {
-                value = SavingState(States.ERROR)
-                value = SavingState(States.NOTHING)
-            } else {
-                value = SavingState(States.ALLOWED)
-            }
+    fun checkNote() =
+        if (note.value?.title?.isBlank() == true || note.value?.body?.isBlank() == true) {
+            onSaveFailureEvent.call()
+        } else {
+            onSaveAllowedEvent.call()
         }
     }
 

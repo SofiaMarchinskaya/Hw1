@@ -9,7 +9,6 @@ import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import com.sofiamarchinskaya.hw1.Constants
 import com.sofiamarchinskaya.hw1.R
 import com.sofiamarchinskaya.hw1.databinding.FragmentNoteInfoBinding
@@ -54,6 +53,15 @@ class NoteInfoFragment : Fragment() {
         }
         initLiveData()
 
+        viewModel.onSaveSuccessEvent.observe(viewLifecycleOwner) {
+            onSuccessfullySaved()
+        }
+        viewModel.onSaveAllowedEvent.observe(viewLifecycleOwner) {
+            createSaveDialog()
+        }
+        viewModel.onSaveFailureEvent.observe(viewLifecycleOwner) {
+            onSaveDisabled()
+        }
         viewModel.note.observe(viewLifecycleOwner) {
             binding.title.setText(viewModel.note.value?.title)
             binding.text.setText(viewModel.note.value?.body)
@@ -76,6 +84,14 @@ class NoteInfoFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.save -> {
+                val id = viewModel.note.value?.id
+                viewModel.note.value = id?.let {
+                    Note(
+                        it,
+                        binding.title.text.toString(),
+                        binding.text.text.toString()
+                    )
+                }
                 viewModel.checkNote()
                 return true
             }

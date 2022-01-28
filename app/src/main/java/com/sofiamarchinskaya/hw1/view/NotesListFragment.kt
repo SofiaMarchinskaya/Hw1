@@ -42,6 +42,13 @@ class NotesListFragment : Fragment() {
                 viewModel.onFabClicked()
             }
         }
+        viewModel.onNoteItemClickEvent.observe(viewLifecycleOwner) {
+            openAboutItemActivity(it)
+        }
+        viewModel.onFabClickEvent.observe(viewLifecycleOwner) {
+            openAddNoteFragment()
+        }
+
         notesListAdapter =
             NotesAdapter(
                 requireContext(),
@@ -105,9 +112,6 @@ class NotesListFragment : Fragment() {
 
     private fun initLiveData() {
         with(viewModel) {
-            fabState.observe(viewLifecycleOwner) {
-                observeFab(it.state)
-            }
             list.observe(viewLifecycleOwner) {
                 notesListAdapter.update(it)
             }
