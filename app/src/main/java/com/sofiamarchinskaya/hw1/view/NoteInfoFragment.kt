@@ -2,18 +2,15 @@ package com.sofiamarchinskaya.hw1.view
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import com.sofiamarchinskaya.hw1.Constants
 import com.sofiamarchinskaya.hw1.R
 import com.sofiamarchinskaya.hw1.databinding.FragmentNoteInfoBinding
 import com.sofiamarchinskaya.hw1.models.entity.Note
-import com.sofiamarchinskaya.hw1.states.States
 import com.sofiamarchinskaya.hw1.viewmodels.NoteInfoViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -49,13 +46,14 @@ class NoteInfoFragment : Fragment() {
             viewModel.isNewNote = true
         }
 
-        viewModel.savingState.observe(viewLifecycleOwner) {
-            when (it.state) {
-                States.SAVED -> onSuccessfullySaved()
-                States.ERROR -> onSaveDisabled()
-                States.ALLOWED -> createSaveDialog()
-                States.NOTHING -> {}//Nothing
-            }
+        viewModel.onSaveSuccessEvent.observe(viewLifecycleOwner) {
+            onSuccessfullySaved()
+        }
+        viewModel.onSaveAllowedEvent.observe(viewLifecycleOwner) {
+            createSaveDialog()
+        }
+        viewModel.onSaveFailureEvent.observe(viewLifecycleOwner) {
+            onSaveDisabled()
         }
         viewModel.note.observe(viewLifecycleOwner) {
             binding.title.setText(viewModel.note.value?.title)

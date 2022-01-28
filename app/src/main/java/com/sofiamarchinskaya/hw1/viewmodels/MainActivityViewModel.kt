@@ -1,14 +1,12 @@
 package com.sofiamarchinskaya.hw1.viewmodels
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.sofiamarchinskaya.hw1.states.MainMenuStates
-import com.sofiamarchinskaya.hw1.states.MenuState
+import com.sofiamarchinskaya.hw1.SingleLiveEvent
 
 class MainActivityViewModel : ViewModel() {
-    val menuState = MutableLiveData<MenuState>()
+    val onAboutClickEvent = SingleLiveEvent<Unit>()
 
     fun onInfoIconClick(){
-        menuState.value = MenuState(MainMenuStates.ABOUT)
+        onAboutClickEvent.call()
     }
 }

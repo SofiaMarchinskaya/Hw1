@@ -11,9 +11,6 @@ import com.sofiamarchinskaya.hw1.Constants
 import com.sofiamarchinskaya.hw1.R
 import com.sofiamarchinskaya.hw1.databinding.FragmentNotesListBinding
 import com.sofiamarchinskaya.hw1.models.entity.Note
-import com.sofiamarchinskaya.hw1.states.FabStates
-import com.sofiamarchinskaya.hw1.states.ListItemState
-import com.sofiamarchinskaya.hw1.states.ListItemStates
 import com.sofiamarchinskaya.hw1.viewmodels.NotesListViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -43,6 +40,13 @@ class NotesListFragment : Fragment() {
                 viewModel.onFabClicked()
             }
         }
+        viewModel.onNoteItemClickEvent.observe(viewLifecycleOwner) {
+            openAboutItemActivity(it)
+        }
+        viewModel.onFabClickEvent.observe(viewLifecycleOwner) {
+            openAddNoteFragment()
+        }
+
         notesListAdapter =
             NotesAdapter(
                 requireContext(),
@@ -96,32 +100,12 @@ class NotesListFragment : Fragment() {
 
     private fun initLiveData() {
         with(viewModel) {
-            fabState.observe(viewLifecycleOwner) {
-                observeFab(it.state)
-            }
             list.observe(viewLifecycleOwner) {
                 notesListAdapter.update(it)
             }
             contextMenuState.observe(viewLifecycleOwner) {
                 onShare(it)
             }
-            listItemState.observe(viewLifecycleOwner) {
-                observeListItem(it)
-            }
-        }
-    }
-
-    private fun observeFab(fabState: FabStates) {
-        when (fabState) {
-            FabStates.OnClicked -> openAddNoteFragment()
-            FabStates.NotClicked -> {}
-        }
-    }
-
-    private fun observeListItem(listItemState: ListItemState) {
-        when (listItemState.state) {
-            ListItemStates.OnClicked -> listItemState.note?.let { note -> openAboutItemActivity(note) }
-            ListItemStates.NotClicked -> {}
         }
     }
 

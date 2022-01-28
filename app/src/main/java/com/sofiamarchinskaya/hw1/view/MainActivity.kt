@@ -6,7 +6,6 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.sofiamarchinskaya.hw1.R
 import com.sofiamarchinskaya.hw1.databinding.ActivityMainBinding
-import com.sofiamarchinskaya.hw1.states.MainMenuStates
 import com.sofiamarchinskaya.hw1.viewmodels.MainActivityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -23,10 +22,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolBar)
-        viewModel.menuState.observe(this) {
-            when (it.state) {
-                MainMenuStates.ABOUT -> openAboutScreen()
-            }
+        viewModel.onAboutClickEvent.observe(this) {
+            openAboutScreen()
         }
     }
 
