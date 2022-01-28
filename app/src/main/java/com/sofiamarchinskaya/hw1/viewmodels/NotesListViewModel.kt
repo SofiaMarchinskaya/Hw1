@@ -15,11 +15,8 @@ class NotesListViewModel(private val repository: NoteRepository) : ViewModel() {
 
     val onFabClickEvent = SingleLiveEvent<Unit>()
     val onNoteItemClickEvent = SingleLiveEvent<Note>()
-
-
     val list = MutableLiveData<List<Note>>()
     val contextMenuState = MutableLiveData<String>()
-    val listItemState = MutableLiveData<ListItemState>()
     var downloadState = MutableLiveData<DownloadState>()
 
     suspend fun updateNotesList() {

@@ -118,19 +118,9 @@ class NotesListFragment : Fragment() {
             contextMenuState.observe(viewLifecycleOwner) {
                 onShare(it)
             }
-            listItemState.observe(viewLifecycleOwner) {
-                observeListItem(it)
-            }
             downloadState.observe(viewLifecycleOwner) {
                 observeDownloadState(it)
             }
-        }
-    }
-
-    private fun observeFab(fabState: FabStates) {
-        when (fabState) {
-            FabStates.OnClicked -> openAddNoteFragment()
-            FabStates.NotClicked -> {}
         }
     }
 
@@ -166,13 +156,6 @@ class NotesListFragment : Fragment() {
             resources.getString(R.string.fail_to_connect)
         else
             resources.getString(R.string.problems_with_cloud)
-
-    private fun observeListItem(listItemState: ListItemState) {
-        when (listItemState.state) {
-            ListItemStates.OnClicked -> listItemState.note?.let { note -> openAboutItemActivity(note) }
-            ListItemStates.NotClicked -> {}
-        }
-    }
 
     companion object {
         private const val TAG = "NotesList"

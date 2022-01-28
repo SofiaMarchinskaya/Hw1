@@ -13,10 +13,6 @@ import com.sofiamarchinskaya.hw1.Constants
 import com.sofiamarchinskaya.hw1.R
 import com.sofiamarchinskaya.hw1.databinding.FragmentNoteInfoBinding
 import com.sofiamarchinskaya.hw1.models.entity.Note
-import com.sofiamarchinskaya.hw1.states.JsonLoadingState
-import com.sofiamarchinskaya.hw1.states.JsonLoadingStates
-import com.sofiamarchinskaya.hw1.states.SavingState
-import com.sofiamarchinskaya.hw1.states.States
 import com.sofiamarchinskaya.hw1.viewmodels.NoteInfoViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -51,17 +47,8 @@ class NoteInfoFragment : Fragment() {
             )
             viewModel.isNewNote = true
         }
-        initLiveData()
 
-        viewModel.onSaveSuccessEvent.observe(viewLifecycleOwner) {
-            onSuccessfullySaved()
-        }
-        viewModel.onSaveAllowedEvent.observe(viewLifecycleOwner) {
-            createSaveDialog()
-        }
-        viewModel.onSaveFailureEvent.observe(viewLifecycleOwner) {
-            onSaveDisabled()
-        }
+        initEvents()
         viewModel.note.observe(viewLifecycleOwner) {
             binding.title.setText(viewModel.note.value?.title)
             binding.text.setText(viewModel.note.value?.body)
@@ -84,14 +71,6 @@ class NoteInfoFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.save -> {
-                val id = viewModel.note.value?.id
-                viewModel.note.value = id?.let {
-                    Note(
-                        it,
-                        binding.title.text.toString(),
-                        binding.text.text.toString()
-                    )
-                }
                 viewModel.checkNote()
                 return true
             }
@@ -137,45 +116,8 @@ class NoteInfoFragment : Fragment() {
         binding.text.setText(note.body)
     }
 
-    private fun initLiveData() {
-        viewModel.savingState.observe(viewLifecycleOwner) {
-            observeSavingState(it)
-        }
-        viewModel.noteFromJson.observe(viewLifecycleOwner) {
-            observeNoteFromJson(it)
-        }
-    }
-
-    private fun observeSavingState(savingState: SavingState) {
-        when (savingState.state) {
-            States.SAVED -> onSuccessfullySaved()
-            States.ERROR -> onSaveDisabled()
-            States.ALLOWED -> createSaveDialog()
-            States.NOTHING -> {}//Nothing
-        }
-    }
-
-    private fun observeNoteFromJson(jsonLoadingState: JsonLoadingState) {
-        when (jsonLoadingState.state) {
-            JsonLoadingStates.SUCCESS -> {
-                jsonLoadingState.note?.let { note -> setLoadedNote(note) }
-                makeToast(jsonLoadingState.state)
-            }
-            JsonLoadingStates.FAILED -> makeToast(jsonLoadingState.state)
-            JsonLoadingStates.LOADING -> showProgressBar()
-            JsonLoadingStates.FINISH -> hideProgressBar()
-        }
-    }
-
-    private fun makeToast(state: JsonLoadingStates) {
-        val msg =
-            if (state == JsonLoadingStates.SUCCESS) resources.getString(R.string.successfully_download)
-            else resources.getString(R.string.failed)
-        Toast.makeText(
-            requireContext(),
-            msg,
-            Toast.LENGTH_LONG
-        ).show()
+    private fun makeToast(msg: String) {
+        Toast.makeText(requireContext(), msg, Toast.LENGTH_LONG).show()
     }
 
     private fun hideProgressBar() {
@@ -188,6 +130,33 @@ class NoteInfoFragment : Fragment() {
         binding.title.visibility = View.INVISIBLE
         binding.text.visibility = View.INVISIBLE
         binding.progressCircular.visibility = View.VISIBLE
+    }
+
+    private fun initEvents() {
+        viewModel.onSaveSuccessEvent.observe(viewLifecycleOwner) {
+            onSuccessfullySaved()
+        }
+        viewModel.onSaveAllowedEvent.observe(viewLifecycleOwner) {
+            createSaveDialog()
+        }
+        viewModel.onSaveFailureEvent.observe(viewLifecycleOwner) {
+            onSaveDisabled()
+        }
+        viewModel.onLoadFailureEvent.observe(viewLifecycleOwner) {
+            makeToast(resources.getString(R.string.failed))
+        }
+        viewModel.onLoadSuccessEvent.observe(viewLifecycleOwner) {
+            if (it != null) {
+                setLoadedNote(it)
+            }
+            makeToast(resources.getString(R.string.successfully_download))
+        }
+        viewModel.onShowProgressBarEvent.observe(viewLifecycleOwner) {
+            showProgressBar()
+        }
+        viewModel.onHideProgressBarEvent.observe(viewLifecycleOwner) {
+            hideProgressBar()
+        }
     }
 
     companion object {
