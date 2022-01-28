@@ -89,6 +89,10 @@ class NoteInfoFragment : Fragment() {
 
     private fun onSuccessfullySaved() {
         Toast.makeText(requireContext(), getString(R.string.success), Toast.LENGTH_LONG).show()
+        activity?.sendBroadcast(Intent().apply {
+            action = Constants.NOTE_SENT
+            putExtra(Constants.TITLE, binding.title.text.toString())
+        })
     }
 
     private fun createSaveDialog() {
@@ -106,10 +110,6 @@ class NoteInfoFragment : Fragment() {
                 lifecycleScope.launch {
                     viewModel.onSaveNote(checkBox.isChecked)
                 }
-                activity?.sendBroadcast(Intent().apply {
-                    action = Constants.NOTE_SENT
-                    putExtra(Constants.TITLE, viewModel.note.value?.title)
-                })
             }
             create()
         }
