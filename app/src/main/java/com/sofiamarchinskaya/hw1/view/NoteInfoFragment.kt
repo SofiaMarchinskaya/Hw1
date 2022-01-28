@@ -1,12 +1,12 @@
 package com.sofiamarchinskaya.hw1.view
 
 import android.app.AlertDialog
-import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.widget.CheckBox
 import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.sofiamarchinskaya.hw1.Constants
@@ -40,20 +40,29 @@ class NoteInfoFragment : Fragment() {
     ): View {
         binding = FragmentNoteInfoBinding.inflate(inflater, container, false)
         arguments?.apply {
-            viewModel.note.value = getString(Constants.TITLE)?.let {
-                getString(Constants.TEXT)?.let { text ->
-                    Note(
-                        getInt(Constants.ID),
-                        it, text
-                    )
-                }
-            }
+            viewModel.note.value =
+                Note(getInt(Constants.ID), getString(Constants.TITLE), getString(Constants.TEXT))
         } ?: run {
             activity?.invalidateOptionsMenu()
-            viewModel.note.value?.id = Constants.INVALID_ID
+            viewModel.note.value = Note(
+                Constants.INVALID_ID,
+                arguments?.getString(Constants.TITLE),
+                arguments?.getString(Constants.TEXT)
+            )
             viewModel.isNewNote = true
         }
-        initLiveData()
+
+        initEvents()
+        viewModel.note.observe(viewLifecycleOwner) {
+            binding.title.setText(viewModel.note.value?.title)
+            binding.text.setText(viewModel.note.value?.body)
+        }
+        binding.text.addTextChangedListener {
+            viewModel.setNoteText(it.toString())
+        }
+        binding.title.addTextChangedListener {
+            viewModel.setNoteTitle(it.toString())
+        }
         return binding.root
     }
 
@@ -66,12 +75,7 @@ class NoteInfoFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.save -> {
-                with(binding) {
-                    viewModel.checkNote(
-                        title.text.toString(),
-                        text.text.toString()
-                    )
-                }
+                viewModel.checkNote()
                 return true
             }
             R.id.load_json -> {
@@ -103,12 +107,7 @@ class NoteInfoFragment : Fragment() {
             )
             setPositiveButton(getString(R.string.dialog_positive)) { _, _ ->
                 lifecycleScope.launch {
-                    viewModel.note.value?.let {
-                        viewModel.onSaveNote(
-                            it,
-                            checkBox.isChecked
-                        )
-                    }
+                    viewModel.onSaveNote(checkBox.isChecked)
                 }
                 activity?.sendBroadcast(Intent().apply {
                     action = Constants.NOTE_SENT
@@ -121,53 +120,12 @@ class NoteInfoFragment : Fragment() {
     }
 
     private fun setLoadedNote(note: Note) {
-        viewModel.note
+        binding.title.setText(note.title)
         binding.text.setText(note.body)
     }
 
-    private fun initLiveData() {
-        viewModel.savingState.observe(viewLifecycleOwner) {
-            observeSavingState(it)
-        }
-        viewModel.noteFromJson.observe(viewLifecycleOwner) {
-            observeNoteFromJson(it)
-        }
-        viewModel.note.observe(viewLifecycleOwner) {
-            binding.title.setText(it.title)
-            binding.text.setText(it.body)
-        }
-    }
-
-    private fun observeSavingState(savingState: SavingState) {
-        when (savingState.state) {
-            States.SAVED -> onSuccessfullySaved()
-            States.ERROR -> onSaveDisabled()
-            States.ALLOWED -> createSaveDialog()
-            States.NOTHING -> {}//Nothing
-        }
-    }
-
-    private fun observeNoteFromJson(jsonLoadingState: JsonLoadingState) {
-        when (jsonLoadingState.state) {
-            JsonLoadingStates.SUCCESS -> {
-                jsonLoadingState.note?.let { note -> setLoadedNote(note) }
-                makeToast(jsonLoadingState.state)
-            }
-            JsonLoadingStates.FAILED -> makeToast(jsonLoadingState.state)
-            JsonLoadingStates.LOADING -> showProgressBar()
-            JsonLoadingStates.FINISH -> hideProgressBar()
-        }
-    }
-
-    private fun makeToast(state: JsonLoadingStates) {
-        val msg =
-            if (state == JsonLoadingStates.SUCCESS) resources.getString(R.string.successfully_download)
-            else resources.getString(R.string.failed)
-        Toast.makeText(
-            requireContext(),
-            msg,
-            Toast.LENGTH_LONG
-        ).show()
+    private fun makeToast(msg: String) {
+        Toast.makeText(requireContext(), msg, Toast.LENGTH_LONG).show()
     }
 
     private fun hideProgressBar() {
@@ -182,16 +140,41 @@ class NoteInfoFragment : Fragment() {
         binding.progressCircular.visibility = View.VISIBLE
     }
 
+    private fun initEvents() {
+        viewModel.onSaveSuccessEvent.observe(viewLifecycleOwner) {
+            onSuccessfullySaved()
+        }
+        viewModel.onSaveAllowedEvent.observe(viewLifecycleOwner) {
+            createSaveDialog()
+        }
+        viewModel.onSaveFailureEvent.observe(viewLifecycleOwner) {
+            onSaveDisabled()
+        }
+        viewModel.onLoadFailureEvent.observe(viewLifecycleOwner) {
+            makeToast(resources.getString(R.string.failed))
+        }
+        viewModel.onLoadSuccessEvent.observe(viewLifecycleOwner) {
+            if (it != null) {
+                setLoadedNote(it)
+            }
+            makeToast(resources.getString(R.string.successfully_download))
+        }
+        viewModel.onShowProgressBarEvent.observe(viewLifecycleOwner) {
+            showProgressBar()
+        }
+        viewModel.onHideProgressBarEvent.observe(viewLifecycleOwner) {
+            hideProgressBar()
+        }
+    }
+
     companion object {
-        fun newInstance(): NoteInfoFragment =
+        fun newInstance(note: Note): NoteInfoFragment =
             NoteInfoFragment().apply {
-                with(viewModel.note) {
-                    arguments = bundleOf(
-                        Constants.TITLE to value?.title,
-                        Constants.TEXT to value?.body,
-                        Constants.ID to value?.id
-                    )
-                }
+                arguments = bundleOf(
+                    Constants.TITLE to note.title,
+                    Constants.TEXT to note.body,
+                    Constants.ID to note.id
+                )
             }
     }
 }

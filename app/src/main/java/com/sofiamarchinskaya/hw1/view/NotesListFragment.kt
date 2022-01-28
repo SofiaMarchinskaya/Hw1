@@ -49,6 +49,7 @@ class NotesListFragment : Fragment() {
                 viewModel.onFabClicked()
             }
         }
+        initEvents()
         notesListAdapter =
             NotesAdapter(
                 requireContext(),
@@ -128,46 +129,17 @@ class NotesListFragment : Fragment() {
 
     private fun initLiveData() {
         with(viewModel) {
-            fabState.observe(viewLifecycleOwner) {
-                observeFab(it.state)
-            }
             list.observe(viewLifecycleOwner) {
                 notesListAdapter.update(it)
             }
             contextMenuState.observe(viewLifecycleOwner) {
                 onShare(it)
             }
-            listItemState.observe(viewLifecycleOwner) {
-                observeListItem(it)
-            }
-            downloadState.observe(viewLifecycleOwner) {
-                observeDownloadState(it)
-            }
         }
     }
 
-    private fun observeFab(fabState: FabStates) {
-        when (fabState) {
-            FabStates.OnClicked -> openAddNoteFragment()
-            FabStates.NotClicked -> {}
-        }
-    }
-
-    private fun observeDownloadState(state: DownloadState) {
-        when (state.status) {
-            DownloadStates.SUCCESS -> Toast.makeText(
-                requireContext(),
-                resources.getString(R.string.successfully_download),
-                Toast.LENGTH_LONG
-            ).show()
-            DownloadStates.FAILED -> Toast.makeText(
-                requireContext(),
-                chooseExceptionMessage(state.msg),
-                Toast.LENGTH_LONG
-            ).show()
-            DownloadStates.DOWNLOAD -> showProgressBar()
-            DownloadStates.FINISH -> hideProgressBar()
-        }
+    private fun makeToast(msg: String) {
+        Toast.makeText(requireContext(), msg, Toast.LENGTH_LONG).show()
     }
 
     private fun hideProgressBar() {
@@ -186,14 +158,24 @@ class NotesListFragment : Fragment() {
         else
             resources.getString(R.string.problems_with_cloud)
 
-    private fun observeListItem(listItemState: ListItemState) {
-        when (listItemState.state) {
-            ListItemStates.OnClicked -> listItemState.note?.let { note ->
-                openAboutItemActivity(
-                    note
-                )
-            }
-            ListItemStates.NotClicked -> {}
+    private fun initEvents() {
+        viewModel.onNoteItemClickEvent.observe(viewLifecycleOwner) {
+            openAboutItemActivity(it)
+        }
+        viewModel.onFabClickEvent.observe(viewLifecycleOwner) {
+            openAddNoteFragment()
+        }
+        viewModel.onLoadSuccessEvent.observe(viewLifecycleOwner) {
+            makeToast(resources.getString(R.string.successfully_download))
+        }
+        viewModel.onLoadFailureEvent.observe(viewLifecycleOwner) {
+            makeToast(chooseExceptionMessage(it))
+        }
+        viewModel.onShowProgressBarEvent.observe(viewLifecycleOwner) {
+            showProgressBar()
+        }
+        viewModel.onHideProgressBarEvent.observe(viewLifecycleOwner) {
+            hideProgressBar()
         }
     }
 

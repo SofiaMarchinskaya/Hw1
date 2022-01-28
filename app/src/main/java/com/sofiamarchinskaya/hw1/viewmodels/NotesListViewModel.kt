@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sofiamarchinskaya.hw1.DownloadCallback
+import com.sofiamarchinskaya.hw1.SingleLiveEvent
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.models.framework.NoteRepository
 import com.sofiamarchinskaya.hw1.states.*
@@ -12,11 +13,15 @@ import kotlinx.coroutines.launch
 class NotesListViewModel(private val repository: NoteRepository) : ViewModel() {
     private var clickedNote: Note? = null
 
+    val onLoadSuccessEvent = SingleLiveEvent<Note?>()
+    val onLoadFailureEvent = SingleLiveEvent<ExceptionTypes?>()
+    val onShowProgressBarEvent = SingleLiveEvent<Unit>()
+    val onHideProgressBarEvent = SingleLiveEvent<Unit>()
+
+    val onFabClickEvent = SingleLiveEvent<Unit>()
+    val onNoteItemClickEvent = SingleLiveEvent<Note>()
     val list = MutableLiveData<List<Note>>()
-    val fabState = MutableLiveData<FabState>()
     val contextMenuState = MutableLiveData<String>()
-    val listItemState = MutableLiveData<ListItemState>()
-    var downloadState = MutableLiveData<DownloadState>()
 
     suspend fun updateNotesList() {
         repository.getAll().collect { list.value = it }
@@ -27,13 +32,11 @@ class NotesListViewModel(private val repository: NoteRepository) : ViewModel() {
     }
 
     fun onFabClicked() {
-        fabState.value = FabState(FabStates.OnClicked)
-        fabState.value = FabState(FabStates.NotClicked)
+        onFabClickEvent.call()
     }
 
     fun onAboutItemClicked(note: Note) {
-        listItemState.value = ListItemState(ListItemStates.OnClicked, note)
-        listItemState.value = ListItemState(ListItemStates.NotClicked)
+        onNoteItemClickEvent.value = note
     }
 
     fun onShareContextItemClick() {
@@ -41,7 +44,7 @@ class NotesListViewModel(private val repository: NoteRepository) : ViewModel() {
     }
 
     fun getNotesFromCloud() {
-        downloadState.value = DownloadState(DownloadStates.DOWNLOAD)
+        onShowProgressBarEvent.call()
         repository.getAllFromCloud(object : DownloadCallback {
             override fun onSuccess(list: List<Note>) {
                 list.forEach {
@@ -49,13 +52,13 @@ class NotesListViewModel(private val repository: NoteRepository) : ViewModel() {
                         repository.insert(it)
                     }
                 }
-                downloadState.value = DownloadState(DownloadStates.SUCCESS)
-                downloadState.value = DownloadState((DownloadStates.FINISH))
+                onHideProgressBarEvent.call()
+                onLoadSuccessEvent.call()
             }
 
             override fun onFailed(msg: ExceptionTypes) {
-                downloadState.value = DownloadState(DownloadStates.FAILED, msg)
-                downloadState.value = DownloadState((DownloadStates.FINISH))
+                onHideProgressBarEvent.call()
+                onLoadFailureEvent.value = msg
             }
         })
     }
