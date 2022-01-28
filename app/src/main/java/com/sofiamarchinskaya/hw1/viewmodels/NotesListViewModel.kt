@@ -13,11 +13,15 @@ import kotlinx.coroutines.launch
 class NotesListViewModel(private val repository: NoteRepository) : ViewModel() {
     private var clickedNote: Note? = null
 
+    val onLoadSuccessEvent = SingleLiveEvent<Note?>()
+    val onLoadFailureEvent = SingleLiveEvent<ExceptionTypes?>()
+    val onShowProgressBarEvent = SingleLiveEvent<Unit>()
+    val onHideProgressBarEvent = SingleLiveEvent<Unit>()
+
     val onFabClickEvent = SingleLiveEvent<Unit>()
     val onNoteItemClickEvent = SingleLiveEvent<Note>()
     val list = MutableLiveData<List<Note>>()
     val contextMenuState = MutableLiveData<String>()
-    var downloadState = MutableLiveData<DownloadState>()
 
     suspend fun updateNotesList() {
         repository.getAll().collect { list.value = it }
@@ -40,7 +44,7 @@ class NotesListViewModel(private val repository: NoteRepository) : ViewModel() {
     }
 
     fun getNotesFromCloud() {
-        downloadState.value = DownloadState(DownloadStates.DOWNLOAD)
+        onShowProgressBarEvent.call()
         repository.getAllFromCloud(object : DownloadCallback {
             override fun onSuccess(list: List<Note>) {
                 list.forEach {
@@ -48,13 +52,13 @@ class NotesListViewModel(private val repository: NoteRepository) : ViewModel() {
                         repository.insert(it)
                     }
                 }
-                downloadState.value = DownloadState(DownloadStates.SUCCESS)
-                downloadState.value = DownloadState((DownloadStates.FINISH))
+                onHideProgressBarEvent.call()
+                onLoadSuccessEvent.call()
             }
 
             override fun onFailed(msg: ExceptionTypes) {
-                downloadState.value = DownloadState(DownloadStates.FAILED, msg)
-                downloadState.value = DownloadState((DownloadStates.FINISH))
+                onHideProgressBarEvent.call()
+                onLoadFailureEvent.value = msg
             }
         })
     }

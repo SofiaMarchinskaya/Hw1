@@ -42,13 +42,7 @@ class NotesListFragment : Fragment() {
                 viewModel.onFabClicked()
             }
         }
-        viewModel.onNoteItemClickEvent.observe(viewLifecycleOwner) {
-            openAboutItemActivity(it)
-        }
-        viewModel.onFabClickEvent.observe(viewLifecycleOwner) {
-            openAddNoteFragment()
-        }
-
+        initEvents()
         notesListAdapter =
             NotesAdapter(
                 requireContext(),
@@ -118,27 +112,11 @@ class NotesListFragment : Fragment() {
             contextMenuState.observe(viewLifecycleOwner) {
                 onShare(it)
             }
-            downloadState.observe(viewLifecycleOwner) {
-                observeDownloadState(it)
-            }
         }
     }
 
-    private fun observeDownloadState(state: DownloadState) {
-        when (state.status) {
-            DownloadStates.SUCCESS -> Toast.makeText(
-                requireContext(),
-                resources.getString(R.string.successfully_download),
-                Toast.LENGTH_LONG
-            ).show()
-            DownloadStates.FAILED -> Toast.makeText(
-                requireContext(),
-                chooseExceptionMessage(state.msg),
-                Toast.LENGTH_LONG
-            ).show()
-            DownloadStates.DOWNLOAD -> showProgressBar()
-            DownloadStates.FINISH -> hideProgressBar()
-        }
+    private fun makeToast(msg: String) {
+        Toast.makeText(requireContext(), msg, Toast.LENGTH_LONG).show()
     }
 
     private fun hideProgressBar() {
@@ -156,6 +134,27 @@ class NotesListFragment : Fragment() {
             resources.getString(R.string.fail_to_connect)
         else
             resources.getString(R.string.problems_with_cloud)
+
+    private fun initEvents() {
+        viewModel.onNoteItemClickEvent.observe(viewLifecycleOwner) {
+            openAboutItemActivity(it)
+        }
+        viewModel.onFabClickEvent.observe(viewLifecycleOwner) {
+            openAddNoteFragment()
+        }
+        viewModel.onLoadSuccessEvent.observe(viewLifecycleOwner) {
+            makeToast(resources.getString(R.string.successfully_download))
+        }
+        viewModel.onLoadFailureEvent.observe(viewLifecycleOwner) {
+            makeToast(chooseExceptionMessage(it))
+        }
+        viewModel.onShowProgressBarEvent.observe(viewLifecycleOwner) {
+            showProgressBar()
+        }
+        viewModel.onHideProgressBarEvent.observe(viewLifecycleOwner) {
+            hideProgressBar()
+        }
+    }
 
     companion object {
         private const val TAG = "NotesList"
