@@ -103,7 +103,7 @@ class NotesListFragment : Fragment() {
             .setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean = false
 
-                override fun onQueryTextChange(newText: String?): Boolean {
+                override fun onQueryTextChange(newText: String): Boolean {
                     ItemsFilter().filter(newText, viewModel.list.value)
                         ?.let { notesListAdapter.update(it) }
                     return false

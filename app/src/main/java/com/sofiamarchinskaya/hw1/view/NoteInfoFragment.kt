@@ -1,6 +1,7 @@
 package com.sofiamarchinskaya.hw1.view
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.widget.CheckBox
@@ -13,10 +14,6 @@ import com.sofiamarchinskaya.hw1.Constants
 import com.sofiamarchinskaya.hw1.R
 import com.sofiamarchinskaya.hw1.databinding.FragmentNoteInfoBinding
 import com.sofiamarchinskaya.hw1.models.entity.Note
-import com.sofiamarchinskaya.hw1.states.JsonLoadingState
-import com.sofiamarchinskaya.hw1.states.JsonLoadingStates
-import com.sofiamarchinskaya.hw1.states.SavingState
-import com.sofiamarchinskaya.hw1.states.States
 import com.sofiamarchinskaya.hw1.viewmodels.NoteInfoViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
