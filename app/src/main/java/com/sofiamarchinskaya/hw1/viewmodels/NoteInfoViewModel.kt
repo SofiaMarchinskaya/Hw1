@@ -24,7 +24,7 @@ class NoteInfoViewModel(private val repository: NoteRepository) : ViewModel() {
                 repository.insert(Note(title = it.title, body = it.body)).also { newId ->
                     if (isSavingToCloud)
                         repository.insertCloud(Note(newId, it.title, it.body))
-                    it.id = newId
+                    note.value = Note(newId,it.title,it.body)
                 }
             }
             savingState.value = SavingState(States.SAVED)
