@@ -22,14 +22,12 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolBar)
+
         viewModel.onAboutClickEvent.observe(this) {
             openAboutScreen()
         }
         viewModel.onWebViewClickEvent.observe(this) {
             openWebViewScreen()
-        }
-        viewModel.onLocationClickEvent.observe(this) {
-            openLocationScreen()
         }
     }
 
@@ -43,10 +41,6 @@ class MainActivity : AppCompatActivity() {
                 viewModel.onWebViewIconClick()
                 return true
             }
-            R.id.location -> {
-                viewModel.onLocationClick()
-                return true
-            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -57,9 +51,5 @@ class MainActivity : AppCompatActivity() {
 
     private fun openWebViewScreen() {
         startActivity(Intent(this, WebViewActivity::class.java))
-    }
-
-    private fun openLocationScreen() {
-        startActivity(Intent(this, LocationActivity::class.java))
     }
 }

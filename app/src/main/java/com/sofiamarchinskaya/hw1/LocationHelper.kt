@@ -10,6 +10,7 @@ import android.location.LocationManager
 import android.os.Looper
 import android.provider.Settings
 import android.widget.Toast
+import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -43,7 +44,7 @@ class LocationHelper(
                     if (isFailed) {
                         Toast.makeText(
                             activity,
-                            "Включите бык",
+                            "activity.getString(R.string.turn_on_location)",
                             Toast.LENGTH_LONG
                         ).show()
                         val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
@@ -85,7 +86,7 @@ class LocationHelper(
         } else {
             Toast.makeText(
                 activity,
-                "бык",
+                "Бык",
                 Toast.LENGTH_LONG
             ).show()
             val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)

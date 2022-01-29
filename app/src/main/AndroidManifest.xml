@@ -15,9 +15,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CustomHw1">
         <activity
-            android:name=".view.LocationActivity"
-            android:exported="true" />
-        <activity
             android:name=".view.WebViewActivity"
             android:exported="true" />
         <activity
