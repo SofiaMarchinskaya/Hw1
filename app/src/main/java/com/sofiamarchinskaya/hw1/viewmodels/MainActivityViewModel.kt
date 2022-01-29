@@ -5,8 +5,18 @@ import com.sofiamarchinskaya.hw1.SingleLiveEvent
 
 class MainActivityViewModel : ViewModel() {
     val onAboutClickEvent = SingleLiveEvent<Unit>()
+    val onWebViewClickEvent = SingleLiveEvent<Unit>()
+    val onLocationClickEvent = SingleLiveEvent<Unit>()
 
-    fun onInfoIconClick(){
+    fun onInfoIconClick() {
         onAboutClickEvent.call()
+    }
+
+    fun onWebViewIconClick() {
+        onWebViewClickEvent.call()
+    }
+
+    fun onLocationClick(){
+        onLocationClickEvent.call()
     }
 }

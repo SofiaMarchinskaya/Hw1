@@ -20,4 +20,7 @@
     <string name="problems_with_cloud">"Ошибка облачного хранилища"</string>
     <string name="failed">"Ошибка загрузки"</string>
     <string name="load_from_file">загрузить из файла</string>
+    <string name="search">search</string>
+    <string name="weather_forecast">прогноз погоды</string>
+    <string name="location">местоположение</string>
 </resources>

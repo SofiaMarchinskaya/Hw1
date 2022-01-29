@@ -25,6 +25,12 @@ class MainActivity : AppCompatActivity() {
         viewModel.onAboutClickEvent.observe(this) {
             openAboutScreen()
         }
+        viewModel.onWebViewClickEvent.observe(this) {
+            openWebViewScreen()
+        }
+        viewModel.onLocationClickEvent.observe(this) {
+            openLocationScreen()
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -33,11 +39,27 @@ class MainActivity : AppCompatActivity() {
                 viewModel.onInfoIconClick()
                 return true
             }
+            R.id.web_view -> {
+                viewModel.onWebViewIconClick()
+                return true
+            }
+            R.id.location -> {
+                viewModel.onLocationClick()
+                return true
+            }
         }
         return super.onOptionsItemSelected(item)
     }
 
     private fun openAboutScreen() {
         startActivity(Intent(this, AboutActivity::class.java))
+    }
+
+    private fun openWebViewScreen() {
+        startActivity(Intent(this, WebViewActivity::class.java))
+    }
+
+    private fun openLocationScreen() {
+        startActivity(Intent(this, LocationActivity::class.java))
     }
 }
