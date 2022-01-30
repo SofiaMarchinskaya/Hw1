@@ -3,19 +3,16 @@ package com.sofiamarchinskaya.hw1.view
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
-import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
 import android.view.*
 import android.widget.CheckBox
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -98,10 +95,24 @@ class NoteInfoFragment : Fragment() {
                 return true
             }
             R.id.location -> {
-                getCurrentLocation()
+                viewModel.onLocationItemClick()
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
+    ) {
+        when (requestCode) {
+            LOCATION_PERMISSION_REQ_CODE -> {
+                if (grantResults.isEmpty() ||
+                    grantResults[0] != PackageManager.PERMISSION_GRANTED
+                ) {
+                    makeToast("You need to grant permission to access location")
+                }
+            }
+        }
     }
 
     private fun onSaveDisabled() {
@@ -183,27 +194,25 @@ class NoteInfoFragment : Fragment() {
         viewModel.onHideProgressBarEvent.observe(viewLifecycleOwner) {
             hideProgressBar()
         }
+        viewModel.onLoadLocationClickEvent.observe(viewLifecycleOwner) {
+            getCurrentLocation()
+        }
     }
 
     @SuppressLint("MissingPermission")
     private fun getCurrentLocation() {
         if (checkPermissions()) {
-            if (isLocationEnabled()) {
-                fusedLocationClient.lastLocation
-                    .addOnSuccessListener { location ->
-                        binding.text.setText(formatLocation(location.latitude, location.longitude))
-                    }
-                    .addOnFailureListener {
-                        Toast.makeText(
-                            requireContext(), "Failed on getting current location",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-            } else {
-                Toast.makeText(requireContext(), "Turn on location", Toast.LENGTH_LONG).show()
-                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                startActivity(intent)
-            }
+            fusedLocationClient.lastLocation
+                .addOnSuccessListener { location ->
+                    binding.text.setText(formatLocation(location.latitude, location.longitude))
+                }
+                .addOnFailureListener {
+                    Toast.makeText(
+                        requireContext(), "Failed on getting current location",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
         } else {
             requestPermissions()
         }
@@ -235,38 +244,20 @@ class NoteInfoFragment : Fragment() {
         return false
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
-    ) {
-        when (requestCode) {
-            LOCATION_PERMISSION_REQ_CODE -> {
-                if (grantResults.isNotEmpty() &&
-                    grantResults[0] == PackageManager.PERMISSION_GRANTED
-                ) {
-                } else {
-                    Toast.makeText(
-                        requireContext(), "You need to grant permission to access location",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-        }
-    }
-
-    private fun isLocationEnabled(): Boolean {
-        var locationManager: LocationManager =
-            requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
-            LocationManager.NETWORK_PROVIDER
-        )
-    }
-
     private fun formatLocation(latitude: Double, longitude: Double): String {
-        val geocoder = Geocoder(requireContext(), Locale.getDefault())
-        val addresses: List<Address> =
-            geocoder.getFromLocation(latitude, longitude, 1)
-        return "${addresses[0].thoroughfare}, ${addresses[0].featureName}," +
-                " ${addresses[0].locality}, ${addresses[0].subAdminArea}, ${addresses[0].adminArea}, ${addresses[0].countryName}"
+        return try {
+            val geocoder = Geocoder(requireContext(), Locale.getDefault())
+            val addresses: List<Address> =
+                geocoder.getFromLocation(latitude, longitude, 1)
+
+            "${addresses[0].thoroughfare}, ${addresses[0].featureName}," +
+                    " ${addresses[0].locality}, ${addresses[0].subAdminArea}, ${addresses[0].adminArea}, ${addresses[0].countryName}"
+        } catch (e: Exception) {
+            makeToast(
+                resources.getString(R.string.fail_to_connect)
+            )
+            resources.getString(R.string.not_defined)
+        }
     }
 
     companion object {

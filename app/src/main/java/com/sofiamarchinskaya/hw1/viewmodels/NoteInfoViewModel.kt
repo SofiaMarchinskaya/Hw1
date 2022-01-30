@@ -1,10 +1,8 @@
 package com.sofiamarchinskaya.hw1.viewmodels
 
-import android.location.Location
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.sofiamarchinskaya.hw1.Constants
-import com.sofiamarchinskaya.hw1.LocationHelper
 import com.sofiamarchinskaya.hw1.NoteCallback
 import com.sofiamarchinskaya.hw1.SingleLiveEvent
 import com.sofiamarchinskaya.hw1.models.entity.Note
@@ -18,9 +16,7 @@ class NoteInfoViewModel(private val repository: NoteRepository) : ViewModel() {
     val onLoadFailureEvent = SingleLiveEvent<Unit>()
     val onShowProgressBarEvent = SingleLiveEvent<Unit>()
     val onHideProgressBarEvent = SingleLiveEvent<Unit>()
-    val onLoadLocationSuccessEvent = SingleLiveEvent<List<String>>()
-    val onLoadLocationFailureEvent = SingleLiveEvent<Unit>()
-
+    val onLoadLocationClickEvent = SingleLiveEvent<List<String>>()
 
     val note = MutableLiveData<Note>()
     var isNewNote = false
@@ -35,7 +31,7 @@ class NoteInfoViewModel(private val repository: NoteRepository) : ViewModel() {
                 repository.insert(Note(title = it.title, body = it.body)).also { newId ->
                     if (isSavingToCloud)
                         repository.insertCloud(Note(newId, it.title, it.body))
-                    note.value = Note(newId,it.title,it.body)
+                    note.value = Note(newId, it.title, it.body)
                 }
             }
             onSaveSuccessEvent.call()
@@ -74,9 +70,8 @@ class NoteInfoViewModel(private val repository: NoteRepository) : ViewModel() {
         note.value?.body = text
     }
 
-    fun getCurrentLocation(location:Location){
-      onLoadLocationSuccessEvent.value = listOf(location.longitude.toString(),location.latitude.toString())
-        onLoadLocationSuccessEvent.call()
+    fun onLocationItemClick() {
+        onLoadLocationClickEvent.call()
     }
 }
 

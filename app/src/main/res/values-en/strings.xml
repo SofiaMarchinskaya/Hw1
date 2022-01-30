@@ -21,4 +21,8 @@
     <string name="problems_with_cloud">Problems with cloud storage</string>
     <string name="failed">loading error</string>
     <string name="load_from_file">load from file</string>
+    <string name="search">search</string>
+    <string name="weather_forecast">weather forecast</string>
+    <string name="location">location</string>
+    <string name="not_defined">location not defined</string>
 </resources>
