@@ -91,7 +91,7 @@ class NoteInfoFragment : Fragment() {
         Toast.makeText(requireContext(), getString(R.string.success), Toast.LENGTH_LONG).show()
         activity?.sendBroadcast(Intent().apply {
             action = Constants.NOTE_SENT
-            putExtra(Constants.TITLE, viewModel.note.value)
+            putExtra(Constants.NOTE, viewModel.note.value)
         })
     }
 
