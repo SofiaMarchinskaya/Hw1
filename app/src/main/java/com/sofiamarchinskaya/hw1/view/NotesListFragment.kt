@@ -105,7 +105,6 @@ class NotesListFragment : Fragment() {
 
                 override fun onQueryTextChange(newText: String): Boolean {
                     viewModel.filter(newText)
-                        ?.let { notesListAdapter.update(it) }
                     return false
                 }
             })
@@ -159,23 +158,25 @@ class NotesListFragment : Fragment() {
             resources.getString(R.string.problems_with_cloud)
 
     private fun initEvents() {
-        viewModel.onNoteItemClickEvent.observe(viewLifecycleOwner) {
-            openAboutItemActivity(it)
-        }
-        viewModel.onFabClickEvent.observe(viewLifecycleOwner) {
-            openAddNoteFragment()
-        }
-        viewModel.onLoadSuccessEvent.observe(viewLifecycleOwner) {
-            makeToast(resources.getString(R.string.successfully_download))
-        }
-        viewModel.onLoadFailureEvent.observe(viewLifecycleOwner) {
-            makeToast(chooseExceptionMessage(it))
-        }
-        viewModel.onShowProgressBarEvent.observe(viewLifecycleOwner) {
-            showProgressBar()
-        }
-        viewModel.onHideProgressBarEvent.observe(viewLifecycleOwner) {
-            hideProgressBar()
+        with(viewModel) {
+            onNoteItemClickEvent.observe(viewLifecycleOwner) {
+                openAboutItemActivity(it)
+            }
+            onFabClickEvent.observe(viewLifecycleOwner) {
+                openAddNoteFragment()
+            }
+            onLoadSuccessEvent.observe(viewLifecycleOwner) {
+                makeToast(resources.getString(R.string.successfully_download))
+            }
+            onLoadFailureEvent.observe(viewLifecycleOwner) {
+                makeToast(chooseExceptionMessage(it))
+            }
+            onShowProgressBarEvent.observe(viewLifecycleOwner) {
+                showProgressBar()
+            }
+            onHideProgressBarEvent.observe(viewLifecycleOwner) {
+                hideProgressBar()
+            }
         }
     }
 

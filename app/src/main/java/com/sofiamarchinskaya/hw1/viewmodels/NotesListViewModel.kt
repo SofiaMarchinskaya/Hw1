@@ -1,6 +1,5 @@
 package com.sofiamarchinskaya.hw1.viewmodels
 
-import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,9 +7,8 @@ import com.sofiamarchinskaya.hw1.DownloadCallback
 import com.sofiamarchinskaya.hw1.SingleLiveEvent
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.models.framework.NoteRepository
-import com.sofiamarchinskaya.hw1.states.*
+import com.sofiamarchinskaya.hw1.states.ExceptionTypes
 import com.sofiamarchinskaya.hw1.view.instruments.ItemsFilter
-import com.sofiamarchinskaya.hw1.view.instruments.QueryFilter
 import kotlinx.coroutines.launch
 
 class NotesListViewModel(private val repository: NoteRepository) : ViewModel() {
@@ -66,6 +64,7 @@ class NotesListViewModel(private val repository: NoteRepository) : ViewModel() {
         })
     }
 
-    fun filter(query: String): List<Note>? =
-        ItemsFilter().filter(query, list.value)
+    fun filter(query: String){
+        list.value = ItemsFilter().filter(query, list.value)
+    }
 }
