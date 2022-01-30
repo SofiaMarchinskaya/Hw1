@@ -5,7 +5,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
-import com.sofiamarchinskaya.hw1.Constants
+import com.sofiamarchinskaya.hw1.types.Constants
 import kotlinx.parcelize.Parcelize
 
 @Entity(tableName = Constants.TABLE_NAME)

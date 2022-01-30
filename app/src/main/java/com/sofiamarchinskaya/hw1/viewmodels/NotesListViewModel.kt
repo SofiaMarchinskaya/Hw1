@@ -1,16 +1,14 @@
 package com.sofiamarchinskaya.hw1.viewmodels
 
-import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sofiamarchinskaya.hw1.DownloadCallback
-import com.sofiamarchinskaya.hw1.SingleLiveEvent
+import com.sofiamarchinskaya.hw1.types.DownloadCallback
+import com.sofiamarchinskaya.hw1.utils.SingleLiveEvent
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.models.framework.NoteRepository
-import com.sofiamarchinskaya.hw1.states.*
-import com.sofiamarchinskaya.hw1.view.instruments.ItemsFilter
-import com.sofiamarchinskaya.hw1.view.instruments.QueryFilter
+import com.sofiamarchinskaya.hw1.types.*
+import com.sofiamarchinskaya.hw1.utils.ItemsFilter
 import kotlinx.coroutines.launch
 
 class NotesListViewModel(private val repository: NoteRepository) : ViewModel() {

@@ -12,13 +12,12 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import com.sofiamarchinskaya.hw1.BackupWorker
-import com.sofiamarchinskaya.hw1.Constants
+import com.sofiamarchinskaya.hw1.utils.BackupWorker
+import com.sofiamarchinskaya.hw1.types.Constants
 import com.sofiamarchinskaya.hw1.R
 import com.sofiamarchinskaya.hw1.databinding.FragmentNotesListBinding
 import com.sofiamarchinskaya.hw1.models.entity.Note
-import com.sofiamarchinskaya.hw1.states.*
-import com.sofiamarchinskaya.hw1.view.instruments.ItemsFilter
+import com.sofiamarchinskaya.hw1.types.*
 import com.sofiamarchinskaya.hw1.viewmodels.NotesListViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel

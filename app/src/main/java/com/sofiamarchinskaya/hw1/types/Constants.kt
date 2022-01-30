@@ -1,4 +1,4 @@
-package com.sofiamarchinskaya.hw1
+package com.sofiamarchinskaya.hw1.types
 
 object Constants {
     const val TITLE = "title" //для получения заголовка заметки из bundle

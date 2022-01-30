@@ -1,7 +1,7 @@
 package com.sofiamarchinskaya.hw1.viewmodels
 
 import androidx.lifecycle.ViewModel
-import com.sofiamarchinskaya.hw1.SingleLiveEvent
+import com.sofiamarchinskaya.hw1.utils.SingleLiveEvent
 
 class MainActivityViewModel : ViewModel() {
     val onAboutClickEvent = SingleLiveEvent<Unit>()

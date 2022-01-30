@@ -2,9 +2,9 @@ package com.sofiamarchinskaya.hw1.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.sofiamarchinskaya.hw1.Constants
-import com.sofiamarchinskaya.hw1.NoteCallback
-import com.sofiamarchinskaya.hw1.SingleLiveEvent
+import com.sofiamarchinskaya.hw1.types.Constants
+import com.sofiamarchinskaya.hw1.types.NoteCallback
+import com.sofiamarchinskaya.hw1.utils.SingleLiveEvent
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.models.framework.NoteRepository
 

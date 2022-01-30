@@ -1,4 +1,4 @@
-package com.sofiamarchinskaya.hw1
+package com.sofiamarchinskaya.hw1.koin
 
 import com.sofiamarchinskaya.hw1.models.NoteRepositoryImpl
 import com.sofiamarchinskaya.hw1.models.framework.NoteRepository

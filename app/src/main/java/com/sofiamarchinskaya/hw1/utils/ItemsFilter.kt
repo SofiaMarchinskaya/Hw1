@@ -1,4 +1,4 @@
-package com.sofiamarchinskaya.hw1.view.instruments
+package com.sofiamarchinskaya.hw1.utils
 
 import com.sofiamarchinskaya.hw1.models.entity.Note
 
