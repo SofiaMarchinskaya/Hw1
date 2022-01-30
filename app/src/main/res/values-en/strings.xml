@@ -25,4 +25,5 @@
     <string name="weather_forecast">weather forecast</string>
     <string name="location">location</string>
     <string name="not_defined">location not defined</string>
+    <string name="html"><![CDATA[<html><body>                 <h1><em><b>App for working with notes<b><em></h1>                 <p style="color:#0000FF">Version 1.0.0</p>                 </body></html>]]></string>
 </resources>

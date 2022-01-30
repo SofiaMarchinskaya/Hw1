@@ -24,5 +24,9 @@
     <string name="weather_forecast">прогноз погоды</string>
     <string name="location">местоположение</string>
     <string name="not_defined">местоположнение не определено</string>
-    <string name="html">показ html контента</string>
+    <string name="html"><![CDATA[<html><body>
+                <h1><em><b>Приложение для работы с заметками<b><em></h1>
+                <p style="color:#8F8271">Версия 1.0.0</p>
+                </body></html>]]></string>
+
 </resources>

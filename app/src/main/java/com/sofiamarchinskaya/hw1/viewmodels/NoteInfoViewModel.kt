@@ -17,7 +17,7 @@ class NoteInfoViewModel(private val repository: NoteRepository) : ViewModel() {
     val onShowProgressBarEvent = SingleLiveEvent<Unit>()
     val onHideProgressBarEvent = SingleLiveEvent<Unit>()
     val onLoadLocationClickEvent = SingleLiveEvent<List<String>>()
-    val onCheckBoxClickEvent = SingleLiveEvent<Unit>()
+    val onHtmlMenuClickEvent = SingleLiveEvent<Unit>()
 
     val note = MutableLiveData<Note>()
     var isNewNote = false
@@ -75,7 +75,7 @@ class NoteInfoViewModel(private val repository: NoteRepository) : ViewModel() {
         onLoadLocationClickEvent.call()
     }
     fun onCheckBoxClick(){
-        onCheckBoxClickEvent.call()
+        onHtmlMenuClickEvent.call()
     }
 }
 

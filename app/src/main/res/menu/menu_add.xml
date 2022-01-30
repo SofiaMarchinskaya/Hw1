@@ -16,9 +16,4 @@
         android:id="@+id/location"
         android:title="@string/location"
         app:showAsAction="never" />
-    <item
-        android:id="@+id/enable_html_content"
-        android:checkable="true"
-        android:title="@string/html"
-        app:showAsAction="never" />
 </menu>
