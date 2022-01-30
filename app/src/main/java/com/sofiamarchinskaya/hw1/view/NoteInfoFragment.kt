@@ -98,10 +98,6 @@ class NoteInfoFragment : Fragment() {
                 viewModel.onLocationItemClick()
                 return true
             }
-            R.id.enable_html_content -> {
-                viewModel.onCheckBoxClick()
-                return true
-            }
         }
         return super.onOptionsItemSelected(item)
     }
