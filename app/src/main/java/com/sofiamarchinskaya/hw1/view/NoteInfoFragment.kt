@@ -3,6 +3,7 @@ package com.sofiamarchinskaya.hw1.view
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.CheckBox
 import android.widget.Toast
@@ -139,6 +140,7 @@ class NoteInfoFragment : Fragment() {
 
     private fun initEvents() {
         viewModel.onSaveSuccessEvent.observe(viewLifecycleOwner) {
+        
             onSuccessfullySaved()
         }
         viewModel.onSaveAllowedEvent.observe(viewLifecycleOwner) {
