@@ -140,7 +140,6 @@ class NoteInfoFragment : Fragment() {
 
     private fun initEvents() {
         viewModel.onSaveSuccessEvent.observe(viewLifecycleOwner) {
-        
             onSuccessfullySaved()
         }
         viewModel.onSaveAllowedEvent.observe(viewLifecycleOwner) {
