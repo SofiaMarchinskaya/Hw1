@@ -139,7 +139,8 @@ class NoteInfoFragment : Fragment() {
             onSuccessfullySaved()
             activity?.sendBroadcast(Intent().apply {
                 action = Constants.NOTE_SENT
-                putExtra(Constants.NOTE, viewModel.note.value)
+                putExtra(Constants.TITLE, it.title)
+                putExtra(Constants.TEXT, it.body)
             })
         }
         viewModel.onSaveAllowedEvent.observe(viewLifecycleOwner) {

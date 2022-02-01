@@ -1,6 +1,7 @@
 package com.sofiamarchinskaya.hw1
 
 import android.app.Application
+import android.content.Intent
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
@@ -10,6 +11,7 @@ import org.koin.core.context.startKoin
 import java.util.concurrent.TimeUnit
 
 class App : Application() {
+
     override fun onCreate() {
         super.onCreate()
         startKoin {

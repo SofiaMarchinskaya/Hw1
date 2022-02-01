@@ -10,5 +10,4 @@ object Constants {
     const val INVALID_ID = -1
     const val FIREBASE_NAME = "notes"
     const val NOTE_SENT = "com.sofiamarchinskaya.hw1.NOTE_SENT"
-    const val NOTE = "note"
 }
