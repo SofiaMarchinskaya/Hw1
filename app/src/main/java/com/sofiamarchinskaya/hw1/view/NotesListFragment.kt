@@ -66,7 +66,6 @@ class NotesListFragment : Fragment() {
             viewModel.updateNotesList()
         }
         initLiveData()
-        setupWorker()
         return binding.root
     }
 
@@ -177,17 +176,6 @@ class NotesListFragment : Fragment() {
                 hideProgressBar()
             }
         }
-    }
-
-    private fun setupWorker() {
-        val workerRequest =
-            PeriodicWorkRequestBuilder<BackupWorker>(15, TimeUnit.MINUTES).build()
-        WorkManager.getInstance(requireActivity().applicationContext)
-            .enqueueUniquePeriodicWork(
-                BackupWorker.WORK_NAME,
-                ExistingPeriodicWorkPolicy.KEEP,
-                workerRequest
-            )
     }
 
     companion object {
