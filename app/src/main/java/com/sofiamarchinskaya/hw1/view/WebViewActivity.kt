@@ -15,6 +15,10 @@ class WebViewActivity : AppCompatActivity() {
             javaScriptEnabled = true
             loadsImagesAutomatically = true
         }
-        binding.webView.loadUrl("https://www.gismeteo.ru")
+        binding.webView.loadUrl(WEATHER_URL)
+    }
+
+    companion object {
+        const val WEATHER_URL = "https://www.gismeteo.ru"
     }
 }

@@ -16,7 +16,7 @@ class CustomTextView @JvmOverloads constructor(
     private var htmlText: String? = null
         set(value) {
             field = value
-            text = value?.let { Html.fromHtml(value, HtmlCompat.FROM_HTML_MODE_LEGACY) }
+            text = value?.let { Html.fromHtml(it, HtmlCompat.FROM_HTML_MODE_LEGACY) }
         }
 
     init {

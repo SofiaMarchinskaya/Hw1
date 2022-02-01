@@ -36,8 +36,6 @@ class NoteInfoFragment : Fragment() {
     private lateinit var binding: FragmentNoteInfoBinding
     private val viewModel: NoteInfoViewModel by viewModel()
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private val LOCATION_PERMISSION_REQ_CODE = 1000
-    val PERMISSION_ID = 42
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
@@ -110,6 +108,8 @@ class NoteInfoFragment : Fragment() {
                     grantResults[0] != PackageManager.PERMISSION_GRANTED
                 ) {
                     makeToast("You need to grant permission to access location")
+                }else{
+                    getCurrentLocation()
                 }
             }
         }
@@ -212,7 +212,6 @@ class NoteInfoFragment : Fragment() {
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-
         } else {
             requestPermissions()
         }
@@ -248,10 +247,9 @@ class NoteInfoFragment : Fragment() {
         return try {
             val geocoder = Geocoder(requireContext(), Locale.getDefault())
             val addresses: List<Address> =
-                geocoder.getFromLocation(latitude, longitude, 1)
-
-            "${addresses[0].thoroughfare}, ${addresses[0].featureName}," +
-                    " ${addresses[0].locality}, ${addresses[0].subAdminArea}, ${addresses[0].adminArea}, ${addresses[0].countryName}"
+                geocoder.getFromLocation(latitude, longitude, MAX_RESULTS)
+            "${addresses[0].thoroughfare ?: ""}, ${addresses[0].featureName ?: ""}," +
+                    " ${addresses[0].locality ?: ""}, ${addresses[0].subAdminArea ?: ""}, ${addresses[0].adminArea ?: ""}, ${addresses[0].countryName ?: ""}"
         } catch (e: Exception) {
             makeToast(
                 resources.getString(R.string.fail_to_connect)
@@ -269,5 +267,9 @@ class NoteInfoFragment : Fragment() {
                     Constants.ID to note.id
                 )
             }
+
+        private const val LOCATION_PERMISSION_REQ_CODE = 1000
+        private const val PERMISSION_ID = 42
+        private const val MAX_RESULTS = 1
     }
 }

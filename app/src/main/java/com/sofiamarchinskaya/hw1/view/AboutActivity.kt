@@ -18,14 +18,20 @@ class AboutActivity : AppCompatActivity() {
         binding = ActivityAboutBinding.inflate(layoutInflater)
         setContentView(binding.root)
         (binding.aboutActivity.background as AnimationDrawable).apply {
-            setEnterFadeDuration(3000)
-            setExitFadeDuration(3000)
+            setEnterFadeDuration(ENTER_FADE_DURATION)
+            setExitFadeDuration(EXIT_FADE_DURATION)
             start()
         }
         AnimationUtils.loadAnimation(this, R.anim.moving_text).apply {
-            duration = 3000
+            duration = TEXT_DURATION
             repeatCount = Animation.INFINITE
             binding.htmlText.startAnimation(this)
         }
+    }
+
+    companion object {
+        const val ENTER_FADE_DURATION = 3000
+        const val EXIT_FADE_DURATION = 3000
+        const val TEXT_DURATION = 3000L
     }
 }
