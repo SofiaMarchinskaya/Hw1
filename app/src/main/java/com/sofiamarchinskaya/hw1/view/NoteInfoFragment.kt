@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.CheckBox
 import android.widget.Toast
@@ -121,10 +122,6 @@ class NoteInfoFragment : Fragment() {
 
     private fun onSuccessfullySaved() {
         Toast.makeText(requireContext(), getString(R.string.success), Toast.LENGTH_LONG).show()
-        activity?.sendBroadcast(Intent().apply {
-            action = Constants.NOTE_SENT
-            putExtra(Constants.TITLE, binding.title.text.toString())
-        })
     }
 
     private fun createSaveDialog() {
@@ -172,6 +169,11 @@ class NoteInfoFragment : Fragment() {
     private fun initEvents() {
         viewModel.onSaveSuccessEvent.observe(viewLifecycleOwner) {
             onSuccessfullySaved()
+            activity?.sendBroadcast(Intent().apply {
+                action = Constants.NOTE_SENT
+                putExtra(Constants.TITLE, it.title)
+                putExtra(Constants.TEXT, it.body)
+            })
         }
         viewModel.onSaveAllowedEvent.observe(viewLifecycleOwner) {
             createSaveDialog()
