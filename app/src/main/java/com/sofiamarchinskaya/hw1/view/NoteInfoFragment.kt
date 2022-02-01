@@ -90,12 +90,6 @@ class NoteInfoFragment : Fragment() {
 
     private fun onSuccessfullySaved() {
         Toast.makeText(requireContext(), getString(R.string.success), Toast.LENGTH_LONG).show()
-        val bundle = Bundle()
-        bundle.putParcelable(Constants.NOTE,viewModel.note.value)
-        activity?.sendBroadcast(Intent().apply {
-            action = Constants.NOTE_SENT
-            putExtra(Constants.NOTE, bundle)
-        })
     }
 
     private fun createSaveDialog() {
@@ -143,6 +137,10 @@ class NoteInfoFragment : Fragment() {
     private fun initEvents() {
         viewModel.onSaveSuccessEvent.observe(viewLifecycleOwner) {
             onSuccessfullySaved()
+            activity?.sendBroadcast(Intent().apply {
+                action = Constants.NOTE_SENT
+                putExtra(Constants.NOTE, viewModel.note.value)
+            })
         }
         viewModel.onSaveAllowedEvent.observe(viewLifecycleOwner) {
             createSaveDialog()
