@@ -248,21 +248,29 @@ class NoteInfoFragment : Fragment() {
     }
 
     private fun formatLocation(latitude: Double, longitude: Double): String {
-        return try {
+        try {
             val geocoder = Geocoder(requireContext(), Locale.getDefault())
-            val addresses: Address =
-                geocoder.getFromLocation(latitude, longitude, MAX_RESULTS)[0]
-            "${addresses.thoroughfare ?: ""}, ${addresses.featureName ?: ""}," +
-                    " ${addresses.locality ?: ""}, ${addresses.subAdminArea ?: ""}, ${addresses.adminArea ?: ""}, ${addresses.countryName ?: ""}"
+            val addresses: Address? =
+                geocoder.getFromLocation(latitude, longitude, MAX_RESULTS).firstOrNull()
+            return if (addresses != null) {
+                "${addresses.thoroughfare ?: ""}, ${addresses.featureName ?: ""}," +
+                        " ${addresses.locality ?: ""}, ${addresses.subAdminArea ?: ""}, ${addresses.adminArea ?: ""}, ${addresses.countryName ?: ""}"
+            } else {
+                resources.getString(R.string.not_defined)
+            }
         } catch (e: Exception) {
             makeToast(
                 resources.getString(R.string.fail_to_connect)
             )
-            resources.getString(R.string.not_defined)
+            return resources.getString(R.string.not_defined)
         }
     }
 
     companion object {
+        private const val LOCATION_PERMISSION_REQ_CODE = 1000
+        private const val PERMISSION_ID = 42
+        private const val MAX_RESULTS = 1
+
         fun newInstance(note: Note): NoteInfoFragment =
             NoteInfoFragment().apply {
                 arguments = bundleOf(
@@ -271,9 +279,5 @@ class NoteInfoFragment : Fragment() {
                     Constants.ID to note.id
                 )
             }
-
-        private const val LOCATION_PERMISSION_REQ_CODE = 1000
-        private const val PERMISSION_ID = 42
-        private const val MAX_RESULTS = 1
     }
 }

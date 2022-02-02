@@ -19,6 +19,6 @@ class WebViewActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val WEATHER_URL = "https://www.gismeteo.ru"
+        private const val WEATHER_URL = "https://www.gismeteo.ru"
     }
 }
