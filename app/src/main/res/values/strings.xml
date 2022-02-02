@@ -20,4 +20,13 @@
     <string name="problems_with_cloud">"Ошибка облачного хранилища"</string>
     <string name="failed">"Ошибка загрузки"</string>
     <string name="load_from_file">загрузить из файла</string>
+    <string name="search">поиск</string>
+    <string name="weather_forecast">прогноз погоды</string>
+    <string name="location">местоположение</string>
+    <string name="not_defined">местоположнение не определено</string>
+    <string name="html"><![CDATA[<html><body>
+                <h1><em><b>Приложение для работы с заметками<b><em></h1>
+                <p style="color:#8F8271">Версия 1.0.0</p>
+                </body></html>]]></string>
+
 </resources>

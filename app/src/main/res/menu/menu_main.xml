@@ -15,8 +15,14 @@
         android:title="@string/from_cloud"
         app:showAsAction="never" />
     <item
+        android:id="@+id/web_view"
+        android:orderInCategory="100"
+        android:title="@string/weather_forecast"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/search_note"
         android:icon="@android:drawable/ic_menu_search"
+        android:title="@string/search"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="ifRoom|collapseActionView" />
 </menu>

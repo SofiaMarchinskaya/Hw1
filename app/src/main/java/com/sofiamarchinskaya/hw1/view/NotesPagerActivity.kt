@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.sofiamarchinskaya.hw1.Constants
+import com.sofiamarchinskaya.hw1.types.Constants
 import com.sofiamarchinskaya.hw1.R
 import com.sofiamarchinskaya.hw1.databinding.ActivityNotesPagerBinding
 import com.sofiamarchinskaya.hw1.models.entity.Note

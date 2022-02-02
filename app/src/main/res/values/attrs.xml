@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr format="color" name="toolbarColor"/>
+    <declare-styleable name="CustomTextView">
+        <attr name="htmlText" format="string" />
+    </declare-styleable>
+</resources>

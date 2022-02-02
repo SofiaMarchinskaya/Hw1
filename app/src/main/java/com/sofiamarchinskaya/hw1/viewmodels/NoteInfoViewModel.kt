@@ -2,9 +2,9 @@ package com.sofiamarchinskaya.hw1.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.sofiamarchinskaya.hw1.Constants
-import com.sofiamarchinskaya.hw1.NoteCallback
-import com.sofiamarchinskaya.hw1.SingleLiveEvent
+import com.sofiamarchinskaya.hw1.types.Constants
+import com.sofiamarchinskaya.hw1.types.NoteCallback
+import com.sofiamarchinskaya.hw1.utils.SingleLiveEvent
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.models.framework.NoteRepository
 
@@ -16,6 +16,7 @@ class NoteInfoViewModel(private val repository: NoteRepository) : ViewModel() {
     val onLoadFailureEvent = SingleLiveEvent<Unit>()
     val onShowProgressBarEvent = SingleLiveEvent<Unit>()
     val onHideProgressBarEvent = SingleLiveEvent<Unit>()
+    val onLoadLocationClickEvent = SingleLiveEvent<List<String>>()
 
     val note = MutableLiveData<Note>()
     var isNewNote = false
@@ -30,10 +31,10 @@ class NoteInfoViewModel(private val repository: NoteRepository) : ViewModel() {
                 repository.insert(Note(title = it.title, body = it.body)).also { newId ->
                     if (isSavingToCloud)
                         repository.insertCloud(Note(newId, it.title, it.body))
-                    note.value = Note(newId,it.title,it.body)
+                    note.value = Note(newId, it.title, it.body)
                 }
             }
-            onSaveSuccessEvent.value = note.value
+            onSaveSuccessEvent.setValue(note.value)
             onSaveSuccessEvent.call()
         }
     }
@@ -68,6 +69,10 @@ class NoteInfoViewModel(private val repository: NoteRepository) : ViewModel() {
 
     fun setNoteText(text: String) {
         note.value?.body = text
+    }
+
+    fun onLocationItemClick() {
+        onLoadLocationClickEvent.call()
     }
 }
 

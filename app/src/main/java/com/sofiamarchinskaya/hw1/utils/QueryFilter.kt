@@ -1,4 +1,4 @@
-package com.sofiamarchinskaya.hw1.view.instruments
+package com.sofiamarchinskaya.hw1.utils
 
 interface QueryFilter<T> {
 

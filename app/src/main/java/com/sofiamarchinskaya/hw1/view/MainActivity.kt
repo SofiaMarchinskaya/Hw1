@@ -22,8 +22,12 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolBar)
+
         viewModel.onAboutClickEvent.observe(this) {
             openAboutScreen()
+        }
+        viewModel.onWebViewClickEvent.observe(this) {
+            openWebViewScreen()
         }
     }
 
@@ -33,11 +37,19 @@ class MainActivity : AppCompatActivity() {
                 viewModel.onInfoIconClick()
                 return true
             }
+            R.id.web_view -> {
+                viewModel.onWebViewIconClick()
+                return true
+            }
         }
         return super.onOptionsItemSelected(item)
     }
 
     private fun openAboutScreen() {
         startActivity(Intent(this, AboutActivity::class.java))
+    }
+
+    private fun openWebViewScreen() {
+        startActivity(Intent(this, WebViewActivity::class.java))
     }
 }

@@ -1,23 +1,33 @@
 package com.sofiamarchinskaya.hw1.view
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.CheckBox
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.sofiamarchinskaya.hw1.Constants
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.sofiamarchinskaya.hw1.types.Constants
 import com.sofiamarchinskaya.hw1.R
 import com.sofiamarchinskaya.hw1.databinding.FragmentNoteInfoBinding
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.viewmodels.NoteInfoViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.*
+
 
 /**
  * Фрагмент для отображения деталей о заметке
@@ -26,9 +36,11 @@ class NoteInfoFragment : Fragment() {
 
     private lateinit var binding: FragmentNoteInfoBinding
     private val viewModel: NoteInfoViewModel by viewModel()
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         super.onCreate(savedInstanceState)
     }
 
@@ -80,8 +92,28 @@ class NoteInfoFragment : Fragment() {
                 viewModel.getJsonNote()
                 return true
             }
+            R.id.location -> {
+                viewModel.onLocationItemClick()
+                return true
+            }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
+    ) {
+        when (requestCode) {
+            LOCATION_PERMISSION_REQ_CODE -> {
+                if (grantResults.isEmpty() ||
+                    grantResults[0] != PackageManager.PERMISSION_GRANTED
+                ) {
+                    makeToast("You need to grant permission to access location")
+                } else {
+                    getCurrentLocation()
+                }
+            }
+        }
     }
 
     private fun onSaveDisabled() {
@@ -166,6 +198,68 @@ class NoteInfoFragment : Fragment() {
         viewModel.onHideProgressBarEvent.observe(viewLifecycleOwner) {
             hideProgressBar()
         }
+        viewModel.onLoadLocationClickEvent.observe(viewLifecycleOwner) {
+            getCurrentLocation()
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun getCurrentLocation() {
+        if (checkPermissions()) {
+            fusedLocationClient.lastLocation
+                .addOnSuccessListener { location ->
+                    binding.text.setText(formatLocation(location.latitude, location.longitude))
+                }
+                .addOnFailureListener {
+                    Toast.makeText(
+                        requireContext(), "Failed on getting current location",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+        } else {
+            requestPermissions()
+        }
+    }
+
+    private fun requestPermissions() {
+        ActivityCompat.requestPermissions(
+            requireActivity(),
+            arrayOf(
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ),
+            PERMISSION_ID
+        )
+    }
+
+    private fun checkPermissions(): Boolean {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            return true
+        }
+        return false
+    }
+
+    private fun formatLocation(latitude: Double, longitude: Double): String {
+        return try {
+            val geocoder = Geocoder(requireContext(), Locale.getDefault())
+            val addresses: Address =
+                geocoder.getFromLocation(latitude, longitude, MAX_RESULTS)[0]
+            "${addresses.thoroughfare ?: ""}, ${addresses.featureName ?: ""}," +
+                    " ${addresses.locality ?: ""}, ${addresses.subAdminArea ?: ""}, ${addresses.adminArea ?: ""}, ${addresses.countryName ?: ""}"
+        } catch (e: Exception) {
+            makeToast(
+                resources.getString(R.string.fail_to_connect)
+            )
+            resources.getString(R.string.not_defined)
+        }
     }
 
     companion object {
@@ -177,5 +271,9 @@ class NoteInfoFragment : Fragment() {
                     Constants.ID to note.id
                 )
             }
+
+        private const val LOCATION_PERMISSION_REQ_CODE = 1000
+        private const val PERMISSION_ID = 42
+        private const val MAX_RESULTS = 1
     }
 }

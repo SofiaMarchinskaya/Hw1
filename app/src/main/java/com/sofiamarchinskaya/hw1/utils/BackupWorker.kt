@@ -1,14 +1,12 @@
-package com.sofiamarchinskaya.hw1
+package com.sofiamarchinskaya.hw1.utils
 
 import android.content.Context
 import android.util.Log
 import androidx.work.CoroutineWorker
-import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.sofiamarchinskaya.hw1.models.NoteRepositoryImpl
 import com.sofiamarchinskaya.hw1.models.framework.NoteRepository
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.runBlocking
 
 class BackupWorker(
     context: Context,
