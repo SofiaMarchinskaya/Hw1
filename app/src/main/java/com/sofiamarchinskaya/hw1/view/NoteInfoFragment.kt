@@ -109,7 +109,7 @@ class NoteInfoFragment : Fragment() {
                     grantResults[0] != PackageManager.PERMISSION_GRANTED
                 ) {
                     makeToast("You need to grant permission to access location")
-                }else{
+                } else {
                     getCurrentLocation()
                 }
             }
@@ -250,10 +250,10 @@ class NoteInfoFragment : Fragment() {
     private fun formatLocation(latitude: Double, longitude: Double): String {
         return try {
             val geocoder = Geocoder(requireContext(), Locale.getDefault())
-            val addresses: List<Address> =
-                geocoder.getFromLocation(latitude, longitude, MAX_RESULTS)
-            "${addresses[0].thoroughfare ?: ""}, ${addresses[0].featureName ?: ""}," +
-                    " ${addresses[0].locality ?: ""}, ${addresses[0].subAdminArea ?: ""}, ${addresses[0].adminArea ?: ""}, ${addresses[0].countryName ?: ""}"
+            val addresses: Address =
+                geocoder.getFromLocation(latitude, longitude, MAX_RESULTS)[0]
+            "${addresses.thoroughfare ?: ""}, ${addresses.featureName ?: ""}," +
+                    " ${addresses.locality ?: ""}, ${addresses.subAdminArea ?: ""}, ${addresses.adminArea ?: ""}, ${addresses.countryName ?: ""}"
         } catch (e: Exception) {
             makeToast(
                 resources.getString(R.string.fail_to_connect)
