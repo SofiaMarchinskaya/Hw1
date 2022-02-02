@@ -168,14 +168,13 @@ class NoteInfoFragment : Fragment() {
 
     private fun initEvents() {
         viewModel.onSaveSuccessEvent.observe(viewLifecycleOwner) {
-            it?.let {
-                onSuccessfullySaved()
-                activity?.sendBroadcast(Intent().apply {
-                    action = Constants.NOTE_SENT
-                    putExtra(Constants.TITLE, it.title)
-                    putExtra(Constants.TEXT, it.body)
-                })
-            }
+            it ?: return@observe
+            onSuccessfullySaved()
+            activity?.sendBroadcast(Intent().apply {
+                action = Constants.NOTE_SENT
+                putExtra(Constants.TITLE, it.title)
+                putExtra(Constants.TEXT, it.body)
+            })
         }
         viewModel.onSaveAllowedEvent.observe(viewLifecycleOwner) {
             createSaveDialog()
