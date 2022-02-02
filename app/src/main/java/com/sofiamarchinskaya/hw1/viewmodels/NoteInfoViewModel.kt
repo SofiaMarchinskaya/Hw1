@@ -9,7 +9,7 @@ import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.models.framework.NoteRepository
 
 class NoteInfoViewModel(private val repository: NoteRepository) : ViewModel() {
-    val onSaveSuccessEvent = SingleLiveEvent<Note>()
+    val onSaveSuccessEvent = SingleLiveEvent<Note?>()
     val onSaveFailureEvent = SingleLiveEvent<Unit>()
     val onSaveAllowedEvent = SingleLiveEvent<Unit>()
     val onLoadSuccessEvent = SingleLiveEvent<Note?>()
