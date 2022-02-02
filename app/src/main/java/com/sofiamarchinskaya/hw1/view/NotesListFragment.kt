@@ -3,19 +3,26 @@ package com.sofiamarchinskaya.hw1.view
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.widget.SearchView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import com.sofiamarchinskaya.hw1.BackupWorker
 import com.sofiamarchinskaya.hw1.Constants
 import com.sofiamarchinskaya.hw1.R
 import com.sofiamarchinskaya.hw1.databinding.FragmentNotesListBinding
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.states.*
+import com.sofiamarchinskaya.hw1.view.instruments.ItemsFilter
 import com.sofiamarchinskaya.hw1.viewmodels.NotesListViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.concurrent.TimeUnit
 
 /**
  * Фрагмент для отображения списка заметок
@@ -60,6 +67,7 @@ class NotesListFragment : Fragment() {
             viewModel.updateNotesList()
         }
         initLiveData()
+        setupWorker()
         return binding.root
     }
 
@@ -85,7 +93,21 @@ class NotesListFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_main, menu)
+        setupSearch(menu)
         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    private fun setupSearch(menu: Menu?) {
+        (menu?.findItem(R.id.search_note)
+            ?.actionView as SearchView)
+            .setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean = false
+
+                override fun onQueryTextChange(newText: String): Boolean {
+                    viewModel.filter(newText)
+                    return false
+                }
+            })
     }
 
     private fun openAddNoteFragment() =
@@ -136,27 +158,41 @@ class NotesListFragment : Fragment() {
             resources.getString(R.string.problems_with_cloud)
 
     private fun initEvents() {
-        viewModel.onNoteItemClickEvent.observe(viewLifecycleOwner) {
-            openAboutItemActivity(it)
+        with(viewModel) {
+            onNoteItemClickEvent.observe(viewLifecycleOwner) {
+                openAboutItemActivity(it)
+            }
+            onFabClickEvent.observe(viewLifecycleOwner) {
+                openAddNoteFragment()
+            }
+            onLoadSuccessEvent.observe(viewLifecycleOwner) {
+                makeToast(resources.getString(R.string.successfully_download))
+            }
+            onLoadFailureEvent.observe(viewLifecycleOwner) {
+                makeToast(chooseExceptionMessage(it))
+            }
+            onShowProgressBarEvent.observe(viewLifecycleOwner) {
+                showProgressBar()
+            }
+            onHideProgressBarEvent.observe(viewLifecycleOwner) {
+                hideProgressBar()
+            }
         }
-        viewModel.onFabClickEvent.observe(viewLifecycleOwner) {
-            openAddNoteFragment()
-        }
-        viewModel.onLoadSuccessEvent.observe(viewLifecycleOwner) {
-            makeToast(resources.getString(R.string.successfully_download))
-        }
-        viewModel.onLoadFailureEvent.observe(viewLifecycleOwner) {
-            makeToast(chooseExceptionMessage(it))
-        }
-        viewModel.onShowProgressBarEvent.observe(viewLifecycleOwner) {
-            showProgressBar()
-        }
-        viewModel.onHideProgressBarEvent.observe(viewLifecycleOwner) {
-            hideProgressBar()
-        }
+    }
+
+    private fun setupWorker() {
+        val workerRequest =
+            PeriodicWorkRequestBuilder<BackupWorker>(15, TimeUnit.MINUTES).build()
+        WorkManager.getInstance(requireActivity().applicationContext)
+            .enqueueUniquePeriodicWork(
+                BackupWorker.WORK_NAME,
+                ExistingPeriodicWorkPolicy.KEEP,
+                workerRequest
+            )
     }
 
     companion object {
         private const val TAG = "NotesList"
     }
 }
+

@@ -1,7 +1,9 @@
 package com.sofiamarchinskaya.hw1.view
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.CheckBox
 import android.widget.Toast
@@ -134,7 +136,14 @@ class NoteInfoFragment : Fragment() {
 
     private fun initEvents() {
         viewModel.onSaveSuccessEvent.observe(viewLifecycleOwner) {
-            onSuccessfullySaved()
+            it?.let {
+                onSuccessfullySaved()
+                activity?.sendBroadcast(Intent().apply {
+                    action = Constants.NOTE_SENT
+                    putExtra(Constants.TITLE, it.title)
+                    putExtra(Constants.TEXT, it.body)
+                })
+            }
         }
         viewModel.onSaveAllowedEvent.observe(viewLifecycleOwner) {
             createSaveDialog()

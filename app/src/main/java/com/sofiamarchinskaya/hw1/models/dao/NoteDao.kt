@@ -11,4 +11,7 @@ interface NoteDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(note: Note): Long
+
+    @Query("SELECT COUNT(*) FROM notes")
+    suspend fun count(): Int
 }

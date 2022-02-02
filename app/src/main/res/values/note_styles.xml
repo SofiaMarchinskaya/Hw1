@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="NoteItemTitle">
         <item name="android:textSize">@dimen/note_title</item>
         <item name="android:typeface">monospace</item>
@@ -21,13 +22,13 @@
         <item name="android:layout_margin">@dimen/note_info_text_margin</item>
     </style>
 
-    <style name = "AboutAppTextAuthor">
+    <style name="AboutAppTextAuthor">
         <item name="android:textSize">@dimen/about_author_text_size</item>
         <item name="android:layout_marginStart">@dimen/text_margin</item>
         <item name="android:layout_marginTop">@dimen/text_margin</item>
     </style>
 
-    <style name = "AboutAppTextDescription">
+    <style name="AboutAppTextDescription">
         <item name="android:textSize">@dimen/app_description_text_size</item>
         <item name="android:layout_marginStart">@dimen/text_margin</item>
     </style>

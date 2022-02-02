@@ -1,5 +1,4 @@
 package com.sofiamarchinskaya.hw1
-
 /*
  * Copyright (C) 2019 Google Inc.
  *

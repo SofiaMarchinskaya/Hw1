@@ -7,10 +7,15 @@ import com.sofiamarchinskaya.hw1.DownloadCallback
 import com.sofiamarchinskaya.hw1.SingleLiveEvent
 import com.sofiamarchinskaya.hw1.models.entity.Note
 import com.sofiamarchinskaya.hw1.models.framework.NoteRepository
-import com.sofiamarchinskaya.hw1.states.*
+import com.sofiamarchinskaya.hw1.states.ExceptionTypes
+import com.sofiamarchinskaya.hw1.view.instruments.ItemsFilter
+import com.sofiamarchinskaya.hw1.view.instruments.QueryFilter
 import kotlinx.coroutines.launch
 
-class NotesListViewModel(private val repository: NoteRepository) : ViewModel() {
+class NotesListViewModel(
+    private val repository: NoteRepository,
+    private val filter: QueryFilter<Note>
+) : ViewModel() {
     private var clickedNote: Note? = null
 
     val onLoadSuccessEvent = SingleLiveEvent<Note?>()
@@ -21,10 +26,14 @@ class NotesListViewModel(private val repository: NoteRepository) : ViewModel() {
     val onFabClickEvent = SingleLiveEvent<Unit>()
     val onNoteItemClickEvent = SingleLiveEvent<Note>()
     val list = MutableLiveData<List<Note>>()
+    private var fullList = listOf<Note>()
     val contextMenuState = MutableLiveData<String>()
 
     suspend fun updateNotesList() {
-        repository.getAll().collect { list.value = it }
+        repository.getAll().collect {
+            fullList = it
+            list.value = it
+        }
     }
 
     fun longClick(note: Note) {
@@ -61,5 +70,9 @@ class NotesListViewModel(private val repository: NoteRepository) : ViewModel() {
                 onLoadFailureEvent.value = msg
             }
         })
+    }
+
+    fun filter(query: String) {
+        list.value = filter.filter(query, fullList)
     }
 }

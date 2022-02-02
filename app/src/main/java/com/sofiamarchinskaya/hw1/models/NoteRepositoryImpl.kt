@@ -67,6 +67,7 @@ class NoteRepositoryImpl : NoteRepository {
     companion object{
         private const val SUCCESS = 200
     }
+    override suspend fun count(): Int = noteDao.count()
 }
 
 
